@@ -136,9 +136,9 @@ internal extension Command {
 
 public extension Command {
 
-    public func runOrExit(arguments: [String] = CommandLine.arguments) {
+    public func runOrExit(arguments: [String] = CommandLine.arguments) -> Result {
         do {
-            try run(arguments: arguments)
+            return try run(arguments: arguments)
         } catch {
             Command.stderrStream.write(error.localizedDescription)
             Command.stdoutStream.write(usageString)
