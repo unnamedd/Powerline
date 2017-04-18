@@ -4,8 +4,15 @@
     import Glibc
 #endif
 
-public struct StringConvertibleError: Error, CustomStringConvertible {
-    public let description: String
+public enum StringConvertibleError<T: StringConvertible>: Error, CustomStringConvertible {
+    case conversionError(source: String, type: T.Type)
+
+    public var description: String {
+        switch self {
+        case .conversionError(let source, let type):
+            return "Failed to convert \"\(source)\" to \(type)"
+        }
+    }
 }
 
 public protocol StringConvertible {
@@ -21,10 +28,23 @@ extension String: StringConvertible {
 extension Int: StringConvertible {
     public init(string: String) throws {
         guard let value = Int(string) else {
-            throw StringConvertibleError(description: "Failed to convert \(string) to int")
+            throw StringConvertibleError.conversionError(source: string, type: Int.self)
         }
 
         self = value
+    }
+}
+
+extension Bool: StringConvertible {
+    public init(string: String) throws {
+        switch string.lowercased() {
+            case "yes", "true", "1":
+            self = true
+            case "no", "false", "0":
+            self = false
+        default:
+            throw StringConvertibleError.conversionError(source: string, type: Bool.self)
+        }
     }
 }
 
@@ -39,7 +59,7 @@ extension Double: StringConvertible {
         }
 
         guard let value = Double(string) else {
-            throw StringConvertibleError(description: "Failed to convert \(string) to int")
+            throw StringConvertibleError.conversionError(source: string, type: Double.self)
         }
 
         self = value
