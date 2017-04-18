@@ -37,7 +37,6 @@ public struct Command {
     public let namedArguments: Set<NamedArgument>
     public let positionalArgument: PositionalArgument?
     public let subcommands: [Command]
-    internal var handler: (Command.Result) throws -> Void
 
     static var stdoutStream: TextOutputStream = StandardOutputStream()
     static var stderrStream: TextOutputStream = StandardErrorStream()
@@ -48,8 +47,8 @@ public struct Command {
         subcommands: [Command] = [],
         positionalArgument: PositionalArgument? = nil,
         namedArguments: Set<NamedArgument> = [],
-        flags: Set<Flag> = [],
-        handler: @escaping (Command.Result) throws -> Void) {
+        flags: Set<Flag> = []
+    ) {
 
         self.name = name
         self.summary = summary
@@ -57,7 +56,6 @@ public struct Command {
         self.flags = flags
         self.namedArguments = namedArguments
         self.positionalArgument = positionalArgument
-        self.handler = handler
     }
 }
 internal extension Command {
@@ -148,7 +146,7 @@ public extension Command {
         }
     }
 
-    public func run(arguments: [String] = CommandLine.arguments) throws {
+    public func run(arguments: [String] = CommandLine.arguments) throws -> Result {
         guard arguments.count >= 2 else {
             throw CommandError.notEnoughArguments
         }
@@ -257,8 +255,7 @@ public extension Command {
             }
 
             if let subcommand = subcommand(named: argument) {
-                try subcommand.run(arguments: Array(arguments[1..<arguments.count]))
-                return
+                return try subcommand.run(arguments: Array(arguments[1..<arguments.count]))
             }
 
             // In any other case we're dealing with a positional argument
@@ -273,11 +270,10 @@ public extension Command {
             positionalValues.append(argument)
         }
 
-        try handler(.init(
+        return .init(
             positionalValues: positionalValues,
             valuesByNamedArgument: valuesByNamedArgument,
             flags: setFlags
-            )
         )
     }
 }

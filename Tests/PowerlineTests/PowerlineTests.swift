@@ -11,8 +11,10 @@ class PowerlineTests: XCTestCase {
 
     func testGreeting() {
         do {
+            print(CommandLine.arguments)
+
             //try Command.greet.run(arguments: ["greet", "David", "John", "Adam", "Paulo", "--say-goodbye", "-g", "\"Welcome to Powerline!\""])
-            Command.greet.runOrExit(arguments: ["greet", "David"])
+            Command.filePrinter.runOrExit(arguments: ["example", "--output", "file.txt", "log1.log", "log2.log", "-v"])
         } catch {
             XCTFail("\(error)")
         }
@@ -20,43 +22,53 @@ class PowerlineTests: XCTestCase {
 }
 
 extension Command {
-    static let greet = Command(
-        name: "greet",
-        summary: "Greets someone",
-        subcommands: [
-            Command(name: "test", summary: "Tests", handler: { (_) in
+    static let filePrinter = Command(
+        name: "filePrinter",
+        summary: "Prints the contents of files",
+        positionalArgument: .files,
+        namedArguments: [.output],
+        flags: [.verbose]
+    )
 
-            })
-        ],
-        positionalArgument: PositionalArgument(name: "name", summary: "The name of the person to greet", variadic: true),
-        namedArguments: [.greeting],
-        flags: [.goodbye]) { result in
+    static func handleCommand(result: Command.Result) throws {
+        if let value: String = try result.value(for: .output) {
+            print("OUTPUT TO:", value)
+        }
 
-            var names: [String] = try result.positionalValues()
+        let strings: [String] = try result.positionalValues()
 
-            if names.count > 1 {
-                names.append("and \(names.remove(at: names.count - 1))")
-            }
+        print(strings)
 
-            print("Hello \(names.joined(separator: ", "))!\n")
-            
-
-            if let message: String = try result.value(for: .greeting) {
-                print(message)
-            }
-
-            if result.flags.contains(.goodbye) {
-                print("Good bye!")
-            }
-
+        if result.flags.contains(.verbose) {
+            print("VERBOSE")
+        }
     }
 }
 
 extension Flag {
 
-    static let goodbye = Flag(name: "say-goodbye", character: "G", summary: "Also says goodbye")
+    static let verbose = Flag(
+        name: "verbose", 					// --verbose
+        character: "v", 					// -v
+        summary: "Prints debug output" 		// Printed out in help
+    )
 }
 
 extension NamedArgument {
-    static let greeting = NamedArgument(name: "greeting", character: "g", summary: "The greeting to print out", valuePlaceholder: "msg")
+
+    static let output = NamedArgument(
+        name: "output", 				// --output <file>
+        character: "o",					// -o <file>
+        summary: "File to write to",	// Printed out in help
+        valuePlaceholder: "file"		// Placeholder for value printed out in help
+    )
+}
+
+extension PositionalArgument {
+
+    static let files = PositionalArgument(
+        name: "file", 					// Printed out in help
+        summary: "A file to process",	// Printed out in help
+        variadic: true					// Whether multiple values are supported
+    )
 }
