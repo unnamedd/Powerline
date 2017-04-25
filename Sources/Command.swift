@@ -1,3 +1,9 @@
+#if os(Linux)
+    import Glibc
+#else
+    import Darwin.C
+#endif
+
 import Foundation
 
 public enum CommandError: Error, CustomStringConvertible {
