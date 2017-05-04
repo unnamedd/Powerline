@@ -1,6 +1,4 @@
-<img src="Images/header-image.png" width="250" />
-
-![Plaforms](https://img.shields.io/badge/platforms-Linux%20|%20macOS-lightgrey.svg)
+<img src="Images/header-image.png" height="250" />
 
 # Powerline
 Powerline is a library for writing solid command-line interfaces in Swift, for Linux and macOS.
