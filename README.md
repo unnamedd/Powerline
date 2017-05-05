@@ -10,7 +10,7 @@ Powerline is a library for writing solid command-line interfaces in Swift, for L
 
 
 
-<img src="images/output-screenshot.png" />
+<img src="Images/output-screenshot.png" />
 
 
 
@@ -196,7 +196,7 @@ $ .build/debug/powerline-example --help
 
 Here's the output you'll see, like shown above.
 
-<img src="images/output-screenshot.png" />
+<img src="Images/output-screenshot.png" />
 
 The command is now ready to use! 👾
 
