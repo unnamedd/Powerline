@@ -5,7 +5,10 @@ class PowerlineTests: XCTestCase {
 
     static var allTests: [(String, (PowerlineTests) -> () throws -> Void)] {
         return [
-            ("testGreeting", testVariadicGreetingWithOptionsAndOutput),
+            ("testVariadicGreetingWithOptionsAndOutput", testVariadicGreetingWithOptionsAndOutput),
+            ("testCompoundFlagLastArgument", testCompoundFlagLastArgument),
+            ("testCmdAsync", testCmdAsync),
+            ("testCmd", testCmd),
         ]
     }
 
