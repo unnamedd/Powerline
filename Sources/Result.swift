@@ -47,11 +47,14 @@ public extension Command {
 }
 
 extension Command.Result {
+
+    @discardableResult
     public func cmd(executable: String, arguments: [String] = []) throws -> ProcessResult {
         let runner = try ProcessRunner(context: context, executable: executable, arguments: arguments)
         return try runner.run()
     }
 
+    @discardableResult
     public func cmd(_ string: String) throws -> ProcessResult {
         let string = string.trimmingCharacters(in: .whitespacesAndNewlines)
         var components = string.components(separatedBy: " ")
