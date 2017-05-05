@@ -97,7 +97,7 @@ class PowerlineTests: XCTestCase {
 
         let command = Command(name: "cmd", summary: "cmd") { result in
 
-            try result.cmd("curl -v https://www.google.com") { error, cmdResult in
+            try result.cmd("curl -v http://ip.jsontest.com") { error, cmdResult in
                 if let error = error {
                     XCTFail(error.localizedDescription)
                     return
