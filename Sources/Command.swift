@@ -162,6 +162,9 @@ public extension Command {
             context.standardError.write(reason, terminator: "\n")
             context.standardError.write(usageString, terminator: "\n")
             exit(64)
+        } catch let error as CommandError {
+            context.standardError.write(error.description, terminator: "\n")
+            exit(EXIT_FAILURE)
         } catch {
             context.standardError.write(error.localizedDescription, terminator: "\n")
             exit(EXIT_FAILURE)
