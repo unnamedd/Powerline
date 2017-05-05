@@ -31,7 +31,7 @@ public struct Flag: Option {
     public let character: Character?
     public let summary: String
 
-    public init(name: String, character: Character? = nil, summary: String?) {
+    public init(name: String, character: Character? = nil, summary: String? = nil) {
 
         guard name != "help" && character != "h" else {
             fatalError("Flag name \"help\" and flag character \"h\" are reserved.")
@@ -49,7 +49,7 @@ public struct NamedArgument: Option {
     public let summary: String
     public let valuePlaceholder: String
 
-    public init(name: String, character: Character? = nil, summary: String?, valuePlaceholder: String?) {
+    public init(name: String, character: Character? = nil, summary: String? = nil, valuePlaceholder: String? = nil) {
 
         guard name != "help" && character != "h" else {
             fatalError("Named argument name \"help\" and flag character \"h\" are reserved.")
@@ -67,7 +67,7 @@ public struct PositionalArgument: Option {
     public let name: String
     public let isVariadic: Bool
 
-    public init(name: String, summary: String?, variadic: Bool) {
+    public init(name: String, summary: String? = nil, variadic: Bool) {
         self.name = name
         self.summary = summary ?? "No summary provided"
         self.isVariadic = variadic

@@ -185,6 +185,7 @@ public struct ProcessHandler {
         process.terminate()
     }
 
+    @discardableResult
     public func resume() -> Bool {
         return process.resume()
     }

@@ -5,119 +5,122 @@ class PowerlineTests: XCTestCase {
 
     static var allTests: [(String, (PowerlineTests) -> () throws -> Void)] {
         return [
-            ("testVariadicGreetingWithOptionsAndOutput", testVariadicGreetingWithOptionsAndOutput),
-            ("testCompoundFlagLastArgument", testCompoundFlagLastArgument),
-            ("testCmdAsync", testCmdAsync),
+            ("testRequiresFlag", testRequiresFlag),
+            ("testRequiresNamedArgument", testRequiresNamedArgument),
+            ("testVariadicPositionalArgumentsWithConversion", testVariadicPositionalArgumentsWithConversion),
+            ("testSubCommand", testSubCommand),
             ("testCmd", testCmd),
+            ("testCmdAsync", testCmdAsync),
         ]
     }
 
-    func testVariadicGreetingWithOptionsAndOutput() throws {
-        print(CommandLine.arguments)
+    func testRequiresFlag() throws {
 
+        let flag = Flag(
+            name: "flag",
+            character: "f",
+            summary: "Required flag"
+        )
 
-        try Command.filePrinter.run(arguments: ["example", "--output", "file.txt", "log1.log", "log2.log", "-v"]) { handler in
-            XCTAssertEqual(try handler.value(for: .output), "file.txt")
-
-            XCTAssertEqual(try handler.positionalValues(), ["log1.log", "log2.log"])
-
-            XCTAssert(handler.flags.contains(.verbose))
-        }
+        try Command(
+            name: "Requires verbose",
+            summary: "A command that simply requires the --verbose command",
+            flags: [flag]) { result in
+                XCTAssert(result.flags.contains(flag))
+        }.run(arguments: ["example", "-f"])
     }
 
-    func testCompoundFlagLastArgument() throws {
-        try Command.filePrinter.run(arguments: ["example", "-vo", "file.txt", "log1.log"]) { handler in
-            XCTAssertEqual(try handler.value(for: .output), "file.txt")
+    func testRequiresNamedArgument() throws {
 
-            XCTAssertEqual(try handler.positionalValues(), ["log1.log"])
+        let arg = NamedArgument(name: "required")
 
-            XCTAssert(handler.flags.contains(.verbose))
+        try Command(
+            name: "Requires verbose",
+            summary: "A command that simply requires the --verbose command",
+            namedArguments: [arg]) { result in
+                XCTAssertEqual(try result.value(for: arg), "1234")
+            }.run(arguments: ["example", "--required", "1234"])
+    }
+
+    func testVariadicPositionalArgumentsWithConversion() throws {
+
+        let positional = PositionalArgument(name: "pos", variadic: true)
+
+        try Command(
+            name: "Requires verbose",
+            summary: "A command that simply requires the --verbose command",
+            positionalArgument: positional) { result in
+                XCTAssertEqual(try result.positionalArguments.value(at: 0), 1234)
+                XCTAssertEqual(try result.positionalArguments.value(at: 1), 5678)
+            }.run(arguments: ["example", "1234", "5678"])
+    }
+
+    func testSubCommand() throws {
+
+        let subCommandFlag = Flag(name: "test", character: "t")
+
+        let subcommand = Command(
+            name: "sub",
+            summary: "Subcommand",
+            flags: [subCommandFlag]) { result in
+                XCTAssert(result.flags.contains(subCommandFlag))
         }
+
+        let mainFlag = Flag(name: "main", character: "m")
+
+        let command = Command(name: "main", summary: "main", subcommands: [subcommand], flags: [mainFlag]) { result in
+            XCTAssert(result.flags.contains(mainFlag))
+        }
+
+        try command.run(arguments: ["example", "-m"])
+        try command.run(arguments: ["example", "sub", "--test"])
+
+    }
+
+    func testCmd() throws {
+        let command = Command(name: "cmd", summary: "cmd") { result in
+
+            guard let stdout = try result.cmd("ls -a1").standardOutput else {
+                XCTFail("No stdout")
+                return
+            }
+
+            result.stdout(stdout)
+        }
+
+        try command.run(arguments: ["example"])
     }
 
     func testCmdAsync() throws {
 
+        let e = expectation(description: "Async command")
 
-        let expectation = self.expectation(description: "Async")
+        let command = Command(name: "cmd", summary: "cmd") { result in
 
-        try Command.filePrinter.run(arguments: ["example", "-vo", "file.txt", "log1.log"]) { handler in
-
-            do {
-                let handler = try handler.cmd("curl -v http://www.google.com") { error, result in
-
-                    defer {
-                        expectation.fulfill()
-                    }
-
-                    if let error = error {
-                        XCTFail("\(error)")
-                        return
-                    }
-
-                    if let string = result?.standardOutput {
-                        handler.print(string)
-                    }
+            try result.cmd("curl -v https://www.google.com") { error, cmdResult in
+                if let error = error {
+                    XCTFail(error.localizedDescription)
+                    return
                 }
 
-            } catch {
-                handler.print(error)
+                guard let cmdResult = cmdResult else {
+                    XCTFail("Result missing")
+                    return
+                }
+
+                guard let stdout = cmdResult.standardOutput else {
+                    XCTFail("No stdout")
+                    return
+                }
+
+                result.stdout(stdout)
+
+                e.fulfill()
             }
-
-            
-            waitForExpectations(timeout: 10, handler: nil)
-
         }
+
+        try command.run(arguments: ["example"])
+
+        waitForExpectations(timeout: 10, handler: nil)
     }
-
-    func testCmd() throws {
-        try Command.filePrinter.run(arguments: ["example"]) { handler in
-
-            guard let output = try handler.cmd("ls -a1").standardOutput else {
-                XCTFail("No output")
-                return
-            }
-
-            print(output)
-
-        }
-    }
-}
-
-extension Command {
-    static let filePrinter = Command(
-        name: "filePrinter",
-        summary: "Prints the contents of files",
-        positionalArgument: .files,
-        namedArguments: [.output],
-        flags: [.verbose]
-    )
-
-}
-
-extension Flag {
-
-    static let verbose = Flag(
-        name: "verbose", 					// --verbose
-        character: "v", 					// -v
-        summary: "Prints debug output" 		// Printed out in help
-    )
-}
-
-extension NamedArgument {
-
-    static let output = NamedArgument(
-        name: "output", 				// --output <file>
-        character: "o",					// -o <file>
-        summary: "File to write to",	// Printed out in help
-        valuePlaceholder: "file"		// Placeholder for value printed out in help
-    )
-}
-
-extension PositionalArgument {
-
-    static let files = PositionalArgument(
-        name: "file", 					// Printed out in help
-        summary: "A file to process",	// Printed out in help
-        variadic: true					// Whether multiple values are supported
-    )
 }

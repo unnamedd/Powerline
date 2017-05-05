@@ -14,6 +14,11 @@ public enum CommandError: Error, CustomStringConvertible {
     case missingPositional(PositionalArgument)
     case notEnoughArguments
     case invalidUsage(reason: String)
+    case other(String)
+
+    public init(error: String) {
+        self = .other(error)
+    }
 
     public var description: String {
         switch self {
@@ -31,6 +36,8 @@ public enum CommandError: Error, CustomStringConvertible {
             return "Not enough arguments"
         case .invalidUsage(let reason):
             return "Invalid usage: \(reason)"
+        case .other(let string):
+            return string
         }
     }
 }
@@ -43,6 +50,7 @@ public struct Command {
     public let namedArguments: Set<NamedArgument>
     public let positionalArgument: PositionalArgument?
     public let subcommands: [Command]
+    public let handler: (Result) throws -> Void
 
 
     public init(
@@ -51,7 +59,8 @@ public struct Command {
         subcommands: [Command] = [],
         positionalArgument: PositionalArgument? = nil,
         namedArguments: Set<NamedArgument> = [],
-        flags: Set<Flag> = []
+        flags: Set<Flag> = [],
+        handler: @escaping (Result) throws -> Void
     ) {
 
         self.name = name
@@ -60,8 +69,10 @@ public struct Command {
         self.flags = flags
         self.namedArguments = namedArguments
         self.positionalArgument = positionalArgument
+        self.handler = handler
     }
 }
+
 internal extension Command {
     internal func flag(withCharacter character: Character) -> Flag? {
         return flags.filter({ $0.character == character }).first
@@ -140,29 +151,30 @@ internal extension Command {
 
 public extension Command {
 
-    @discardableResult
-    public func runOrExit<T>(arguments: [String] = CommandLine.arguments, context: Context = .main, completion: (Handler) throws -> T) rethrows -> T {
-        return try completion(runOrExit(arguments: arguments, context: context))
+    public func runOrExit(arguments: [String] = CommandLine.arguments) {
+        runOrExit(arguments: arguments, context: .main)
     }
 
-    public func runOrExit(arguments: [String] = CommandLine.arguments, context: Context = .main) -> Handler {
+    private func runOrExit(arguments: [String] = CommandLine.arguments, context: Context) {
 
         do {
-            return try run(arguments: arguments, context: context)
-        } catch {
-            context.standardError.write(error.localizedDescription, terminator: "\n")
+            try run(arguments: arguments, context: context)
+        } catch CommandError.invalidUsage(let reason) {
+            context.standardError.write(reason, terminator: "\n")
             context.standardError.write(usageString, terminator: "\n")
             exit(64)
         }
+        catch {
+            context.standardError.write(error.localizedDescription, terminator: "\n")
+            exit(EXIT_FAILURE)
+        }
     }
 
-    @discardableResult
-    public func run<T>(arguments: [String] = CommandLine.arguments, context: Context = .main, completion: (Handler) throws -> T) throws -> T {
-        return try completion(run(arguments: arguments, context: context))
+    public func run(arguments: [String] = CommandLine.arguments) throws {
+        try run(arguments: arguments, context: .main)
     }
 
-    @discardableResult
-    public func run(arguments: [String] = CommandLine.arguments, context: Context = .main) throws -> Handler {
+    private func run(arguments: [String] = CommandLine.arguments, context: Context) throws {
 
         var context = context
 
@@ -289,11 +301,14 @@ public extension Command {
             positionalValues.append(argument)
         }
 
-        return .init(
+        let result = Result(
             context: context,
             positionalValues: positionalValues,
             valuesByNamedArgument: valuesByNamedArgument,
             flags: setFlags
         )
+
+        try handler(result)
+
     }
 }

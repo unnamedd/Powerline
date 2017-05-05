@@ -4,7 +4,7 @@
     import Glibc
 #endif
 
-public enum StringConvertibleError<T: StringConvertible>: Error, CustomStringConvertible {
+public enum StringConvertibleError<T: StringInitializable>: Error, CustomStringConvertible {
     case conversionError(source: String, type: T.Type)
 
     public var description: String {
@@ -15,17 +15,17 @@ public enum StringConvertibleError<T: StringConvertible>: Error, CustomStringCon
     }
 }
 
-public protocol StringConvertible {
+public protocol StringInitializable {
     init(string: String) throws
 }
 
-extension String: StringConvertible {
+extension String: StringInitializable {
     public init(string: String) throws {
         self = string
     }
 }
 
-extension Int: StringConvertible {
+extension Int: StringInitializable {
     public init(string: String) throws {
         guard let value = Int(string) else {
             throw StringConvertibleError.conversionError(source: string, type: Int.self)
@@ -35,7 +35,7 @@ extension Int: StringConvertible {
     }
 }
 
-extension Bool: StringConvertible {
+extension Bool: StringInitializable {
     public init(string: String) throws {
         switch string.lowercased() {
             case "yes", "true", "1":
@@ -48,7 +48,7 @@ extension Bool: StringConvertible {
     }
 }
 
-extension Double: StringConvertible {
+extension Double: StringInitializable {
     public init(string: String) throws {
 
         var string = string
