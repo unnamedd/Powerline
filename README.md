@@ -10,10 +10,16 @@ Powerline is a library for writing solid command-line interfaces in Swift, for L
 
 
 
+<img src="images/output-screenshot.png" />
+
+
+
 ## Features
 
-- [ ] Subcommands
-- [ ] Type-safe
+- [x] Subcommands
+- [x] Type-safe options parsing
+- [x] String colouring 
+- [x] Shell commands
 
 ## Glossary
 * **Command**
@@ -188,25 +194,9 @@ Run the executable
 $ .build/debug/powerline-example --help
 ```
 
-Here's the output you'll see
+Here's the output you'll see, like shown above.
 
-```Txt
-NAME
-	greeter - Greets people
-
-USAGE
-	greeter [options]
-
-OPTIONS
-	-v,  --verbose
-		Prints debug output
-
-	-h, --help
-		Show usage description
-
-	-o, --output <file>
-		File to write to
-```
+<img src="images/output-screenshot.png" />
 
 The command is now ready to use! 👾
 
