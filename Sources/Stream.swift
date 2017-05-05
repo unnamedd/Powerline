@@ -8,7 +8,6 @@ public protocol FileHandleStream {
 public protocol ReadableStream: FileHandleStream {}
 public protocol WritableStream: FileHandleStream {}
 
-
 extension ReadableStream {
     public func readToEndOfFile() -> String {
         guard let string = String(

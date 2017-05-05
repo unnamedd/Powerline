@@ -59,8 +59,7 @@ internal struct ProcessRunner {
 
         if combineOutput {
             standardErrorPipe = standardOutputPipe
-        }
-        else {
+        } else {
             standardErrorPipe = Pipe()
         }
 
@@ -204,15 +203,13 @@ public struct ProcessResult {
 
         if standardOutput.isEmpty {
             self.standardOutput = nil
-        }
-        else {
+        } else {
             self.standardOutput = standardOutput
         }
-        
+
         if standardError.isEmpty {
             self.standardError = nil
-        }
-        else {
+        } else {
             self.standardError = standardOutput
         }
     }

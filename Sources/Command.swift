@@ -52,7 +52,6 @@ public struct Command {
     public let subcommands: [Command]
     public let handler: (Result) throws -> Void
 
-
     public init(
         name: String,
         summary: String,
@@ -163,8 +162,7 @@ public extension Command {
             context.standardError.write(reason, terminator: "\n")
             context.standardError.write(usageString, terminator: "\n")
             exit(64)
-        }
-        catch {
+        } catch {
             context.standardError.write(error.localizedDescription, terminator: "\n")
             exit(EXIT_FAILURE)
         }
