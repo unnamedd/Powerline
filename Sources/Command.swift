@@ -135,49 +135,60 @@ internal extension Command {
 
         var string = ""
 
-        string += "NAME\n"
+        let indentation = "  "
 
-        string += "\t\(name) - \(summary)\n\n"
+        string += "NAME".bold + "\n"
 
-        string += "USAGE\n"
+        string += "\(indentation)\(name) - \(summary.dimmed)\n\n"
 
-        string += "\t\(name) [options]\n\n"
+        string += "USAGE".bold + "\n"
+
+        string += "\(indentation)\(name.underlined) " + "[options]".magenta
+
+        if let positionalArgument = positionalArgument {
+            string += " " + "[\(positionalArgument.name)\(positionalArgument.isVariadic ? "..." : "")]".blue
+
+            string += "\n" + indentation + positionalArgument.name.blue + " - " + positionalArgument.summary.dimmed
+        }
+
+        string += "\n\n"
 
         if !subcommands.isEmpty {
 
-            string += "COMMANDS\n"
+            string += "COMMANDS".bold + "\n"
 
             for subcommand in subcommands {
-                string += "\t\(subcommand.name) - \(subcommand.summary)\n\n"
+                string += "\(indentation)\(subcommand.name.underlined) - \(subcommand.summary.dimmed)\n" // TODO: Prepend all super command names in subcommand usage description
+                string += indentation + String(repeating: " ", count: subcommand.name.characters.count + 3) + ("Run " + "`\(name) \(subcommand.name) -h`".italic + " for more info").dimmed + "\n\n"
             }
         }
 
         if flags.count + namedArguments.count > 0 {
 
-            string += "OPTIONS\n"
+            string += "OPTIONS".bold + "\n"
 
             for flag in flags {
 
-                string += "\t"
+                string += "\(indentation)"
 
                 if let character = flag.character {
-                    string += "-\(character), "
+                    string += "-\(character)".bold.magenta + ", "
                 }
 
-                string += " --\(flag.name)\n\t\t\(flag.summary)\n\n"
+                string += " " + "--\(flag.name)".blue + "\n\(indentation)\(indentation)\(flag.summary.dimmed)\n\n"
 
             }
 
-            string += "\t-h, --help\n\t\tShow usage description\n\n"
+            string += "\(indentation)" + "-h".bold.magenta + ", " + "--help".blue + "\n\(indentation)\(indentation)" + "Show usage description".dimmed + "\n\n"
 
             for namedArgument in namedArguments {
-                string += "\t"
+                string += "\(indentation)"
 
                 if let character = namedArgument.character {
-                    string += "-\(character), "
+                    string += "-\(character)".bold.magenta + ", "
                 }
 
-                string += "--\(namedArgument.name) <\(namedArgument.valuePlaceholder)>\n\t\t\(namedArgument.summary)\n\n"
+                string += "--\(namedArgument.name)".blue + "<\(namedArgument.valuePlaceholder)>".italic + "\n\(indentation)\(indentation)\(namedArgument.summary.dimmed)" + "\n\n"
             }
 
         }

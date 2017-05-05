@@ -126,7 +126,6 @@ extension Command.Result {
         return try runner.run(completion: completion)
     }
 
-
     /// Runs a shell command asynchronously
     ///
     /// - Parameters:

@@ -8,6 +8,13 @@
 
 Powerline is a library for writing solid command-line interfaces in Swift, for Linux and macOS.
 
+
+
+## Features
+
+- [ ] Subcommands
+- [ ] Type-safe
+
 ## Glossary
 * **Command**
    A command is a space-delimited string , where the first string component is the name of an executable.
