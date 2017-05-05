@@ -22,8 +22,7 @@ public struct Context {
 
         let environment = ProcessInfo.processInfo.environment
 
-
-        let encodingString = environment["LC_TYPE"] ?? "UTF-8"
+        let encodingString = environment["LC_TYPE"] ?? environment["LANG"]?.components(separatedBy: ".").last ?? "UTF-8"
         let encoding: String.Encoding
 
         switch encodingString.lowercased() {
