@@ -5,18 +5,77 @@ class PowerlineTests: XCTestCase {
 
     static var allTests: [(String, (PowerlineTests) -> () throws -> Void)] {
         return [
-            ("testGreeting", testGreeting),
+            ("testGreeting", testVariadicGreetingWithOptionsAndOutput),
         ]
     }
 
-    func testGreeting() {
-        do {
-            print(CommandLine.arguments)
+    func testVariadicGreetingWithOptionsAndOutput() throws {
+        print(CommandLine.arguments)
 
-            //try Command.greet.run(arguments: ["greet", "David", "John", "Adam", "Paulo", "--say-goodbye", "-g", "\"Welcome to Powerline!\""])
-            Command.filePrinter.runOrExit(arguments: ["example", "--output", "file.txt", "log1.log", "log2.log", "-v"])
-        } catch {
-            XCTFail("\(error)")
+
+        try Command.filePrinter.run(arguments: ["example", "--output", "file.txt", "log1.log", "log2.log", "-v"]) { handler in
+            XCTAssertEqual(try handler.value(for: .output), "file.txt")
+
+            XCTAssertEqual(try handler.positionalValues(), ["log1.log", "log2.log"])
+
+            XCTAssert(handler.flags.contains(.verbose))
+        }
+    }
+
+    func testCompoundFlagLastArgument() throws {
+        try Command.filePrinter.run(arguments: ["example", "-vo", "file.txt", "log1.log"]) { handler in
+            XCTAssertEqual(try handler.value(for: .output), "file.txt")
+
+            XCTAssertEqual(try handler.positionalValues(), ["log1.log"])
+
+            XCTAssert(handler.flags.contains(.verbose))
+        }
+    }
+
+    func testCmdAsync() throws {
+
+
+        let expectation = self.expectation(description: "Async")
+
+        try Command.filePrinter.run(arguments: ["example", "-vo", "file.txt", "log1.log"]) { handler in
+
+            do {
+                let handler = try handler.cmd("curl -v http://www.google.com") { error, result in
+
+                    defer {
+                        expectation.fulfill()
+                    }
+
+                    if let error = error {
+                        XCTFail("\(error)")
+                        return
+                    }
+
+                    if let string = result?.standardOutput {
+                        handler.print(string)
+                    }
+                }
+
+            } catch {
+                handler.print(error)
+            }
+
+            
+            waitForExpectations(timeout: 10, handler: nil)
+
+        }
+    }
+
+    func testCmd() throws {
+        try Command.filePrinter.run(arguments: ["example"]) { handler in
+
+            guard let output = try handler.cmd("ls -a1").standardOutput else {
+                XCTFail("No output")
+                return
+            }
+
+            print(output)
+
         }
     }
 }
@@ -30,19 +89,6 @@ extension Command {
         flags: [.verbose]
     )
 
-    static func handleCommand(result: Command.Result) throws {
-        if let value: String = try result.value(for: .output) {
-            print("OUTPUT TO:", value)
-        }
-
-        let strings: [String] = try result.positionalValues()
-
-        print(strings)
-
-        if result.flags.contains(.verbose) {
-            print("VERBOSE")
-        }
-    }
 }
 
 extension Flag {

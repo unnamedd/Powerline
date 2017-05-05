@@ -44,8 +44,6 @@ public struct Command {
     public let positionalArgument: PositionalArgument?
     public let subcommands: [Command]
 
-    static var stdoutStream: TextOutputStream = StandardOutputStream()
-    static var stderrStream: TextOutputStream = StandardErrorStream()
 
     public init(
         name: String,
@@ -142,18 +140,33 @@ internal extension Command {
 
 public extension Command {
 
-    public func runOrExit(arguments: [String] = CommandLine.arguments) -> Result {
+    @discardableResult
+    public func runOrExit<T>(arguments: [String] = CommandLine.arguments, context: Context = .main, completion: (Handler) throws -> T) rethrows -> T {
+        return try completion(runOrExit(arguments: arguments, context: context))
+    }
+
+    public func runOrExit(arguments: [String] = CommandLine.arguments, context: Context = .main) -> Handler {
+
         do {
-            return try run(arguments: arguments)
+            return try run(arguments: arguments, context: context)
         } catch {
-            Command.stderrStream.write(error.localizedDescription)
-            Command.stdoutStream.write(usageString)
-            exit(EX_USAGE)
+            context.standardError.write(error.localizedDescription, terminator: "\n")
+            context.standardError.write(usageString, terminator: "\n")
+            exit(64)
         }
     }
 
-    public func run(arguments: [String] = CommandLine.arguments) throws -> Result {
-        guard arguments.count >= 2 else {
+    @discardableResult
+    public func run<T>(arguments: [String] = CommandLine.arguments, context: Context = .main, completion: (Handler) throws -> T) throws -> T {
+        return try completion(run(arguments: arguments, context: context))
+    }
+
+    @discardableResult
+    public func run(arguments: [String] = CommandLine.arguments, context: Context = .main) throws -> Handler {
+
+        var context = context
+
+        guard arguments.count >= 1 else {
             throw CommandError.notEnoughArguments
         }
 
@@ -197,8 +210,8 @@ public extension Command {
                 let argumentName = argument.substring(from: argument.index(argument.startIndex, offsetBy: 2))
 
                 if argumentName == "help" {
-                    Command.stdoutStream.write(usageString)
-                    exit(EX_OK)
+                    context.standardOutput.write(usageString, terminator: "\n")
+                    exit(EXIT_SUCCESS)
                 }
 
                 // Find a named argument corresponding to the name
@@ -221,8 +234,8 @@ public extension Command {
                 if string.characters.count == 1 {
 
                     guard string != "h" else {
-                        Command.stdoutStream.write(usageString)
-                        exit(EX_OK)
+                        context.standardOutput.write(usageString, terminator: "\n")
+                        exit(EXIT_SUCCESS)
                     }
 
                     if let flag = flag(withCharacter: string.characters[string.startIndex]) {
@@ -277,6 +290,7 @@ public extension Command {
         }
 
         return .init(
+            context: context,
             positionalValues: positionalValues,
             valuesByNamedArgument: valuesByNamedArgument,
             flags: setFlags
