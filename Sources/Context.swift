@@ -18,11 +18,35 @@ public struct Context {
         }
     }
 
-    public static let main = Context(
-        environment: ProcessInfo.processInfo.environment,
-        encoding: .utf8,
-        standardInput: InputStream(fileHandle: FileHandle.standardInput, encoding: .utf8),
-        standardOutput: OutputStream(fileHandle: FileHandle.standardOutput, encoding: .utf8),
-        standardError: OutputStream(fileHandle: FileHandle.standardError, encoding: .utf8)
-    )
+    public static let main: Context = {
+
+        let environment = ProcessInfo.processInfo.environment
+
+
+        let encodingString = environment["LC_TYPE"] ?? "UTF-8"
+        let encoding: String.Encoding
+
+        switch encodingString.lowercased() {
+        case "utf-8":
+            encoding = .utf8
+        case "ascii":
+            encoding = .ascii
+        case "unicode":
+            encoding = .unicode
+        case "utf-16":
+            encoding = .utf16
+        default:
+            encoding = .utf8
+        }
+
+        // TODO: Support more
+
+        return Context(
+            environment: environment,
+            encoding: encoding,
+            standardInput: InputStream(fileHandle: FileHandle.standardInput, encoding: .utf8),
+            standardOutput: OutputStream(fileHandle: FileHandle.standardOutput, encoding: .utf8),
+            standardError: OutputStream(fileHandle: FileHandle.standardError, encoding: .utf8)
+        )
+    }()
 }
