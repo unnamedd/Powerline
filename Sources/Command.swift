@@ -6,6 +6,16 @@
 
 import Foundation
 
+/// Error associated with command execution
+///
+/// - missingValue: Missing value in named argument
+/// - missingNamedArgument: Missing named argument
+/// - unknownOption: Unexpected option
+/// - extranousPositionalArguments: Too many positional arguments
+/// - missingPositional: Missing positional argument
+/// - notEnoughArguments: Not enouch arguments to run the command
+/// - invalidUsage: Invalid usage
+/// - other: Custom errors
 public enum CommandError: Error, CustomStringConvertible {
     case missingValue(NamedArgument)
     case missingNamedArgument(NamedArgument)
@@ -16,7 +26,10 @@ public enum CommandError: Error, CustomStringConvertible {
     case invalidUsage(reason: String)
     case other(String)
 
-    public init(error: String) {
+    /// Creates a new CommandError with a custom description
+    ///
+    /// - Parameter error: Error description
+    public init(_ error: String) {
         self = .other(error)
     }
 
@@ -44,14 +57,39 @@ public enum CommandError: Error, CustomStringConvertible {
 
 public struct Command {
 
+    /// The name of the command
     public let name: String
+
+    /// Short description of what the command does
     public let summary: String
+
+    /// Flags accepted by the command
     public let flags: Set<Flag>
+
+    /// Named arguments, accepted by the command
     public let namedArguments: Set<NamedArgument>
+
+    /// Positional argument accepted by the command
     public let positionalArgument: PositionalArgument?
+
+    /// Subcommands of the command
+    ///
+    /// For instance a subcommand of `git` would be `status`.
     public let subcommands: [Command]
+
+    /// Closure handling the result of the comand
     public let handler: (Result) throws -> Void
 
+    /// Creates a new command
+    ///
+    /// - Parameters:
+    ///   - name: Name of the command
+    ///   - summary: Short description of what the command does
+    ///   - subcommands: Subcommands for the command
+    ///   - positionalArgument: Positional argument accepted by the command
+    ///   - namedArguments: Named arguments accepted by the command
+    ///   - flags: Flags accepted by the command
+    ///   - handler: Closure handling the result of the comand
     public init(
         name: String,
         summary: String,
@@ -150,6 +188,10 @@ internal extension Command {
 
 public extension Command {
 
+    /// Runs the command, supressing thrown errors exiting and printing the error or usage, if the 
+    /// command was improperly used
+    ///
+    /// - Parameter arguments: Arguments to pass to the command. Defaults to `CommandLine.arguments`
     public func runOrExit(arguments: [String] = CommandLine.arguments) {
         runOrExit(arguments: arguments, context: .main)
     }
@@ -171,6 +213,9 @@ public extension Command {
         }
     }
 
+    /// Runs the command
+    ///
+    /// - Parameter arguments: Arguments to pass to the command. Defaults to `CommandLine.arguments`
     public func run(arguments: [String] = CommandLine.arguments) throws {
         try run(arguments: arguments, context: .main)
     }

@@ -5,9 +5,17 @@
 #endif
 
 public extension Command {
+
+    /// A command result contains the parsed flags, named arguments and positional arguments
+    //  and provide access to stdout, stdin, and stderr
     public struct Result {
+
+        /// The flags parsed from the command
         public let flags: Set<Flag>
+
+        /// Positional arguments parsed from the command
         public let positionalArguments: PositionalArguments
+
         private let valuesByNamedArgument: [NamedArgument: String]
 
         fileprivate var context: Context
@@ -24,10 +32,19 @@ public extension Command {
             self.flags = flags
         }
 
+        /// Returns the sting value of a named argument
+        ///
+        /// - Parameter namedArgument: Named argument
+        /// - Returns: String, or nil if the named argument was not provided
         public func string(for namedArgument: NamedArgument) -> String? {
             return valuesByNamedArgument[namedArgument]
         }
 
+        /// Returns a named argument, converted to the inferred type
+        ///
+        /// - Parameter namedArgument: Named argument
+        /// - Returns: Value of the inferred type, or nil if the argument was not provided
+        /// - Throws: An error indicating the the conversion failed
         public func value<T: StringInitializable>(for namedArgument: NamedArgument) throws -> T? {
             guard let string = valuesByNamedArgument[namedArgument] else {
                 return nil
@@ -36,6 +53,11 @@ public extension Command {
             return try? T(string: string)
         }
 
+        /// Returns a named argument, converted to the inferred type
+        ///
+        /// - Parameter namedArgument: Named argument
+        /// - Returns: Value of the inferred type
+        /// - Throws: An error indicating the the conversion failed **or**, if the named argument was not provided
         public func value<T: StringInitializable>(for namedArgument: NamedArgument) throws -> T {
             guard let value: T = try value(for: namedArgument) else {
                 throw CommandError.missingNamedArgument(namedArgument)
@@ -48,16 +70,31 @@ public extension Command {
 
 extension Command.Result {
 
+    /// Runs a shell command synchronously
+    ///
+    /// - Parameters:
+    ///   - executable: Executable to run
+    ///   - arguments: Arguments passed to the executable
+    /// - Returns: A `ProcessResult` struct, containing the stdout and stderr of the runned proccess
+    /// - Throws: An error indicating that thehe process exited with a non-zero value, or if the executable
+    ///           wasn't found or is invalid
     @discardableResult
     public func cmd(executable: String, arguments: [String] = []) throws -> ProcessResult {
         let runner = try ProcessRunner(context: context, executable: executable, arguments: arguments)
         return try runner.run()
     }
 
+    /// Runs a shell command synchronously
+    ///
+    /// - Parameters:
+    ///   - string: Executable and arguments to be passed, separated by whitespace
+    /// - Returns: A `ProcessResult` struct, containing the stdout and stderr of the runned proccess
+    /// - Throws: An error indicating that thehe process exited with a non-zero value, or if the executable 
+    ///           wasn't found or is invalid
     @discardableResult
     public func cmd(_ string: String) throws -> ProcessResult {
         let string = string.trimmingCharacters(in: .whitespacesAndNewlines)
-        var components = string.components(separatedBy: " ")
+        var components = string.components(separatedBy: " ").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
 
         guard components.count > 1 else {
             return try cmd(executable: string)
@@ -70,6 +107,18 @@ extension Command.Result {
 }
 
 extension Command.Result {
+
+    /// Runs a shell command asynchronously
+    ///
+    /// - Parameters:
+    ///   - executable: Executable to run
+    ///   - arguments: Arguments passed to the executable
+    ///   - completion: Completion handler
+    ///   - error: Error, if any
+    ///   - result: A `ProcessResult` struct, containing the stdout and stderr of the runned proccess
+    ///             or nil, if an error occurred
+    /// - Returns: A `ProcessHandler` struct, allowing you to suspend, terminate, and resume the process
+    /// - Throws: An error indicating that the executable wasn't found or is invalid
     @discardableResult
     public func cmd(executable: String, arguments: [String] = [], completion: @escaping (_ error: ProcessError?, _ result: ProcessResult?) -> Void) throws -> ProcessHandler {
         let runner = try ProcessRunner(context: context, executable: executable, arguments: arguments)
@@ -77,6 +126,17 @@ extension Command.Result {
         return try runner.run(completion: completion)
     }
 
+
+    /// Runs a shell command asynchronously
+    ///
+    /// - Parameters:
+    ///   - string: Executable and arguments to be passed, separated by whitespace
+    ///   - completion: Completion handler
+    ///   - error: Error, if any
+    ///   - result: A `ProcessResult` struct, containing the stdout and stderr of the runned proccess
+    ///             or nil, if an error occurred
+    /// - Returns: A `ProcessHandler` struct, allowing you to suspend, terminate, and resume the process
+    /// - Throws: An error indicating that the executable wasn't found or is invalid
     @discardableResult
     public func cmd(_ string: String, completion: @escaping (_ error: ProcessError?, _ result: ProcessResult?) -> Void) throws -> ProcessHandler {
         let string = string.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -109,6 +169,7 @@ extension Command.Result {
 }
 
 extension Command.Result {
+    /// A collection of positional arguments
     public struct PositionalArguments {
         fileprivate let values: [String]
 
@@ -124,6 +185,11 @@ extension Command.Result.PositionalArguments: Collection {
         return values[position]
     }
 
+    /// Returns a value at a given index in the collection, converted to the inferred type
+    ///
+    /// - Parameter index: Index in collection
+    /// - Returns: A value of the inferred type
+    /// - Throws: An error indicating that the type conversion failed
     public func value<T: StringInitializable>(at index: Int) throws -> T {
         return try T(string: self[index])
     }

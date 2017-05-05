@@ -35,12 +35,12 @@ Creating structured commands with Powerline is easy. The best way to produce typ
 
 Let's create a CLI that greets people.
 
-### Set up the project
+### Create a new Swift executable
 
-```swift
+```sh
 $ mkdir powerline-example
 $ cd powerline-example
-swift package init --type executable
+$ swift package init --type executable
 ```
 
 In your `Package.swift` file, add `Powerline` as a dependency:
@@ -49,16 +49,18 @@ In your `Package.swift` file, add `Powerline` as a dependency:
 import PackageDescription
 
 let package = Package(
-    name: "Powerline-example2",
+    name: "powerline-example",
     dependencies: [
         .Package(url: "https://github.com/formbound/Powerline", majorVersion: 0, minor: 1)
     ]
 )
 ```
 
-Create flags, named arguments, and positional arguments like so:
+#### Create flags, named arguments and positional arguments 
 
 ```swift
+import Powerline
+
 extension Flag {
     static let verbose = Flag(
         name: "verbose",
@@ -74,13 +76,6 @@ extension NamedArgument {
         summary: "File to write to",
         valuePlaceholder: "file"
     )
-
-    static let count = NamedArgument(
-        name: "count",
-        character: "c",
-        summary: "Number of times to say Hello world",
-        valuePlaceholder: "n"
-    )
 }
 
 extension PositionalArgument {
@@ -92,7 +87,9 @@ extension PositionalArgument {
 }
 ```
 
-Create the command in an extension if you like, or store it in any way you wish.
+#### Create commands
+
+Create the command in an extension, or store in any other way of your preference. 
 
 ```swift
 extension Command {
@@ -101,60 +98,75 @@ extension Command {
         summary: "Greets people",
         subcommands: [],
         positionalArgument: .names,
-        namedArguments: [.output, .count],
-        flags: [.verbose],
-        handler: greeterHandler
-    )
+        namedArguments: [.output],
+        flags: [.verbose]) { result in
 
-    private static func greeterHandler(result: Command.Result) throws {
-
-        // Make sure there's anyone to greet to begin with
-        guard !result.positionalArguments.isEmpty else {
-            throw CommandError(error: "No names to greet!")
-        }
-
-        // Check --verbose flag
+        // Check flags
         let verbose: Bool = result.flags.contains(.verbose)
 
-        // Safely cast and access the value from a named argument
-        let greetCount: Int = try result.value(for: .count) ?? 1
-
-        // String to print or output
-        var resultString: String = ""
-
-        for i in 0..<greetCount {
-
-            if verbose {
-                print("Greeting round \(i)")
-            }
-
-            // Loop through positional arguments
-            for name in result.positionalArguments {
-
-                if verbose {
-                    print("Greeting \(name)")
-                }
-
-                resultString += "Hello " + name + "!\n"
-            }
+        if verbose {
+            result.stdout("Verbose mode enabled")
         }
 
-        // If we have an output file in the named arguments, write to that file
+        var resultString: String = ""
+
+        // Loop through positional arguments
+        for name in result.positionalArguments {
+            resultString += "Hello " + name + "!\n"
+        }
+
+        // Get value from named argument
         if let outputFile: String = try result.value(for: .output) {
             try resultString.write(toFile: outputFile, atomically: true, encoding: .utf8)
         }
-            // Otherwise, print the output
         else {
+            // Print greetings
             result.stdout(resultString)
         }
     }
 }
 ```
 
+
+
+The signature for a command handler closure is `(Command.Result) throws -> Void`, so you could just as easily put the handler function somewhere else.
+
+```swift
+let command = Command(
+    name: "example",
+    summary: "Example command",
+    handler: exampleCommandHandler
+)
+
+func exampleCommandHandler(handler: Command.Result) throws {
+    // Handle command
+}
+```
+
+#### Run a command
+
 In your `main.swift` file, simply add
 
 ```swift
 Command.greeter.runOrExit()
+```
+
+You can also handle errors yourself, by running
+
+```Swift
+do {
+  try Command.greeter.run()
+} catch {
+  print("\(error)")
+}
+```
+
+#### Throwing errors
+
+You can throw any error you want, and handle them as you wish. When running commands using `runOrExit()` , throwing a `CommandError` will output the message you provide to `stderr`.
+
+```swift
+throw CommandError("Invalid usage")
 ```
 
 Build your executable
@@ -171,7 +183,7 @@ $ .build/debug/powerline-example --help
 
 Here's the output you'll see
 
-```sh
+```Txt
 NAME
 	greeter - Greets people
 
@@ -187,32 +199,36 @@ OPTIONS
 
 	-o, --output <file>
 		File to write to
-
-	-c, --count <n>
-		Number of times to say Hello world
 ```
 
 The command is now ready to use! 👾
 
 ## Additionally
 
-### Printing to standard out and standard error
+### Printing to stdout and stderr
 
 ```swift
 func commandHandler(result: Command.Result) throws {
+	// Print to stdout
     result.stdout("Hello")
+   	// Print to stderr
     result.stderr("Hello")
 }
 ```
 
 ### Running shell commands
 
+A shell command will throw an error if it exists with a non-zero value.
+
 ```swift
 func commandHandler(result: Command.Result) throws {
+	
+	// Run a command synchronously
     let shellResult = try result.cmd("ls -a1")
-    print(shellResult.standardOutput)
-    print(shellResult.standardError)
-
+    print(shellResult.standardOutput) // Optional
+    print(shellResult.standardError)  // Optional
+    
+	// Run a command asynchronously
     let process = try result.cmd("ls -a1") { error, result in
         // Run asynchronously
     }
