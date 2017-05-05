@@ -194,6 +194,34 @@ OPTIONS
 
 The command is now ready to use! 👾
 
+## Additionally
+
+### Printing to standard out and standard error
+
+```swift
+func commandHandler(result: Command.Result) throws {
+    result.stdout("Hello")
+    result.stderr("Hello")
+}
+```
+
+### Running shell commands
+
+```swift
+func commandHandler(result: Command.Result) throws {
+    let shellResult = try result.cmd("ls -a1")
+    print(shellResult.standardOutput)
+    print(shellResult.standardError)
+
+    let process = try result.cmd("ls -a1") { error, result in
+        // Run asynchronously
+    }
+
+    process.suspend()
+    process.resume()
+}
+```
+
 ## Credits
 
 - David Ask ([@davidask](https://github.com/davidask))
