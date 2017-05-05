@@ -209,9 +209,9 @@ The command is now ready to use! 👾
 
 ```swift
 func commandHandler(result: Command.Result) throws {
-	// Print to stdout
+    // Print to stdout
     result.stdout("Hello")
-   	// Print to stderr
+    // Print to stderr
     result.stderr("Hello")
 }
 ```
@@ -223,12 +223,12 @@ A shell command will throw an error if it exists with a non-zero value.
 ```swift
 func commandHandler(result: Command.Result) throws {
 	
-	// Run a command synchronously
+    // Run a command synchronously
     let shellResult = try result.cmd("ls -a1")
     print(shellResult.standardOutput) // Optional
     print(shellResult.standardError)  // Optional
     
-	// Run a command asynchronously
+    // Run a command asynchronously
     let process = try result.cmd("ls -a1") { error, result in
         // Run asynchronously
     }
