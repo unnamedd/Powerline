@@ -33,106 +33,166 @@ Powerline is a library for writing solid command-line interfaces in Swift, for L
 ## Usage
 Creating structured commands with Powerline is easy. The best way to produce type-safe and clean code is to add arguments and commands via extensions.
 
-### Arguments
+Let's create a CLI that greets people.
 
-Begin by creating named arguments, flags and positional arguments, like so:
+### Set up the project
+
+```swift
+$ mkdir powerline-example
+$ cd powerline-example
+swift package init --type executable
+```
+
+In your `Package.swift` file, add `Powerline` as a dependency:
+
+```swift
+import PackageDescription
+
+let package = Package(
+    name: "Powerline-example2",
+    dependencies: [
+        .Package(url: "https://github.com/formbound/Powerline", majorVersion: 0, minor: 1)
+    ]
+)
+```
+
+Create flags, named arguments, and positional arguments like so:
 
 ```swift
 extension Flag {
-  static let verbose = Flag(
-      name: "verbose",                 // --verbose
-      character: "v",                  // -v
-      summary: "Prints debug output"   // Printed out in help
-  )
+    static let verbose = Flag(
+        name: "verbose",
+        character: "v",
+        summary: "Prints debug output"
+    )
 }
-```
 
-```swift
 extension NamedArgument {
-  static let output = NamedArgument(
-    name: "output",              // --output <file>
-    character: "o",              // -o <file>
-    summary: "File to write to", // Printed out in help
-    valuePlaceholder: "file"     // Placeholder for value printed out in help
-  )
-}
-```
+    static let output = NamedArgument(
+        name: "output",
+        character: "o",
+        summary: "File to write to",
+        valuePlaceholder: "file"
+    )
 
-```swift
+    static let count = NamedArgument(
+        name: "count",
+        character: "c",
+        summary: "Number of times to say Hello world",
+        valuePlaceholder: "n"
+    )
+}
+
 extension PositionalArgument {
-  static let files = PositionalArgument(
-  	name: "file",                 // Printed out in help
-  	summary: "A file to process", // Printed out in help
-  	variadic: true                // Whether multiple values are supported
-  )
+    static let names = PositionalArgument(
+        name: "names",
+        summary: "Names to greet",
+        variadic: true
+    )
 }
 ```
 
-### Commands
+Create the command in an extension if you like, or store it in any way you wish.
 
 ```swift
 extension Command {
-    static let filePrinter = Command(
-        name: "filePrinter",                     // Name of command
-        summary: "Prints the contents of files", // Summary shown in help
-        subcommands: [],                         // Add aditional subcommands if needed
-        positionalArgument: .files,              // Positional arguments
-        namedArguments: [.output],               // Named arguments
-        flags: [.verbose]                        // Flags,
-        handler: filePrinterCommandHandler       // Handler closure
+    static let greeter = Command(
+        name: "greeter",
+        summary: "Greets people",
+        subcommands: [],
+        positionalArgument: .names,
+        namedArguments: [.output, .count],
+        flags: [.verbose],
+        handler: greeterHandler
     )
-    
-    private static func filePrinterCommandHandler(result: Command.Result) throws {
-    
-    	// Check flags
-    	let verbose: Bool = result.flags.contains(.verbose)
-    
-    	if verbose {
-    		result.stdout("Verbose enabled")
-    	}
-    	
-    	// Iterate over positional arguments
-    	for argument in result.positionalArguments {
-    		result.stdout("Processing", argument)
-    	}
-    	
-    	// Get value of named parameter
-    	guard let output = result.string(for: .output) else {
-    		throw CommandError(error: "Missing output parameter")
-    	}
-    	
-    	// Automatically cast and nil assert, throw error on failure
-		let outputOrThrow: Int = try result.value(for: .output)
-		
-		// Run a shell command
-		let cmdResult = try result.cmd("curl -v http://www.google.com")
-		
-		guard let cmdResult.standardOutput else {
-			
-			if let cmdStderr = cmdResult.standardError {
-				result.stderr(cmdStderr)
-			}	
-		
-			throw CommandError(error: "Curl didn't result in stdout")
-		}
+
+    private static func greeterHandler(result: Command.Result) throws {
+
+        // Make sure there's anyone to greet to begin with
+        guard !result.positionalArguments.isEmpty else {
+            throw CommandError(error: "No names to greet!")
+        }
+
+        // Check --verbose flag
+        let verbose: Bool = result.flags.contains(.verbose)
+
+        // Safely cast and access the value from a named argument
+        let greetCount: Int = try result.value(for: .count) ?? 1
+
+        // String to print or output
+        var resultString: String = ""
+
+        for i in 0..<greetCount {
+
+            if verbose {
+                print("Greeting round \(i)")
+            }
+
+            // Loop through positional arguments
+            for name in result.positionalArguments {
+
+                if verbose {
+                    print("Greeting \(name)")
+                }
+
+                resultString += "Hello " + name + "!\n"
+            }
+        }
+
+        // If we have an output file in the named arguments, write to that file
+        if let outputFile: String = try result.value(for: .output) {
+            try resultString.write(toFile: outputFile, atomically: true, encoding: .utf8)
+        }
+            // Otherwise, print the output
+        else {
+            result.stdout(resultString)
+        }
     }
 }
 ```
 
-### Running commands
+In your `main.swift` file, simply add
+
 ```swift
-// Run with process info arguments
-Command.filePrinter.run()
-
-// Run with custom arguments
-Command.filePrinter.run(arguments: ["arg1", "arg2])
-
-// Run with process info arugments, exit on error
-Command.filePrinter.runOrExit()
-
-// Run with custom arugments, exit on error
-Command.filePrinter.runOrExit(arguments: ["arg1", "arg2])
+Command.greeter.runOrExit()
 ```
+
+Build your executable
+
+```swift
+$ swift build
+```
+
+Run the executable
+
+```swift
+$ .build/debug/powerline-example --help
+```
+
+Here's the output you'll see
+
+```sh
+NAME
+	greeter - Greets people
+
+USAGE
+	greeter [options]
+
+OPTIONS
+	-v,  --verbose
+		Prints debug output
+
+	-h, --help
+		Show usage description
+
+	-o, --output <file>
+		File to write to
+
+	-c, --count <n>
+		Number of times to say Hello world
+```
+
+The command is now ready to use! 👾
 
 ## Credits
 
