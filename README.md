@@ -16,7 +16,6 @@ Powerline is a library for writing solid command-line interfaces in Swift, for L
 
 - [x] Subcommands
 - [x] Type-safe options parsing
-- [x] String colouring 
 - [x] Shell commands
 - [x] Prompting
 - [x] String colouring
