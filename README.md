@@ -254,7 +254,7 @@ func commandHandler(result: Command.Result) throws {
     let selectedOption = result.select(
         options,
         default: options[1],
-        message: "Where to deploy your application?"
+        message: "Select your favorite number!"
     )
 }
 ```
