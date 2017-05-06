@@ -197,7 +197,7 @@ internal extension Command {
     }
 }
 
-public extension Command {
+extension Command {
 
     /// Runs the command, supressing thrown errors exiting and printing the error or usage, if the 
     /// command was improperly used
@@ -235,7 +235,7 @@ public extension Command {
 
         var context = context
 
-        guard arguments.count >= 2 else {
+        guard arguments.count >= 1 else {
             throw CommandError.notEnoughArguments
         }
 

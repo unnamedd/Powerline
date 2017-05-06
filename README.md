@@ -18,6 +18,8 @@ Powerline is a library for writing solid command-line interfaces in Swift, for L
 - [x] Type-safe options parsing
 - [x] String colouring 
 - [x] Shell commands
+- [x] Prompting
+- [x] String colouring
 
 ## Glossary
 * **Command**
@@ -210,6 +212,20 @@ func commandHandler(result: Command.Result) throws {
     result.stderr("Hello")
 }
 ```
+
+
+
+### Colorize strings
+
+You can colorize output using `String` extensions. Here are some examples:
+
+```swift
+"Success".green
+"My favorite colors are " + "green".red + " and " + "blue".blue
+"This string is white on black".white.onBlack
+```
+
+
 
 ### Running shell commands
 

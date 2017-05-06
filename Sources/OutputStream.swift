@@ -3,7 +3,7 @@ import Foundation
 public protocol CommandOutput: TextOutputStream {
 }
 
-public extension CommandOutput {
+extension CommandOutput {
     public mutating func writeln(_ s: String) {
         write("\(s)\n")
     }

@@ -4,7 +4,7 @@
     import Darwin.C
 #endif
 
-public extension Command {
+extension Command {
 
     /// A command result contains the parsed flags, named arguments and positional arguments
     //  and provide access to stdout, stdin, and stderr
@@ -152,15 +152,28 @@ extension Command.Result {
 }
 
 extension Command.Result {
+    /// Returns the shell environment
     public var environment: [String: String] {
         return context.environment
     }
 
+    /// Prints a message to `stdout`
+    ///
+    /// - Parameters:
+    ///   - items: Items being described, and written to `stdout`
+    ///   - separator: String separating the items
+    ///   - terminator: String, appended to the end of the output
     public func stdout(_ items: Any..., separator: String = " ", terminator: String = "\n") {
         let string = items.map { String(describing: $0) }.joined(separator: separator)
         context.standardOutput.write(string, terminator: terminator)
     }
 
+    /// Prints a message to `stderr`
+    ///
+    /// - Parameters:
+    ///   - items: Items being described, and written to `stderr`
+    ///   - separator: String separating the items
+    ///   - terminator: String, appended to the end of the output
     public func stderr(_ items: Any..., separator: String = " ", terminator: String = "\n") {
         let string = items.map { String(describing: $0) }.joined(separator: separator)
         context.standardError.write(string, terminator: terminator)
@@ -179,6 +192,9 @@ extension Command.Result {
 }
 
 extension Command.Result {
+    /// Reads the input from stdin
+    ///
+    /// - Returns: A string, or nil if the input is empty
     public func readInput() -> String? {
         guard let input = context.standardInput.read()?.trimmingCharacters(in: .whitespacesAndNewlines) else {
             return nil
@@ -186,6 +202,10 @@ extension Command.Result {
         return input.isEmpty ? nil : input
     }
 
+    /// Prompts the user to type either `y` or `n`.
+    ///
+    /// - Parameter message: A message to provide
+    /// - Returns: `true` if the input was `y`, `false` if the input was `n`.
     public func confirm(_ message: String) -> Bool {
         stdout(message.bold.magenta, "[y/N]", terminator: " ")
 
@@ -203,6 +223,13 @@ extension Command.Result {
         }
     }
 
+    /// Prompts the user to select one of several values
+    ///
+    /// - Parameters:
+    ///   - options: An array of strings representing the selectable values
+    ///   - defaultValue: Optional default value. Does not have to be contained in the original options
+    ///   - message: A message to provide
+    /// - Returns: The selected value or default value, if provided
     public func select(_ options: [String], default defaultValue: String? = nil, message: String) -> String {
         stdout(message.bold.magenta)
         for (i, option) in options.enumerated() {

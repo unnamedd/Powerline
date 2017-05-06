@@ -88,6 +88,8 @@ class PowerlineTests: XCTestCase {
             result.stdout(stdout)
         }
 
+        print(CommandLine.arguments)
+
         try command.run(arguments: ["example"])
     }
 

@@ -1,12 +1,12 @@
 import Foundation
 
-public struct Context {
-    public var environment: [String: String]
-    public var encoding: String.Encoding
-    public var standardInput: InputStream
-    public var standardOutput: OutputStream
-    public var standardError: OutputStream
-    public var currentDirectory: String {
+internal struct Context {
+    internal var environment: [String: String]
+    internal var encoding: String.Encoding
+    internal var standardInput: InputStream
+    internal var standardOutput: OutputStream
+    internal var standardError: OutputStream
+    internal var currentDirectory: String {
         get {
             return FileManager.default.currentDirectoryPath
         }
@@ -18,7 +18,7 @@ public struct Context {
         }
     }
 
-    public static let main: Context = {
+    internal static let main: Context = {
 
         let environment = ProcessInfo.processInfo.environment
 

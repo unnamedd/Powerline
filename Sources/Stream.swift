@@ -1,27 +1,27 @@
 import Foundation
 
-public protocol FileHandleStream {
+internal protocol FileHandleStream {
     var fileHandle: FileHandle { get }
     var encoding: String.Encoding { get }
 }
 
-public protocol ReadableStream: FileHandleStream {}
-public protocol WritableStream: FileHandleStream {}
+internal protocol ReadableStream: FileHandleStream {}
+internal protocol WritableStream: FileHandleStream {}
 
 extension ReadableStream {
-    public func readToEndOfFile() -> String? {
+    internal func readToEndOfFile() -> String? {
         guard let data: Data = readToEndOfFile() else {
             return nil
         }
         return String(data: data, encoding: encoding)
     }
 
-    public func read() -> Data? {
+    internal func read() -> Data? {
         let data = fileHandle.availableData
         return data.isEmpty ? nil : data
     }
 
-    public func read() -> String? {
+    internal func read() -> String? {
         guard let data: Data = read() else {
             return nil
         }
@@ -29,22 +29,22 @@ extension ReadableStream {
         return String(data: data, encoding: encoding)
     }
 
-    public func readToEndOfFile() -> Data? {
+    internal func readToEndOfFile() -> Data? {
         let data = fileHandle.readDataToEndOfFile()
         return data.isEmpty ? nil : data
     }
 }
 
 extension WritableStream {
-    public func write(_ string: String, terminator: String) {
+    internal func write(_ string: String, terminator: String) {
         write(string + terminator)
     }
 
-    public func write(_ data: Data) {
+    internal func write(_ data: Data) {
         fileHandle.write(data)
     }
 
-    public func write(_ string: String) {
+    internal func write(_ string: String) {
         guard let data = string.data(using: encoding) else {
             fatalError("Failed to convert string to data using encoding \(encoding)")
         }
@@ -53,18 +53,18 @@ extension WritableStream {
     }
 }
 
-public struct OutputStream: WritableStream {
+internal struct OutputStream: WritableStream {
     public let fileHandle: FileHandle
     public var encoding: String.Encoding
 
 }
 
-public struct InputStream: ReadableStream {
+internal struct InputStream: ReadableStream {
     public let fileHandle: FileHandle
     public var encoding: String.Encoding
 }
 
-public struct Stream: ReadableStream, WritableStream {
+internal struct Stream: ReadableStream, WritableStream {
     public let fileHandle: FileHandle
     public var encoding: String.Encoding
 }

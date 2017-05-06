@@ -156,6 +156,8 @@ internal struct ProcessRunner {
     }
 }
 
+/// A `ProcessHandler` allows you to assert the running status of a process, as well as
+/// suspend, terminate, interrupt, and resume it.
 public struct ProcessHandler {
     private var process: Process
 
@@ -163,32 +165,45 @@ public struct ProcessHandler {
         self.process = process
     }
 
+    /// Determines whether the process is running
     public var isRunning: Bool {
         return process.isRunning
     }
 
+    /// Attempts to suspend the process
+    ///
+    /// - Returns: `true` if successful, `false` if unsucsessful
     @discardableResult
     public func suspend() -> Bool {
         return process.suspend()
     }
 
+    /// Terminates the process
     public func terminate() {
         process.terminate()
     }
 
+    /// Attempts to resume the process
+    ///
+    /// - Returns: `true` if successful, `false` if unsucsessful
     @discardableResult
     public func resume() -> Bool {
         return process.resume()
     }
 
+    /// Interrupts the process
     public func interrupt() {
         process.interrupt()
     }
 }
 
+/// The output result of a running process
 public struct ProcessResult {
 
+    /// The standard output of the process
     public let standardOutput: String?
+
+    /// The standard error of the output
     public let standardError: String?
 
     internal init(standardOutput: String?, standardError: String?) {
