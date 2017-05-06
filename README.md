@@ -10,7 +10,7 @@ Powerline is a library for writing solid command-line interfaces in Swift, for L
 
 
 
-<img src="Images/output-screenshot.png" />
+<img src="Images/output-screenshot2.png" />
 
 ## Features
 
@@ -192,7 +192,7 @@ Run the executable
 $ .build/debug/powerline-example --help
 ```
 
-Here's the output you'll see, like shown above.
+Here's the output you'll see:
 
 <img src="Images/output-screenshot.png" />
 
@@ -230,6 +230,32 @@ func commandHandler(result: Command.Result) throws {
 
     process.suspend()
     process.resume()
+}
+```
+
+### Prompting
+
+You can read from `stdin` in a few useful ways:
+
+```swift
+func commandHandler(result: Command.Result) throws {
+
+    if let input = result.readInput() {
+        // Do something with input
+    }
+
+    if result.confirm("Are you sure?") {
+        // User is sure
+    }
+
+    let options = ["One", "Two", "Three", "Four"]
+
+    // `default` is optional, forcing the user to make an active choice
+    let selectedOption = result.select(
+        options,
+        default: options[1],
+        message: "Where to deploy your application?"
+    )
 }
 ```
 
