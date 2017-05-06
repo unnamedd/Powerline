@@ -98,13 +98,9 @@ internal struct ProcessRunner {
 
         guard process.terminationStatus == 0 else {
 
-            var standardError: String = self.standardError.readToEndOfFile().trimmingCharacters(
+            let standardError: String = self.standardError.readToEndOfFile()?.trimmingCharacters(
                 in: .whitespacesAndNewlines
-            )
-
-            if standardError.isEmpty {
-                standardError = "Contents of standard error is empty"
-            }
+            ) ?? "Contents of standard error is empty"
 
             throw ProcessError.unsuccessfulExit(
                 exitCode: Int(process.terminationStatus),
@@ -113,8 +109,8 @@ internal struct ProcessRunner {
         }
 
         return ProcessResult(
-            standardOutput: standardOutput.readToEndOfFile().trimmingCharacters(in: .whitespacesAndNewlines),
-            standardError: standardError.readToEndOfFile().trimmingCharacters(in: .whitespacesAndNewlines)
+            standardOutput: standardOutput.readToEndOfFile()?.trimmingCharacters(in: .whitespacesAndNewlines),
+            standardError: standardError.readToEndOfFile()?.trimmingCharacters(in: .whitespacesAndNewlines)
         )
     }
 
@@ -132,13 +128,9 @@ internal struct ProcessRunner {
 
             guard process.terminationStatus == 0 else {
 
-                var standardError: String = self.standardError.readToEndOfFile().trimmingCharacters(
+                let standardError: String = self.standardError.readToEndOfFile()?.trimmingCharacters(
                     in: .whitespacesAndNewlines
-                )
-
-                if standardError.isEmpty {
-                    standardError = "Contents of standard error is empty"
-                }
+                ) ?? "Contents of standard error is empty"
 
                 let error = ProcessError.unsuccessfulExit(
                     exitCode: Int(process.terminationStatus),
@@ -151,8 +143,8 @@ internal struct ProcessRunner {
             }
 
             let result = ProcessResult(
-                standardOutput: self.standardOutput.readToEndOfFile().trimmingCharacters(in: .whitespacesAndNewlines),
-                standardError: self.standardError.readToEndOfFile().trimmingCharacters(in: .whitespacesAndNewlines)
+                standardOutput: self.standardOutput.readToEndOfFile()?.trimmingCharacters(in: .whitespacesAndNewlines),
+                standardError: self.standardError.readToEndOfFile()?.trimmingCharacters(in: .whitespacesAndNewlines)
             )
 
             completion(nil, result)
@@ -199,18 +191,9 @@ public struct ProcessResult {
     public let standardOutput: String?
     public let standardError: String?
 
-    internal init(standardOutput: String, standardError: String) {
+    internal init(standardOutput: String?, standardError: String?) {
 
-        if standardOutput.isEmpty {
-            self.standardOutput = nil
-        } else {
-            self.standardOutput = standardOutput
-        }
-
-        if standardError.isEmpty {
-            self.standardError = nil
-        } else {
-            self.standardError = standardOutput
-        }
+        self.standardOutput = standardOutput
+        self.standardError = standardError
     }
 }

@@ -9,20 +9,15 @@ public protocol ReadableStream: FileHandleStream {}
 public protocol WritableStream: FileHandleStream {}
 
 extension ReadableStream {
-    public func readToEndOfFile() -> String {
-        guard let string = String(
-            data: readToEndOfFile(),
-            encoding: encoding
-            ) else {
-                fatalError("Failed to convert data to string using encoding \(encoding)")
+    public func readToEndOfFile() -> String? {
+        guard let data: Data = readToEndOfFile() else {
+            return nil
         }
-
-        return string
+        return String(data: data, encoding: encoding)
     }
 
     public func read() -> Data? {
         let data = fileHandle.availableData
-
         return data.isEmpty ? nil : data
     }
 
@@ -34,8 +29,9 @@ extension ReadableStream {
         return String(data: data, encoding: encoding)
     }
 
-    public func readToEndOfFile() -> Data {
-        return fileHandle.readDataToEndOfFile()
+    public func readToEndOfFile() -> Data? {
+        let data = fileHandle.readDataToEndOfFile()
+        return data.isEmpty ? nil : data
     }
 }
 

@@ -235,7 +235,7 @@ public extension Command {
 
         var context = context
 
-        guard arguments.count >= 1 else {
+        guard arguments.count >= 2 else {
             throw CommandError.notEnoughArguments
         }
 

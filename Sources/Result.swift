@@ -178,6 +178,71 @@ extension Command.Result {
     }
 }
 
+extension Command.Result {
+    public func readInput() -> String? {
+        guard let input = context.standardInput.read()?.trimmingCharacters(in: .whitespacesAndNewlines) else {
+            return nil
+        }
+        return input.isEmpty ? nil : input
+    }
+
+    public func confirm(_ message: String) -> Bool {
+        stdout(message.bold.magenta, "[y/N]", terminator: " ")
+
+        while true {
+            let input = readInput()?.lowercased() ?? ""
+
+            switch input {
+            case "y":
+                return true
+            case "n":
+                return false
+            default:
+                stdout("Please enter yes or no. [y/N]:".yellow, terminator: " ")
+            }
+        }
+    }
+
+    public func select(_ options: [String], default defaultValue: String? = nil, message: String) -> String {
+        stdout(message.bold.magenta)
+        for (i, option) in options.enumerated() {
+            if let defaultValue = defaultValue, i == options.index(of: defaultValue) {
+                stdout("\(i + 1))".blue.bold, option, "(Default)".dimmed)
+            } else {
+                stdout("\(i + 1))".blue, option)
+            }
+        }
+
+        if let defaultValue = defaultValue {
+            stdout("Select an option. Press ENTER for default value (\(defaultValue.italic)):".blue, terminator: " ")
+        } else {
+            stdout("Select an option:".blue, terminator: " ")
+        }
+
+        while true {
+            guard let input = readInput() else {
+                guard let defaultValue = defaultValue else {
+                    stdout("You have to select an option:".yellow, terminator: " ")
+                    continue
+                }
+
+                return defaultValue
+            }
+
+            guard let index = Int(input), (options.startIndex ..< options.endIndex).contains(index - 1) else {
+                if let defaultValue = defaultValue {
+                    stdout("Please select an option between \(options.startIndex + 1) and \(options.endIndex), or press ENTER for default value (\(defaultValue.italic)):".yellow, terminator: " ")
+                } else {
+                    stdout("Please select an option between \(options.startIndex + 1) and \(options.endIndex):".yellow, terminator: " ")
+                }
+                continue
+            }
+
+            return options[index - 1]
+        }
+    }
+}
+
 extension Command.Result.PositionalArguments: Collection {
 
     public subscript(position: Int) -> String {
