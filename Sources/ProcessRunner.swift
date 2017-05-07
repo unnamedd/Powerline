@@ -6,7 +6,7 @@ public enum ProcessError: Error {
     case invalidLaunchPath
     case unsuccessfulExit(
         exitCode: Int,
-        standardError: String
+        reason: String?
     )
 }
 
@@ -19,8 +19,12 @@ extension ProcessError: CustomStringConvertible {
             return "Launch path \"\(path)\" is not an executable"
         case .invalidLaunchPath:
             return "Missing launch path"
-        case .unsuccessfulExit(let exitCode, let stderr):
-            return "Process finished with non-zero exit value \(exitCode):\n\(stderr)"
+        case .unsuccessfulExit(let exitCode, let reason):
+            guard let reason = reason else {
+                return "Process finished with non-zero exit value \(exitCode)"
+            }
+
+            return reason
         }
     }
 }
@@ -98,13 +102,15 @@ internal struct ProcessRunner {
 
         guard process.terminationStatus == 0 else {
 
-            let standardError: String = self.standardError.readToEndOfFile()?.trimmingCharacters(
+            let output: String? = self.standardError.readToEndOfFile() ?? self.standardOutput.readToEndOfFile()
+
+            let reason = output?.trimmingCharacters(
                 in: .whitespacesAndNewlines
-            ) ?? "Contents of standard error is empty"
+            )
 
             throw ProcessError.unsuccessfulExit(
                 exitCode: Int(process.terminationStatus),
-                standardError: standardError
+                reason: reason
             )
         }
 
@@ -128,13 +134,15 @@ internal struct ProcessRunner {
 
             guard process.terminationStatus == 0 else {
 
-                let standardError: String = self.standardError.readToEndOfFile()?.trimmingCharacters(
+                let output: String? = self.standardError.readToEndOfFile() ?? self.standardOutput.readToEndOfFile()
+
+                let reason = output?.trimmingCharacters(
                     in: .whitespacesAndNewlines
-                ) ?? "Contents of standard error is empty"
+                )
 
                 let error = ProcessError.unsuccessfulExit(
                     exitCode: Int(process.terminationStatus),
-                    standardError: standardError
+                    reason: reason
                 )
 
                 completion(error, nil)

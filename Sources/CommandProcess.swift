@@ -4,71 +4,75 @@
     import Darwin.C
 #endif
 
-extension Command {
+import Foundation
 
-    /// A command result contains the parsed flags, named arguments and positional arguments
-    //  and provide access to stdout, stdin, and stderr
-    public struct Process {
+/// A command process provides access to a running process of a command, containing the parsed flags, named arguments
+//  and positional arguments. It also provide access to stdout, stdin, and stderr
+public struct CommandProcess {
 
-        /// The flags parsed from the command
-        public let flags: Set<Flag>
+    /// The raw arguments, passed to the process
+    public let rawArguments: [String]
 
-        /// Positional arguments parsed from the command
-        public let positionalArguments: PositionalArguments
+    /// The flags parsed from the command
+    public let flags: Set<Flag>
 
-        private let valuesByNamedArgument: [NamedArgument: String]
+    /// Positional arguments parsed from the command
+    public let positionalArguments: PositionalArguments
 
-        fileprivate var context: Context
+    private let valuesByNamedArgument: [NamedArgument: String]
 
-        internal init(
-            context: Context,
-            positionalValues: [String],
-            valuesByNamedArgument: [NamedArgument: String],
-            flags: Set<Flag>) {
+    fileprivate var context: Context
 
-            self.context = context
-            self.positionalArguments = PositionalArguments(values: positionalValues)
-            self.valuesByNamedArgument = valuesByNamedArgument
-            self.flags = flags
+    internal init(
+        rawArguments: [String],
+        context: Context,
+        positionalValues: [String],
+        valuesByNamedArgument: [NamedArgument: String],
+        flags: Set<Flag>) {
+
+        self.rawArguments = rawArguments
+        self.context = context
+        self.positionalArguments = PositionalArguments(values: positionalValues)
+        self.valuesByNamedArgument = valuesByNamedArgument
+        self.flags = flags
+    }
+
+    /// Returns the sting value of a named argument
+    ///
+    /// - Parameter namedArgument: Named argument
+    /// - Returns: String, or nil if the named argument was not provided
+    public func string(for namedArgument: NamedArgument) -> String? {
+        return valuesByNamedArgument[namedArgument]
+    }
+
+    /// Returns a named argument, converted to the inferred type
+    ///
+    /// - Parameter namedArgument: Named argument
+    /// - Returns: Value of the inferred type, or nil if the argument was not provided
+    /// - Throws: An error indicating the the conversion failed
+    public func value<T: StringInitializable>(forNamedArgument namedArgument: NamedArgument) throws -> T? {
+        guard let string = valuesByNamedArgument[namedArgument] else {
+            return nil
         }
 
-        /// Returns the sting value of a named argument
-        ///
-        /// - Parameter namedArgument: Named argument
-        /// - Returns: String, or nil if the named argument was not provided
-        public func string(for namedArgument: NamedArgument) -> String? {
-            return valuesByNamedArgument[namedArgument]
+        return T(string: string)
+    }
+
+    /// Returns a named argument, converted to the inferred type
+    ///
+    /// - Parameter namedArgument: Named argument
+    /// - Returns: Value of the inferred type
+    /// - Throws: An error indicating the the conversion failed **or**, if the named argument was not provided
+    public func value<T: StringInitializable>(forNamedArgument namedArgument: NamedArgument) throws -> T {
+        guard let value: T = try value(forNamedArgument: namedArgument) else {
+            throw CommandError.missingNamedArgument(namedArgument)
         }
 
-        /// Returns a named argument, converted to the inferred type
-        ///
-        /// - Parameter namedArgument: Named argument
-        /// - Returns: Value of the inferred type, or nil if the argument was not provided
-        /// - Throws: An error indicating the the conversion failed
-        public func value<T: StringInitializable>(forNamedArgument namedArgument: NamedArgument) throws -> T? {
-            guard let string = valuesByNamedArgument[namedArgument] else {
-                return nil
-            }
-
-            return try? T(string: string)
-        }
-
-        /// Returns a named argument, converted to the inferred type
-        ///
-        /// - Parameter namedArgument: Named argument
-        /// - Returns: Value of the inferred type
-        /// - Throws: An error indicating the the conversion failed **or**, if the named argument was not provided
-        public func value<T: StringInitializable>(forNamedArgument namedArgument: NamedArgument) throws -> T {
-            guard let value: T = try value(forNamedArgument: namedArgument) else {
-                throw CommandError.missingNamedArgument(namedArgument)
-            }
-
-            return value
-        }
+        return value
     }
 }
 
-extension Command.Process {
+extension CommandProcess {
 
     /// Runs a shell command synchronously
     ///
@@ -106,7 +110,7 @@ extension Command.Process {
     }
 }
 
-extension Command.Process {
+extension CommandProcess {
 
     /// Runs a shell command asynchronously
     ///
@@ -151,10 +155,33 @@ extension Command.Process {
     }
 }
 
-extension Command.Process {
+extension CommandProcess {
     /// Returns the shell environment
     public var environment: [String: String] {
         return context.environment
+    }
+
+    /// The current directory of the process
+    public var currentDirectory: String {
+        get {
+            return context.currentDirectory
+        }
+        set {
+            context.currentDirectory = newValue
+        }
+    }
+    /// The current directory url of the process
+    public var urlForCurrentDirectory: URL? {
+        get {
+            return URL(string: currentDirectory)
+        }
+        set {
+            guard let newValue = newValue else {
+                error("Cannot set current URL to nil value")
+                return
+            }
+            currentDirectory = newValue.path
+        }
     }
 
     /// Prints a message to `stdout`
@@ -180,7 +207,7 @@ extension Command.Process {
     }
 }
 
-extension Command.Process {
+extension CommandProcess {
     /// A collection of positional arguments
     public struct PositionalArguments {
         fileprivate let values: [String]
@@ -191,7 +218,7 @@ extension Command.Process {
     }
 }
 
-extension Command.Process {
+extension CommandProcess {
     /// Reads the input from stdin
     ///
     /// - Returns: A string, or nil if the input is empty
@@ -200,6 +227,24 @@ extension Command.Process {
             return nil
         }
         return input.isEmpty ? nil : input
+    }
+
+    public func read<T: StringInitializable>(message: String) -> T {
+        print("\(message): ".bold.magenta, terminator: " ")
+
+        while true {
+            guard let input = readInput() else {
+                print("Please try again:".yellow, terminator: " ")
+                continue
+            }
+
+            guard let value = T(string: input) else {
+                print("Failed to convert input to \(String(describing: T.self)) Please try again:".yellow, terminator: " ")
+                continue
+            }
+
+            return value
+        }
     }
 
     /// Prompts the user to type either `y` or `n`.
@@ -270,7 +315,7 @@ extension Command.Process {
     }
 }
 
-extension Command.Process.PositionalArguments: Collection {
+extension CommandProcess.PositionalArguments: Collection {
 
     public subscript(position: Int) -> String {
         return values[position]
@@ -281,8 +326,8 @@ extension Command.Process.PositionalArguments: Collection {
     /// - Parameter index: Index in collection
     /// - Returns: A value of the inferred type
     /// - Throws: An error indicating that the type conversion failed
-    public func value<T: StringInitializable>(at index: Int) throws -> T {
-        return try T(string: self[index])
+    public func value<T: StringInitializable>(at index: Int) throws -> T? {
+        return T(string: self[index])
     }
 
     public var count: Int {

@@ -20,23 +20,30 @@ public enum CommandError: Error, CustomStringConvertible {
     case missingValue(NamedArgument)
     case missingNamedArgument(NamedArgument)
     case unknownOption(String)
-    case extranousPositionalArguments
+    case unexpectedArgument(String)
     case missingPositional(PositionalArgument)
     case notEnoughArguments
     case invalidUsage(reason: String)
     case other(String)
 
-    /// Creates a new CommandError with a custom description
+    /// Creates a new CommandError with a custom message
     ///
-    /// - Parameter error: Error description
-    public init(_ error: String) {
-        self = .other(error)
+    /// - Parameters:
+    ///   - invalidUsage: If set to `true`, usage will be printed out
+    ///   - message: Message to print
+    public init(_ message: String, invalidUsage: Bool = false) {
+        guard invalidUsage else {
+            self = .other(message)
+            return
+        }
+
+        self = .invalidUsage(reason: message)
     }
 
     public var description: String {
         switch self {
-        case .extranousPositionalArguments:
-            return "Extranous positional arguments"
+        case .unexpectedArgument(let argument):
+            return "Unexpected argument \"\(argument)\""
         case .missingNamedArgument(let namedArgument):
             return "Missing argument \"\(namedArgument.name)\""
         case .missingPositional(let positional):
@@ -55,62 +62,52 @@ public enum CommandError: Error, CustomStringConvertible {
     }
 }
 
-public struct Command {
-
-    /// The name of the command
-    public let name: String
+public protocol Command {
 
     /// Short description of what the command does
-    public let summary: String
+    var summary: String { get }
 
     /// Flags accepted by the command
-    public let flags: Set<Flag>
+    var flags: Set<Flag> { get }
 
     /// Named arguments, accepted by the command
-    public let namedArguments: Set<NamedArgument>
+    var namedArguments: Set<NamedArgument> { get }
 
     /// Positional argument accepted by the command
-    public let positionalArgument: PositionalArgument?
+    var positionalArgument: PositionalArgument? { get }
 
     /// Subcommands of the command
     ///
     /// For instance a subcommand of `git` would be `status`.
-    public let subcommands: [Command]
+    var subcommands: [String: Command] { get }
 
-    /// Closure handling the result of the comand
-    public let processHandler: (Process) throws -> Void
-
-    /// Creates a new command
+    /// Invoked when the command is run
     ///
-    /// - Parameters:
-    ///   - name: Name of the command
-    ///   - summary: Short description of what the command does
-    ///   - subcommands: Subcommands for the command
-    ///   - positionalArgument: Positional argument accepted by the command
-    ///   - namedArguments: Named arguments accepted by the command
-    ///   - flags: Flags accepted by the command
-    ///   - processHandler: Closure handling the result of the comand
-    public init(
-        name: String,
-        summary: String,
-        subcommands: [Command] = [],
-        positionalArgument: PositionalArgument? = nil,
-        namedArguments: Set<NamedArgument> = [],
-        flags: Set<Flag> = [],
-        processHandler: @escaping (Process) throws -> Void
-    ) {
+    /// - Parameter process: Process grants access to the parameters of the running process
+    ///   such as options, environment, stdout, stdin, and more
+    func run(process: CommandProcess) throws
+}
 
-        self.name = name
-        self.summary = summary
-        self.subcommands = subcommands
-        self.flags = flags
-        self.namedArguments = namedArguments
-        self.positionalArgument = positionalArgument
-        self.processHandler = processHandler
+extension Command {
+
+    public var flags: Set<Flag> {
+        return []
+    }
+
+    public var namedArguments: Set<NamedArgument> {
+        return []
+    }
+
+    public func run(process: CommandProcess) throws {
+        process.print(usageString(name: try name(fromArguments: process.rawArguments)))
+    }
+
+    public var subcommands: [String: Command] {
+        return [:]
     }
 }
 
-internal extension Command {
+extension Command {
     internal func flag(withCharacter character: Character) -> Flag? {
         return flags.filter({ $0.character == character }).first
     }
@@ -127,11 +124,7 @@ internal extension Command {
         return namedArguments.filter({ $0.name == name }).first
     }
 
-    internal func subcommand(named name: String) -> Command? {
-        return subcommands.filter({ $0.name == name }).first
-    }
-
-    internal var usageString: String {
+    internal func usageString(name: String) -> String {
 
         var string = ""
 
@@ -141,26 +134,30 @@ internal extension Command {
 
         string += "\(indentation)\(name) - \(summary.dimmed)\n\n"
 
-        string += "USAGE".bold + "\n"
+        if positionalArgument != nil || !flags.isEmpty || !namedArguments.isEmpty {
 
-        string += "\(indentation)\(name.underlined) " + "[options]".magenta
+            string += "USAGE".bold + "\n"
 
-        if let positionalArgument = positionalArgument {
-            string += " " + "[\(positionalArgument.name)\(positionalArgument.isVariadic ? "..." : "")]".blue
+            string += "\(indentation)\(name.underlined) " + "[options]".magenta
 
-            string += "\n" + indentation + positionalArgument.name.blue + " - " + positionalArgument.summary.dimmed
+            if let positionalArgument = positionalArgument {
+                string += " " + "[\(positionalArgument.name)\(positionalArgument.isVariadic ? "..." : "")]".blue
+
+                string += "\n" + indentation + positionalArgument.name.blue + " - " + positionalArgument.summary.dimmed
+            }
+
+            string += "\n\n"
         }
-
-        string += "\n\n"
 
         if !subcommands.isEmpty {
 
-            string += "COMMANDS".bold + "\n"
+            string += "SUBCOMMANDS".bold + "\n"
 
-            for subcommand in subcommands {
-                string += "\(indentation)\(subcommand.name.underlined) - \(subcommand.summary.dimmed)\n" // TODO: Prepend all super command names in subcommand usage description
-                string += indentation + String(repeating: " ", count: subcommand.name.characters.count + 3) + ("Run " + "`\(name) \(subcommand.name) -h`".italic + " for more info").dimmed + "\n\n"
+            for (subcommandName, subcommand) in subcommands {
+                string += "\(indentation)\(subcommandName.underlined) - \(subcommand.summary.dimmed)\n"
             }
+
+            string += "\n"
         }
 
         if flags.count + namedArguments.count > 0 {
@@ -198,12 +195,29 @@ internal extension Command {
 }
 
 extension Command {
+    internal func name(fromArguments arguments: [String]) throws -> String {
+        guard !arguments.isEmpty else {
+            throw CommandError.notEnoughArguments
+        }
+
+        let name = arguments[0]
+
+        let nameComponents = name.components(separatedBy: "/")
+        guard nameComponents.count > 1 else {
+            return name
+        }
+
+        return nameComponents[nameComponents.endIndex - 1]
+    }
+}
+
+extension Command {
 
     /// Runs the command, supressing thrown errors exiting and printing the error or usage, if the 
     /// command was improperly used
     ///
     /// - Parameter arguments: Arguments to pass to the command. Defaults to `CommandLine.arguments`
-    public func runOrExit(arguments: [String] = CommandLine.arguments) {
+    final public func runOrExit(arguments: [String] = CommandLine.arguments) {
         runOrExit(arguments: arguments, context: .main)
     }
 
@@ -212,14 +226,18 @@ extension Command {
         do {
             try run(arguments: arguments, context: context)
         } catch CommandError.invalidUsage(let reason) {
-            context.standardError.write(reason, terminator: "\n")
-            context.standardError.write(usageString, terminator: "\n")
+            context.standardError.write(reason.red, terminator: "\n")
+
+            if let name = try? name(fromArguments: arguments) {
+                context.standardError.write(usageString(name: name), terminator: "\n")
+            }
+
             exit(64)
         } catch let error as CommandError {
-            context.standardError.write(error.description, terminator: "\n")
+            context.standardError.write(error.description.red, terminator: "\n")
             exit(EXIT_FAILURE)
         } catch {
-            context.standardError.write(error.localizedDescription, terminator: "\n")
+            context.standardError.write(String(describing: error).red, terminator: "\n")
             exit(EXIT_FAILURE)
         }
     }
@@ -227,17 +245,17 @@ extension Command {
     /// Runs the command
     ///
     /// - Parameter arguments: Arguments to pass to the command. Defaults to `CommandLine.arguments`
-    public func run(arguments: [String] = CommandLine.arguments) throws {
+    final public func run(arguments: [String] = CommandLine.arguments) throws {
         try run(arguments: arguments, context: .main)
     }
 
     private func run(arguments: [String] = CommandLine.arguments, context: Context) throws {
 
-        var context = context
-
         guard arguments.count >= 1 else {
             throw CommandError.notEnoughArguments
         }
+
+        let name = try self.name(fromArguments: arguments)
 
         var setFlags: Set<Flag> = []
         var positionalValues = [String]()
@@ -279,7 +297,7 @@ extension Command {
                 let argumentName = argument.substring(from: argument.index(argument.startIndex, offsetBy: 2))
 
                 if argumentName == "help" {
-                    context.standardOutput.write(usageString, terminator: "\n")
+                    context.standardOutput.write(usageString(name: name), terminator: "\n")
                     exit(EXIT_SUCCESS)
                 }
 
@@ -303,7 +321,7 @@ extension Command {
                 if string.characters.count == 1 {
 
                     guard string != "h" else {
-                        context.standardOutput.write(usageString, terminator: "\n")
+                        context.standardOutput.write(usageString(name: name), terminator: "\n")
                         exit(EXIT_SUCCESS)
                     }
 
@@ -342,24 +360,25 @@ extension Command {
                 continue
             }
 
-            if let subcommand = subcommand(named: argument) {
+            if let subcommand = subcommands[argument] {
                 return try subcommand.run(arguments: Array(arguments[1..<arguments.count]))
             }
 
             // In any other case we're dealing with a positional argument
             guard let positional = positionalArgument else {
-                throw CommandError.extranousPositionalArguments
+                throw CommandError.unexpectedArgument(argument)
             }
 
             if !positional.isVariadic && !positionalValues.isEmpty {
-                throw CommandError.extranousPositionalArguments
+                throw CommandError.unexpectedArgument(argument)
             }
 
             positionalValues.append(argument)
         }
 
-        try processHandler(
-            .init(
+        try run(
+            process: .init(
+                rawArguments: arguments,
                 context: context,
                 positionalValues: positionalValues,
                 valuesByNamedArgument: valuesByNamedArgument,

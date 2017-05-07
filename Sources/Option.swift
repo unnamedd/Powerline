@@ -9,7 +9,7 @@ extension Option {
     }
 }
 
-internal extension Sequence where Iterator.Element: Option {
+extension Sequence where Iterator.Element: Option {
     internal func named(_ name: String) -> Iterator.Element? {
         return filter({ $0.name == name }).first
     }

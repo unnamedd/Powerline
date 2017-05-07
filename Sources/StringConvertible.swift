@@ -4,31 +4,20 @@
     import Glibc
 #endif
 
-public enum StringConvertibleError<T: StringInitializable>: Error, CustomStringConvertible {
-    case conversionError(source: String, type: T.Type)
-
-    public var description: String {
-        switch self {
-        case .conversionError(let source, let type):
-            return "Failed to convert \"\(source)\" to \(type)"
-        }
-    }
-}
-
 public protocol StringInitializable {
-    init(string: String) throws
+    init?(string: String)
 }
 
 extension String: StringInitializable {
-    public init(string: String) throws {
+    public init?(string: String) {
         self = string
     }
 }
 
 extension Int: StringInitializable {
-    public init(string: String) throws {
+    public init?(string: String) {
         guard let value = Int(string) else {
-            throw StringConvertibleError.conversionError(source: string, type: Int.self)
+            return nil
         }
 
         self = value
@@ -36,20 +25,20 @@ extension Int: StringInitializable {
 }
 
 extension Bool: StringInitializable {
-    public init(string: String) throws {
+    public init?(string: String) {
         switch string.lowercased() {
             case "yes", "true", "1":
             self = true
             case "no", "false", "0":
             self = false
         default:
-            throw StringConvertibleError.conversionError(source: string, type: Bool.self)
+            return nil
         }
     }
 }
 
 extension Double: StringInitializable {
-    public init(string: String) throws {
+    public init?(string: String) {
 
         var string = string
 
@@ -59,7 +48,7 @@ extension Double: StringInitializable {
         }
 
         guard let value = Double(string) else {
-            throw StringConvertibleError.conversionError(source: string, type: Double.self)
+            return nil
         }
 
         self = value

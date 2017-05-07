@@ -21,28 +21,24 @@ Powerline is a library for writing solid command-line interfaces in Swift, for L
 - [x] String colouring
 
 ## Glossary
-* **Command**
-   A command is a space-delimited string , where the first string component is the name of an executable.
 
-* **Argument**
-   An argument is a string component of a command.
-
-
-* **Named argument**
-   A named argument is a key-value argument written like this `--message Hello` or `-m Hello`.
-
-* **Flag**
-   A flag is a on-off switch which presence (or lack thereof) defines a condition. Flags can be written as such: `--verbose` or `-v`.
-
-   * Multiple flags can be combined, so instead of writing `-a -b -c`, writing `-abc` works too.
-   * A series of flags can contain a named argument last, e.g. `git commit -am "Changes"`.
-
-* **Positional argument**
-   A positional one or more values as a simple strings in a command.
+- **Command**
+  A command is a space-delimited string , where the first string component is the name of an executable.
+- **Argument**
+  An argument is a string component of a command.
 
 
+- **Named argument**
+  A named argument is a key-value argument written like this `--message Hello` or `-m Hello`.
+- **Flag**
+  A flag is a on-off switch which presence (or lack thereof) defines a condition. Flags can be written as such: `--verbose` or `-v`.
+  - Multiple flags can be combined, so instead of writing `-a -b -c`, writing `-abc` works too.
+  - A series of flags can contain a named argument last, e.g. `git commit -am "Changes"`.
+- **Positional argument**
+  A positional one or more values as a simple strings in a command.
 
 ## Usage
+
 Creating structured commands with Powerline is easy. The best way to produce type-safe and clean code is to add arguments and commands via extensions.
 
 Let's create a CLI that greets people.
@@ -68,7 +64,7 @@ let package = Package(
 )
 ```
 
-#### Create flags, named arguments and positional arguments 
+#### Create flags, named arguments
 
 ```swift
 import Powerline
@@ -89,34 +85,46 @@ extension NamedArgument {
         valuePlaceholder: "file"
     )
 }
-
-extension PositionalArgument {
-    static let names = PositionalArgument(
-        name: "names",
-        summary: "Names to greet",
-        variadic: true
-    )
-}
 ```
 
 #### Create commands
 
-Create the command in an extension, or store in any other way of your preference. 
+Here's an example of a complete command implementation.
 
 ```swift
-extension Command {
-    static let greeter = Command(
-        name: "greeter",
-        summary: "Greets people",
-        subcommands: [],
-        positionalArgument: .names,
-        namedArguments: [.output],
-        flags: [.verbose]) { process in
+import Powerline
+
+struct Greeter: Command {
+
+    // Positional argument accepted by the command
+    let positionalArgument: PositionalArgument? = PositionalArgument(name: "names", variadic: true)
+
+    // Short description of what the command does
+    let summary: String = "Greets people!"
+
+    // Flags accepted by the command
+    let flags: Set<Flag> = [.verbose]
+
+    // Named arguments, accepted by the command
+    let namedArguments: Set<NamedArgument> = [.output]
+
+    // Invoked when the command is run
+    //
+    // - Parameter process: Process grants access to the parameters
+    //   of the running process such as options, environment,
+    ///  stdout, stdin, and more
+    func run(process: CommandProcess) throws {
+
+        // No positional arguments? This command requires at least one
+        guard !process.positionalArguments.isEmpty else {
+            throw CommandError("There's no one to greet :(", invalidUsage: true)
+        }
 
         // Check flags
         let verbose: Bool = process.flags.contains(.verbose)
 
         if verbose {
+            // Prints to stdout
             process.print("Verbose mode enabled")
         }
 
@@ -130,44 +138,41 @@ extension Command {
         // Get value from named argument
         if let outputFile: String = try process.value(forNamedArgument: .output) {
             try resultString.write(toFile: outputFile, atomically: true, encoding: .utf8)
-        }
-        else {
+        } else {
             // Print greetings
             process.print(resultString)
         }
+
     }
 }
 ```
 
+#### Subcommands
 
-
-The signature for a command handler closure is `(Command.Process) throws -> Void`, so you could just as easily put the handler function somewhere else.
+You can build complex commands by adding subcommands, like so:
 
 ```swift
-let command = Command(
-    name: "example",
-    summary: "Example command",
-    handler: exampleCommandHandler
-)
-
-func exampleCommandHandler(process: Command.Processs) throws {
-    // Handle command
+struct Greeter: Command {
+    let summary: String = "Greets people!"
+    let subcommands: [String: Command] = ["polite": PoliteGreeter()]
 }
 ```
+
+Running `greeter polite` will now invoke that subcommand.
 
 #### Run a command
 
 In your `main.swift` file, simply add
 
 ```swift
-Command.greeter.runOrExit()
+Greeter().runOrExit()
 ```
 
 You can also handle errors yourself, by running
 
 ```Swift
 do {
-  try Command.greeter.run()
+  try Greeter().run()
 } catch {
   print("\(error)")
 }
@@ -177,8 +182,10 @@ do {
 
 You can throw any error you want, and handle them as you wish. When running commands using `runOrExit()` , throwing a `CommandError` will output the message you provide to `stderr`.
 
+Setting `invalidUsage` to true will cause the usage output to be printed.
+
 ```swift
-throw CommandError("Invalid usage")
+throw CommandError("Wrong usage", invalidUsage: true)
 ```
 
 Build your executable
