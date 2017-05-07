@@ -46,8 +46,8 @@ Let's create a CLI that greets people.
 ### Create a new Swift executable
 
 ```sh
-$ mkdir powerline-example
-$ cd powerline-example
+$ mkdir greeter
+$ cd greeter
 $ swift package init --type executable
 ```
 
@@ -57,7 +57,7 @@ In your `Package.swift` file, add `Powerline` as a dependency:
 import PackageDescription
 
 let package = Package(
-    name: "powerline-example",
+    name: "greeter",
     dependencies: [
         .Package(url: "https://github.com/formbound/Powerline", majorVersion: 0, minor: 1)
     ]
@@ -197,7 +197,7 @@ $ swift build
 Run the executable
 
 ```swift
-$ .build/debug/powerline-example --help
+$ .build/debug/greeter --help
 ```
 
 Here's the output you'll see:
