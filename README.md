@@ -111,29 +111,29 @@ extension Command {
         subcommands: [],
         positionalArgument: .names,
         namedArguments: [.output],
-        flags: [.verbose]) { result in
+        flags: [.verbose]) { process in
 
         // Check flags
-        let verbose: Bool = result.flags.contains(.verbose)
+        let verbose: Bool = process.flags.contains(.verbose)
 
         if verbose {
-            result.stdout("Verbose mode enabled")
+            process.print("Verbose mode enabled")
         }
 
         var resultString: String = ""
 
         // Loop through positional arguments
-        for name in result.positionalArguments {
+        for name in process.positionalArguments {
             resultString += "Hello " + name + "!\n"
         }
 
         // Get value from named argument
-        if let outputFile: String = try result.value(for: .output) {
+        if let outputFile: String = try process.value(forNamedArgument: .output) {
             try resultString.write(toFile: outputFile, atomically: true, encoding: .utf8)
         }
         else {
             // Print greetings
-            result.stdout(resultString)
+            process.print(resultString)
         }
     }
 }
@@ -141,7 +141,7 @@ extension Command {
 
 
 
-The signature for a command handler closure is `(Command.Result) throws -> Void`, so you could just as easily put the handler function somewhere else.
+The signature for a command handler closure is `(Command.Process) throws -> Void`, so you could just as easily put the handler function somewhere else.
 
 ```swift
 let command = Command(
@@ -150,7 +150,7 @@ let command = Command(
     handler: exampleCommandHandler
 )
 
-func exampleCommandHandler(handler: Command.Result) throws {
+func exampleCommandHandler(process: Command.Processs) throws {
     // Handle command
 }
 ```
@@ -204,11 +204,11 @@ The command is now ready to use! 👾
 ### Printing to stdout and stderr
 
 ```swift
-func commandHandler(result: Command.Result) throws {
+func commandHandler(process: Command.Process) throws {
     // Print to stdout
-    result.stdout("Hello")
+    process.print("Hello")
     // Print to stderr
-    result.stderr("Hello")
+    process.error("Hello")
 }
 ```
 
@@ -231,15 +231,15 @@ You can colorize output using `String` extensions. Here are some examples:
 A shell command will throw an error if it exists with a non-zero value.
 
 ```swift
-func commandHandler(result: Command.Result) throws {
+func commandHandler(process: Command.Process) throws {
 	
     // Run a command synchronously
-    let shellResult = try result.cmd("ls -a1")
+    let shellResult = try process.run("ls -a1")
     print(shellResult.standardOutput) // Optional
     print(shellResult.standardError)  // Optional
     
     // Run a command asynchronously
-    let process = try result.cmd("ls -a1") { error, result in
+    let process = try process.run("ls -a1") { error, result in
         // Run asynchronously
     }
 
@@ -253,20 +253,20 @@ func commandHandler(result: Command.Result) throws {
 You can read from `stdin` in a few useful ways:
 
 ```swift
-func commandHandler(result: Command.Result) throws {
+func commandHandler(process: Command.Process) throws {
 
-    if let input = result.readInput() {
+    if let input = process.readInput() {
         // Do something with input
     }
 
-    if result.confirm("Are you sure?") {
+    if process.confirm("Are you sure?") {
         // User is sure
     }
 
     let options = ["One", "Two", "Three", "Four"]
 
     // `default` is optional, forcing the user to make an active choice
-    let selectedOption = result.select(
+    let selectedOption = process.select(
         options,
         default: options[1],
         message: "Select your favorite number!"

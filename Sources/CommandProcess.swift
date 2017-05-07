@@ -8,7 +8,7 @@ extension Command {
 
     /// A command result contains the parsed flags, named arguments and positional arguments
     //  and provide access to stdout, stdin, and stderr
-    public struct Result {
+    public struct Process {
 
         /// The flags parsed from the command
         public let flags: Set<Flag>
@@ -45,7 +45,7 @@ extension Command {
         /// - Parameter namedArgument: Named argument
         /// - Returns: Value of the inferred type, or nil if the argument was not provided
         /// - Throws: An error indicating the the conversion failed
-        public func value<T: StringInitializable>(for namedArgument: NamedArgument) throws -> T? {
+        public func value<T: StringInitializable>(forNamedArgument namedArgument: NamedArgument) throws -> T? {
             guard let string = valuesByNamedArgument[namedArgument] else {
                 return nil
             }
@@ -58,8 +58,8 @@ extension Command {
         /// - Parameter namedArgument: Named argument
         /// - Returns: Value of the inferred type
         /// - Throws: An error indicating the the conversion failed **or**, if the named argument was not provided
-        public func value<T: StringInitializable>(for namedArgument: NamedArgument) throws -> T {
-            guard let value: T = try value(for: namedArgument) else {
+        public func value<T: StringInitializable>(forNamedArgument namedArgument: NamedArgument) throws -> T {
+            guard let value: T = try value(forNamedArgument: namedArgument) else {
                 throw CommandError.missingNamedArgument(namedArgument)
             }
 
@@ -68,7 +68,7 @@ extension Command {
     }
 }
 
-extension Command.Result {
+extension Command.Process {
 
     /// Runs a shell command synchronously
     ///
@@ -79,7 +79,7 @@ extension Command.Result {
     /// - Throws: An error indicating that thehe process exited with a non-zero value, or if the executable
     ///           wasn't found or is invalid
     @discardableResult
-    public func cmd(executable: String, arguments: [String] = []) throws -> ProcessResult {
+    public func run(executable: String, arguments: [String] = []) throws -> ProcessResult {
         let runner = try ProcessRunner(context: context, executable: executable, arguments: arguments)
         return try runner.run()
     }
@@ -92,21 +92,21 @@ extension Command.Result {
     /// - Throws: An error indicating that thehe process exited with a non-zero value, or if the executable 
     ///           wasn't found or is invalid
     @discardableResult
-    public func cmd(_ string: String) throws -> ProcessResult {
+    public func run(_ string: String) throws -> ProcessResult {
         let string = string.trimmingCharacters(in: .whitespacesAndNewlines)
         var components = string.components(separatedBy: " ").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
 
         guard components.count > 1 else {
-            return try cmd(executable: string)
+            return try run(executable: string)
         }
 
         let executable = components.removeFirst()
 
-        return try cmd(executable: executable, arguments: components)
+        return try run(executable: executable, arguments: components)
     }
 }
 
-extension Command.Result {
+extension Command.Process {
 
     /// Runs a shell command asynchronously
     ///
@@ -120,7 +120,7 @@ extension Command.Result {
     /// - Returns: A `ProcessHandler` struct, allowing you to suspend, terminate, and resume the process
     /// - Throws: An error indicating that the executable wasn't found or is invalid
     @discardableResult
-    public func cmd(executable: String, arguments: [String] = [], completion: @escaping (_ error: ProcessError?, _ result: ProcessResult?) -> Void) throws -> ProcessHandler {
+    public func run(executable: String, arguments: [String] = [], completion: @escaping (_ error: ProcessError?, _ result: ProcessResult?) -> Void) throws -> ProcessHandler {
         let runner = try ProcessRunner(context: context, executable: executable, arguments: arguments)
 
         return try runner.run(completion: completion)
@@ -137,21 +137,21 @@ extension Command.Result {
     /// - Returns: A `ProcessHandler` struct, allowing you to suspend, terminate, and resume the process
     /// - Throws: An error indicating that the executable wasn't found or is invalid
     @discardableResult
-    public func cmd(_ string: String, completion: @escaping (_ error: ProcessError?, _ result: ProcessResult?) -> Void) throws -> ProcessHandler {
+    public func run(_ string: String, completion: @escaping (_ error: ProcessError?, _ result: ProcessResult?) -> Void) throws -> ProcessHandler {
         let string = string.trimmingCharacters(in: .whitespacesAndNewlines)
         var components = string.components(separatedBy: " ")
 
         guard components.count > 1 else {
-            return try cmd(executable: string, completion: completion)
+            return try run(executable: string, completion: completion)
         }
 
         let executable = components.removeFirst()
 
-        return try cmd(executable: executable, arguments: components, completion: completion)
+        return try run(executable: executable, arguments: components, completion: completion)
     }
 }
 
-extension Command.Result {
+extension Command.Process {
     /// Returns the shell environment
     public var environment: [String: String] {
         return context.environment
@@ -163,7 +163,7 @@ extension Command.Result {
     ///   - items: Items being described, and written to `stdout`
     ///   - separator: String separating the items
     ///   - terminator: String, appended to the end of the output
-    public func stdout(_ items: Any..., separator: String = " ", terminator: String = "\n") {
+    public func print(_ items: Any..., separator: String = " ", terminator: String = "\n") {
         let string = items.map { String(describing: $0) }.joined(separator: separator)
         context.standardOutput.write(string, terminator: terminator)
     }
@@ -174,13 +174,13 @@ extension Command.Result {
     ///   - items: Items being described, and written to `stderr`
     ///   - separator: String separating the items
     ///   - terminator: String, appended to the end of the output
-    public func stderr(_ items: Any..., separator: String = " ", terminator: String = "\n") {
+    public func error(_ items: Any..., separator: String = " ", terminator: String = "\n") {
         let string = items.map { String(describing: $0) }.joined(separator: separator)
         context.standardError.write(string, terminator: terminator)
     }
 }
 
-extension Command.Result {
+extension Command.Process {
     /// A collection of positional arguments
     public struct PositionalArguments {
         fileprivate let values: [String]
@@ -191,7 +191,7 @@ extension Command.Result {
     }
 }
 
-extension Command.Result {
+extension Command.Process {
     /// Reads the input from stdin
     ///
     /// - Returns: A string, or nil if the input is empty
@@ -207,7 +207,7 @@ extension Command.Result {
     /// - Parameter message: A message to provide
     /// - Returns: `true` if the input was `y`, `false` if the input was `n`.
     public func confirm(_ message: String) -> Bool {
-        stdout(message.bold.magenta, "[y/N]", terminator: " ")
+        print(message.bold.magenta, "[y/N]", terminator: " ")
 
         while true {
             let input = readInput()?.lowercased() ?? ""
@@ -218,7 +218,7 @@ extension Command.Result {
             case "n":
                 return false
             default:
-                stdout("Please enter yes or no. [y/N]:".yellow, terminator: " ")
+                print("Please enter yes or no. [y/N]:".yellow, terminator: " ")
             }
         }
     }
@@ -231,25 +231,25 @@ extension Command.Result {
     ///   - message: A message to provide
     /// - Returns: The selected value or default value, if provided
     public func select(_ options: [String], default defaultValue: String? = nil, message: String) -> String {
-        stdout(message.bold.magenta)
+        print(message.bold.magenta)
         for (i, option) in options.enumerated() {
             if let defaultValue = defaultValue, i == options.index(of: defaultValue) {
-                stdout("\(i + 1))".blue.bold, option, "(Default)".dimmed)
+                print("\(i + 1))".blue.bold, option, "(Default)".dimmed)
             } else {
-                stdout("\(i + 1))".blue, option)
+                print("\(i + 1))".blue, option)
             }
         }
 
         if let defaultValue = defaultValue {
-            stdout("Select an option. Press ENTER for default value (\(defaultValue.italic)):".blue, terminator: " ")
+            print("Select an option. Press ENTER for default value (\(defaultValue.italic)):".blue, terminator: " ")
         } else {
-            stdout("Select an option:".blue, terminator: " ")
+            print("Select an option:".blue, terminator: " ")
         }
 
         while true {
             guard let input = readInput() else {
                 guard let defaultValue = defaultValue else {
-                    stdout("You have to select an option:".yellow, terminator: " ")
+                    print("You have to select an option:".yellow, terminator: " ")
                     continue
                 }
 
@@ -258,9 +258,9 @@ extension Command.Result {
 
             guard let index = Int(input), (options.startIndex ..< options.endIndex).contains(index - 1) else {
                 if let defaultValue = defaultValue {
-                    stdout("Please select an option between \(options.startIndex + 1) and \(options.endIndex), or press ENTER for default value (\(defaultValue.italic)):".yellow, terminator: " ")
+                    print("Please select an option between \(options.startIndex + 1) and \(options.endIndex), or press ENTER for default value (\(defaultValue.italic)):".yellow, terminator: " ")
                 } else {
-                    stdout("Please select an option between \(options.startIndex + 1) and \(options.endIndex):".yellow, terminator: " ")
+                    print("Please select an option between \(options.startIndex + 1) and \(options.endIndex):".yellow, terminator: " ")
                 }
                 continue
             }
@@ -270,7 +270,7 @@ extension Command.Result {
     }
 }
 
-extension Command.Result.PositionalArguments: Collection {
+extension Command.Process.PositionalArguments: Collection {
 
     public subscript(position: Int) -> String {
         return values[position]

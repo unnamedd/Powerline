@@ -25,8 +25,8 @@ class PowerlineTests: XCTestCase {
         try Command(
             name: "Requires verbose",
             summary: "A command that simply requires the --verbose command",
-            flags: [flag]) { result in
-                XCTAssert(result.flags.contains(flag))
+            flags: [flag]) { process in
+                XCTAssert(process.flags.contains(flag))
         }.run(arguments: ["example", "-f"])
     }
 
@@ -37,8 +37,8 @@ class PowerlineTests: XCTestCase {
         try Command(
             name: "Requires verbose",
             summary: "A command that simply requires the --verbose command",
-            namedArguments: [arg]) { result in
-                XCTAssertEqual(try result.value(for: arg), "1234")
+            namedArguments: [arg]) { process in
+                XCTAssertEqual(try process.value(forNamedArgument: arg), "1234")
             }.run(arguments: ["example", "--required", "1234"])
     }
 
@@ -49,9 +49,9 @@ class PowerlineTests: XCTestCase {
         try Command(
             name: "Requires verbose",
             summary: "A command that simply requires the --verbose command",
-            positionalArgument: positional) { result in
-                XCTAssertEqual(try result.positionalArguments.value(at: 0), 1234)
-                XCTAssertEqual(try result.positionalArguments.value(at: 1), 5678)
+            positionalArgument: positional) { process in
+                XCTAssertEqual(try process.positionalArguments.value(at: 0), 1234)
+                XCTAssertEqual(try process.positionalArguments.value(at: 1), 5678)
             }.run(arguments: ["example", "1234", "5678"])
     }
 
@@ -62,14 +62,14 @@ class PowerlineTests: XCTestCase {
         let subcommand = Command(
             name: "sub",
             summary: "Subcommand",
-            flags: [subCommandFlag]) { result in
-                XCTAssert(result.flags.contains(subCommandFlag))
+            flags: [subCommandFlag]) { process in
+                XCTAssert(process.flags.contains(subCommandFlag))
         }
 
         let mainFlag = Flag(name: "main", character: "m")
 
-        let command = Command(name: "main", summary: "main", subcommands: [subcommand], flags: [mainFlag]) { result in
-            XCTAssert(result.flags.contains(mainFlag))
+        let command = Command(name: "main", summary: "main", subcommands: [subcommand], flags: [mainFlag]) { process in
+            XCTAssert(process.flags.contains(mainFlag))
         }
 
         try command.run(arguments: ["example", "-m"])
@@ -78,14 +78,14 @@ class PowerlineTests: XCTestCase {
     }
 
     func testCmd() throws {
-        let command = Command(name: "cmd", summary: "cmd") { result in
+        let command = Command(name: "cmd", summary: "cmd") { process in
 
-            guard let stdout = try result.cmd("ls -a1").standardOutput else {
+            guard let stdout = try process.run("ls -a1").standardOutput else {
                 XCTFail("No stdout")
                 return
             }
 
-            result.stdout(stdout)
+            process.print(stdout)
         }
 
         print(CommandLine.arguments)
@@ -97,9 +97,9 @@ class PowerlineTests: XCTestCase {
 
         let e = expectation(description: "Async command")
 
-        let command = Command(name: "cmd", summary: "cmd") { result in
+        let command = Command(name: "cmd", summary: "cmd") { process in
 
-            try result.cmd("curl -v http://ip.jsontest.com") { error, cmdResult in
+            try process.run("curl -v http://ip.jsontest.com") { error, cmdResult in
                 if let error = error {
                     XCTFail(error.localizedDescription)
                     return
@@ -115,7 +115,7 @@ class PowerlineTests: XCTestCase {
                     return
                 }
 
-                result.stdout(stdout)
+                process.print(stdout)
 
                 e.fulfill()
             }

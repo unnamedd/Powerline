@@ -78,7 +78,7 @@ public struct Command {
     public let subcommands: [Command]
 
     /// Closure handling the result of the comand
-    public let handler: (Result) throws -> Void
+    public let processHandler: (Process) throws -> Void
 
     /// Creates a new command
     ///
@@ -89,7 +89,7 @@ public struct Command {
     ///   - positionalArgument: Positional argument accepted by the command
     ///   - namedArguments: Named arguments accepted by the command
     ///   - flags: Flags accepted by the command
-    ///   - handler: Closure handling the result of the comand
+    ///   - processHandler: Closure handling the result of the comand
     public init(
         name: String,
         summary: String,
@@ -97,7 +97,7 @@ public struct Command {
         positionalArgument: PositionalArgument? = nil,
         namedArguments: Set<NamedArgument> = [],
         flags: Set<Flag> = [],
-        handler: @escaping (Result) throws -> Void
+        processHandler: @escaping (Process) throws -> Void
     ) {
 
         self.name = name
@@ -106,7 +106,7 @@ public struct Command {
         self.flags = flags
         self.namedArguments = namedArguments
         self.positionalArgument = positionalArgument
-        self.handler = handler
+        self.processHandler = processHandler
     }
 }
 
@@ -358,14 +358,14 @@ extension Command {
             positionalValues.append(argument)
         }
 
-        let result = Result(
-            context: context,
-            positionalValues: positionalValues,
-            valuesByNamedArgument: valuesByNamedArgument,
-            flags: setFlags
+        try processHandler(
+            .init(
+                context: context,
+                positionalValues: positionalValues,
+                valuesByNamedArgument: valuesByNamedArgument,
+                flags: setFlags
+            )
         )
-
-        try handler(result)
 
     }
 }
