@@ -246,12 +246,12 @@ func commandHandler(process: Command.Process) throws {
     print(shellResult.standardError)  // Optional
     
     // Run a command asynchronously
-    let process = try process.run("ls -a1") { error, result in
+    let ls = try process.run("ls -a1") { error, result in
         // Run asynchronously
     }
 
-    process.suspend()
-    process.resume()
+    ls.suspend()
+    ls.resume()
 }
 ```
 
