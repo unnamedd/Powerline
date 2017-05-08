@@ -1,4 +1,6 @@
-import Foundation
+import class Foundation.Pipe
+import class Foundation.Process
+import class Foundation.FileManager
 
 public enum ProcessError: Error {
     case fileNotFound(path: String)

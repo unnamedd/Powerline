@@ -4,7 +4,7 @@
     import Darwin.C
 #endif
 
-import Foundation
+import struct Foundation.URL
 
 /// A command process provides access to a running process of a command, containing the parsed flags, named arguments
 //  and positional arguments. It also provide access to stdout, stdin, and stderr
@@ -50,7 +50,7 @@ public struct CommandProcess {
     /// - Parameter namedArgument: Named argument
     /// - Returns: Value of the inferred type, or nil if the argument was not provided
     /// - Throws: An error indicating the the conversion failed
-    public func value<T: StringInitializable>(forNamedArgument namedArgument: NamedArgument) throws -> T? {
+    public func value<T: StandardInputInitializable>(forNamedArgument namedArgument: NamedArgument) throws -> T? {
         guard let string = valuesByNamedArgument[namedArgument] else {
             return nil
         }
@@ -63,7 +63,7 @@ public struct CommandProcess {
     /// - Parameter namedArgument: Named argument
     /// - Returns: Value of the inferred type
     /// - Throws: An error indicating the the conversion failed **or**, if the named argument was not provided
-    public func value<T: StringInitializable>(forNamedArgument namedArgument: NamedArgument) throws -> T {
+    public func value<T: StandardInputInitializable>(forNamedArgument namedArgument: NamedArgument) throws -> T {
         guard let value: T = try value(forNamedArgument: namedArgument) else {
             throw CommandError.missingNamedArgument(namedArgument)
         }
@@ -229,7 +229,7 @@ extension CommandProcess {
         return input.isEmpty ? nil : input
     }
 
-    public func read<T: StringInitializable>(message: String) -> T {
+    public func read<T: StandardInputInitializable>(message: String) -> T {
         print("\(message): ".bold.magenta, terminator: " ")
 
         while true {
@@ -326,7 +326,7 @@ extension CommandProcess.PositionalArguments: Collection {
     /// - Parameter index: Index in collection
     /// - Returns: A value of the inferred type
     /// - Throws: An error indicating that the type conversion failed
-    public func value<T: StringInitializable>(at index: Int) throws -> T? {
+    public func value<T: StandardInputInitializable>(at index: Int) throws -> T? {
         return T(string: self[index])
     }
 

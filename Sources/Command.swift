@@ -4,8 +4,6 @@
     import Darwin.C
 #endif
 
-import Foundation
-
 /// Error associated with command execution
 ///
 /// - missingValue: Missing value in named argument

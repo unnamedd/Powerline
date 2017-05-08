@@ -4,17 +4,17 @@
     import Glibc
 #endif
 
-public protocol StringInitializable {
+public protocol StandardInputInitializable {
     init?(string: String)
 }
 
-extension String: StringInitializable {
+extension String: StandardInputInitializable {
     public init?(string: String) {
         self = string
     }
 }
 
-extension Int: StringInitializable {
+extension Int: StandardInputInitializable {
     public init?(string: String) {
         guard let value = Int(string) else {
             return nil
@@ -24,7 +24,7 @@ extension Int: StringInitializable {
     }
 }
 
-extension Bool: StringInitializable {
+extension Bool: StandardInputInitializable {
     public init?(string: String) {
         switch string.lowercased() {
             case "yes", "true", "1":
@@ -37,7 +37,7 @@ extension Bool: StringInitializable {
     }
 }
 
-extension Double: StringInitializable {
+extension Double: StandardInputInitializable {
     public init?(string: String) {
 
         var string = string

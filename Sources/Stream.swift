@@ -1,4 +1,5 @@
-import Foundation
+import struct Foundation.Data
+import class Foundation.FileHandle
 
 internal protocol FileHandleStream {
     var fileHandle: FileHandle { get }

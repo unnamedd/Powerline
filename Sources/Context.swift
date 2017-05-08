@@ -1,4 +1,12 @@
-import Foundation
+#if os(Linux)
+    import Glibc
+#else
+    import Darwin.C
+#endif
+
+import class Foundation.FileManager
+import class Foundation.FileHandle
+import class Foundation.ProcessInfo
 
 internal struct Context {
     internal var environment: [String: String]
