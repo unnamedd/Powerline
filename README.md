@@ -124,8 +124,8 @@ struct Greeter: Command {
         let verbose: Bool = process.flags.contains(.verbose)
 
         if verbose {
-            // Prints to stdout
-            process.print("Verbose mode enabled")
+            // Prints to stdout, in black text on green background
+            process.print("Verbose mode enabled".black.onGreen)
         }
 
         var resultString: String = ""
@@ -135,14 +135,13 @@ struct Greeter: Command {
             resultString += "Hello " + name + "!\n"
         }
 
-        // Get value from named argument
+        // Did we get a value for the `output` argument? If so, write to file
         if let outputFile: String = try process.value(forNamedArgument: .output) {
             try resultString.write(toFile: outputFile, atomically: true, encoding: .utf8)
         } else {
             // Print greetings
             process.print(resultString)
         }
-
     }
 }
 ```
