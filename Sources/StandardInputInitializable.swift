@@ -4,29 +4,41 @@
     import Glibc
 #endif
 
+import struct Foundation.URL
+
+public enum StandardInputInitializableError: Error {
+    case failedConversion(of: String, to: StandardInputInitializable.Type)
+}
+
 public protocol StandardInputInitializable {
-    init?(string: String)
+    init?(input: String)
+
+    static var inputExamples: [String] { get }
 }
 
 extension String: StandardInputInitializable {
-    public init?(string: String) {
-        self = string
+    public init?(input: String) {
+        self = input
     }
+
+    public static let inputExamples: [String] = []
 }
 
 extension Int: StandardInputInitializable {
-    public init?(string: String) {
-        guard let value = Int(string) else {
+    public init?(input: String) {
+        guard let value = Int(input) else {
             return nil
         }
 
         self = value
     }
+
+    public static let inputExamples: [String] = []
 }
 
 extension Bool: StandardInputInitializable {
-    public init?(string: String) {
-        switch string.lowercased() {
+    public init?(input: String) {
+        switch input.lowercased() {
             case "yes", "true", "1":
             self = true
             case "no", "false", "0":
@@ -35,12 +47,14 @@ extension Bool: StandardInputInitializable {
             return nil
         }
     }
+
+    public static let inputExamples = ["yes", "true", "1", "no", "false", "0"]
 }
 
 extension Double: StandardInputInitializable {
-    public init?(string: String) {
+    public init?(input: String) {
 
-        var string = string
+        var string = input
 
         if let locale = localeconv(), let decimalPoint = locale.pointee.decimal_point {
             let decimalPointCharacter = Character(UnicodeScalar(UInt8(bitPattern: decimalPoint.pointee)))
@@ -52,5 +66,15 @@ extension Double: StandardInputInitializable {
         }
 
         self = value
+    }
+
+    public static let inputExamples = ["1", "1.1", "1035.3999"]
+}
+
+extension URL: StandardInputInitializable {
+    public static let inputExamples = ["http://www.github.com", "~/Desktop", "/usr/local/bin", "directory"]
+
+    public init?(input: String) {
+        self.init(string: input)
     }
 }

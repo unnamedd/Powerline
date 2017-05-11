@@ -55,7 +55,11 @@ public struct CommandProcess {
             return nil
         }
 
-        return T(string: string)
+        guard let value = T(input: string) else {
+            throw StandardInputInitializableError.failedConversion(of: string, to: T.self)
+        }
+
+        return value
     }
 
     /// Returns a named argument, converted to the inferred type
@@ -171,17 +175,20 @@ extension CommandProcess {
         }
     }
     /// The current directory url of the process
-    public var urlForCurrentDirectory: URL? {
+    public var urlForCurrentDirectory: URL {
         get {
-            return URL(string: currentDirectory)
+            return URL(fileURLWithPath: currentDirectory, isDirectory: true)
         }
         set {
-            guard let newValue = newValue else {
-                error("Cannot set current URL to nil value")
-                return
-            }
             currentDirectory = newValue.path
         }
+    }
+
+    public func relativePath(for path: String) throws -> String {
+        guard let url = URL(string: path, relativeTo: urlForCurrentDirectory) else {
+            throw CommandError("Failed to resolve path for \(path)")
+        }
+        return url.relativePath
     }
 
     /// Prints a message to `stdout`
@@ -222,29 +229,37 @@ extension CommandProcess {
     /// Reads the input from stdin
     ///
     /// - Returns: A string, or nil if the input is empty
-    public func readInput() -> String? {
+    public func read() -> String? {
         guard let input = context.standardInput.read()?.trimmingCharacters(in: .whitespacesAndNewlines) else {
             return nil
         }
         return input.isEmpty ? nil : input
     }
 
-    public func read<T: StandardInputInitializable>(message: String) -> T {
-        print("\(message): ".bold.magenta, terminator: " ")
+    public func read<T: StandardInputInitializable>() -> T {
 
         while true {
-            guard let input = readInput() else {
+            guard let input = read() else {
                 print("Please try again:".yellow, terminator: " ")
                 continue
             }
 
-            guard let value = T(string: input) else {
-                print("Failed to convert input to \(String(describing: T.self)) Please try again:".yellow, terminator: " ")
+            guard let value = T(input: input) else {
+                error("\"\(input)\" cannot be converted to \(String(describing: T.self))".red)
+                print("Examples:".magenta, terminator: " ")
+                print(T.inputExamples.joined(separator: ", ").dimmed)
+                print("Please try again:".yellow, terminator: " ")
                 continue
             }
 
             return value
         }
+    }
+
+    public func read<T: StandardInputInitializable>(message: String) -> T {
+        print("\(message): ".bold.magenta, terminator: "")
+
+        return read()
     }
 
     /// Prompts the user to type either `y` or `n`.
@@ -255,7 +270,7 @@ extension CommandProcess {
         print(message.bold.magenta, "[y/N]", terminator: " ")
 
         while true {
-            let input = readInput()?.lowercased() ?? ""
+            let input = read()?.lowercased() ?? ""
 
             switch input {
             case "y":
@@ -292,7 +307,7 @@ extension CommandProcess {
         }
 
         while true {
-            guard let input = readInput() else {
+            guard let input = read() else {
                 guard let defaultValue = defaultValue else {
                     print("You have to select an option:".yellow, terminator: " ")
                     continue
@@ -303,7 +318,8 @@ extension CommandProcess {
 
             guard let index = Int(input), (options.startIndex ..< options.endIndex).contains(index - 1) else {
                 if let defaultValue = defaultValue {
-                    print("Please select an option between \(options.startIndex + 1) and \(options.endIndex), or press ENTER for default value (\(defaultValue.italic)):".yellow, terminator: " ")
+                    print(
+                        "Please select an option between) and \(options.endIndex), or press ENTER for default value (\(defaultValue.italic)):".yellow, terminator: " ")
                 } else {
                     print("Please select an option between \(options.startIndex + 1) and \(options.endIndex):".yellow, terminator: " ")
                 }
@@ -321,13 +337,12 @@ extension CommandProcess.PositionalArguments: Collection {
         return values[position]
     }
 
-    /// Returns a value at a given index in the collection, converted to the inferred type
-    ///
-    /// - Parameter index: Index in collection
-    /// - Returns: A value of the inferred type
-    /// - Throws: An error indicating that the type conversion failed
-    public func value<T: StandardInputInitializable>(at index: Int) throws -> T? {
-        return T(string: self[index])
+    public func value<T: StandardInputInitializable>(at index: Int) throws -> T {
+        guard let value = T(input: self[index]) else {
+            throw StandardInputInitializableError.failedConversion(of: self[index], to: T.self)
+        }
+
+        return value
     }
 
     public var count: Int {
