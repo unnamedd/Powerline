@@ -231,6 +231,14 @@ extension Command {
             }
 
             exit(64)
+        } catch StandardInputInitializableError.failedConversion(let input, let type) {
+            context.standardError.write(
+                "\"\(input)\" cannot be converted to \(String(describing: type))".red,
+                terminator: "\n"
+            )
+            context.standardOutput.write("Examples:".magenta, terminator: " ")
+            context.standardOutput.write(type.inputExamples.joined(separator: ", ").dimmed, terminator: "\n")
+
         } catch let error as CommandError {
             context.standardError.write(error.description.red, terminator: "\n")
             exit(EXIT_FAILURE)
