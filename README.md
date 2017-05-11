@@ -1,9 +1,3 @@
-<p align="center">
-
-<img src="Images/header-image.png" height="250" />
-
-</p>
-
 # Powerline
 
 Powerline is a library for writing solid command-line interfaces in Swift, for Linux and macOS.
@@ -261,7 +255,7 @@ You can read from `stdin` in a few useful ways:
 ```swift
 func commandHandler(process: Command.Process) throws {
 
-    if let input = process.readInput() {
+    if let input: String = process.read() {
         // Do something with input
     }
 
