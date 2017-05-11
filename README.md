@@ -1,10 +1,8 @@
+<img src="Images/output-screenshot2.png" />
+
 # Powerline
 
 Powerline is a library for writing solid command-line interfaces in Swift, for Linux and macOS.
-
-
-
-<img src="Images/output-screenshot2.png" />
 
 ## Features
 
