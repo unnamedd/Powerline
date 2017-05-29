@@ -70,21 +70,6 @@ class PowerlineTests: XCTestCase {
 
     }
 
-    func testPrintTable() throws {
-        let command = SimpleCommand { process in
-            process.printTable([
-                "One": ["1", "2", "3"],
-                "Two": ["1", "2", "3"],
-                "Long string is longer than the rest": ["1", "2", "3"],
-                "Three": ["1", "2", "3"],
-            ])
-        }
-
-        print(CommandLine.arguments)
-
-        try command.run(arguments: ["example"])
-    }
-
     func testCmd() throws {
         let command = SimpleCommand { process in
 
