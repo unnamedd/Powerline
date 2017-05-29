@@ -1,4 +1,7 @@
-<img src="Images/output-screenshot2.png" />
+
+<p align="center">
+<img src="Images/header.png" height="250" />
+</p>
 
 # Powerline
 

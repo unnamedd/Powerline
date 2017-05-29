@@ -106,19 +106,20 @@ extension Command {
 }
 
 extension Command {
-    internal func flag(withCharacter character: Character) -> Flag? {
+
+    fileprivate func flag(withCharacter character: Character) -> Flag? {
         return flags.filter({ $0.character == character }).first
     }
 
-    internal func flag(named name: String) -> Flag? {
+    fileprivate func flag(named name: String) -> Flag? {
         return flags.filter({ $0.name == name }).first
     }
 
-    internal func namedArgument(withCharacter character: Character) -> NamedArgument? {
+    fileprivate func namedArgument(withCharacter character: Character) -> NamedArgument? {
         return namedArguments.filter({ $0.character == character }).first
     }
 
-    internal func namedArgument(named name: String) -> NamedArgument? {
+    fileprivate func namedArgument(named name: String) -> NamedArgument? {
         return namedArguments.filter({ $0.name == name }).first
     }
 
