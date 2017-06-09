@@ -33,7 +33,7 @@ extension Context {
 
     public func relativePath(for path: String) throws -> String {
         guard let url = URL(string: path, relativeTo: urlForCurrentDirectory) else {
-            throw CommandError(reason: "Failed to resolve path for \(path)")
+            throw CommandError(message: "Failed to resolve path for \(path)")
         }
         return url.relativePath
     }

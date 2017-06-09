@@ -42,6 +42,10 @@ extension Command {
     public var variadicParameter: Parameter? {
         return nil
     }
+
+    public func process(context: Context) throws {
+        context.print(usageString(context: context))
+    }
 }
 
 extension Command {
@@ -284,7 +288,7 @@ extension Command {
 
                 string += "\(indentation)"
 
-                string += option.description
+                string += option.description + " <\(option.placeholder ?? "value")>"
 
                 string += "\n\(indentation)\(indentation)\(option.summary.dimmed)\n\n"
 
@@ -296,15 +300,15 @@ extension Command {
     }
 }
 
-internal enum CommandError: Error {
+public enum CommandError: Error {
     case missingOperand(Option)
     case missingOption(Option)
     case unexpectedArgument(String)
     case missingParameter(Parameter)
-    case other(reason: String, invalidUsage: Bool)
+    case other(message: String, invalidUsage: Bool)
 
-    internal init(reason: String, invalidUsage: Bool = false) {
-        self = .other(reason: reason, invalidUsage: invalidUsage)
+    public init(message: String, invalidUsage: Bool = false) {
+        self = .other(message: message, invalidUsage: invalidUsage)
     }
 }
 
