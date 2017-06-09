@@ -15,7 +15,11 @@ public class Context {
 
     public internal(set) var parameters = Parameters()
 
-    internal var argumentIndexOfCommand = 0
+    internal var commands: [(name: String, argumentIndex: Int)]
+
+    internal var currentCommand: (name: String, argumentIndex: Int) {
+        return commands[commands.endIndex - 1]
+    }
 
     public let arguments: Arguments
 
@@ -31,6 +35,8 @@ public class Context {
 
     public init(arguments: Arguments) {
         self.arguments = arguments
+
+        commands = [(name: arguments.executableName, argumentIndex: 0)]
 
         let environment = ProcessInfo.processInfo.environment
 
@@ -50,7 +56,7 @@ public class Context {
 
         case "utf-16":
             encoding = .utf16
-            
+
         default:
             encoding = .utf8
         }

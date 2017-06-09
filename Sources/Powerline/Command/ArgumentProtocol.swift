@@ -16,7 +16,7 @@ extension ArgumentProtocol {
     }
 
     public var description: String {
-        return "\(name.description) (\(summary))"
+        return "\(name.description)"
     }
 }
 
@@ -29,5 +29,5 @@ extension Sequence where Iterator.Element: ArgumentProtocol, Iterator.Element.Na
     internal func filter(longName: String) -> [Iterator.Element] {
         return filter({ $0.name.longName == longName })
     }
-    
+
 }

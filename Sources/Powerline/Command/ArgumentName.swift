@@ -43,7 +43,7 @@ extension ArgumentName: CustomStringConvertible {
         switch self {
 
         case .both(let string, let character):
-            return "-\(character) / --\(string)"
+            return "-\(character), --\(string)"
 
         case .long(let string):
             return "--\(string)"

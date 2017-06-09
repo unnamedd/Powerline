@@ -18,9 +18,7 @@ extension Context {
             }
 
             guard let value = T(input: input) else {
-                error("\"\(input)\" cannot be converted to \(String(describing: T.self))".red)
-                print("Examples:".magenta, terminator: " ")
-                print(T.inputExamples.joined(separator: ", ").dimmed)
+                print(StandardInputInitializableError.failedConversion(of: input, to: T.self).description)
                 print("Please try again:".yellow, terminator: " ")
                 continue
             }
@@ -98,7 +96,7 @@ extension Context {
                 }
                 continue
             }
-            
+
             return options[index - 1]
         }
     }

@@ -10,6 +10,20 @@ public enum StandardInputInitializableError: Error {
     case failedConversion(of: String, to: StandardInputInitializable.Type)
 }
 
+extension StandardInputInitializableError: CustomStringConvertible {
+
+    public var description: String {
+        switch self {
+        case .failedConversion(of: let value, to: let type):
+
+            var string = "\"\(value)\" cannot be converted to \(String(describing: type))".red
+            string += "Examples:".magenta + type.inputExamples.joined(separator: ", ").dimmed
+            return string
+        }
+    }
+
+}
+
 public protocol StandardInputInitializable {
     init?(input: String)
 

@@ -57,9 +57,14 @@ extension Command {
 
         do {
             try run(context: context)
+
+        } catch let error as StandardInputInitializableError {
+
+            context.error(error.description)
+
         } catch let error as CommandError {
 
-            context.print(error.description.red)
+            context.error(error.description.red)
 
         } catch {
             throw error
@@ -71,23 +76,32 @@ extension Command {
         // Loop through all arguments in the context
         for component in context.arguments.components {
 
-            if let value = component as? Arguments.Parameter, component.index > context.argumentIndexOfCommand {
+            if let parameter = component as? Arguments.Parameter, component.index > context.currentCommand.argumentIndex {
 
-                if component.index == context.argumentIndexOfCommand + 1, let subcommand = subcommands[value.value] {
-                    context.argumentIndexOfCommand = component.index
+                if component.index == context.currentCommand.argumentIndex + 1, let subcommand = subcommands[parameter.value] {
+                    context.commands.append((name: parameter.value, argumentIndex: parameter.index))
                     try subcommand.run(context: context)
                     return
 
                 } else {
-                    try parse(component: value, context: context)
+                    try parse(component: parameter, context: context)
                 }
 
-
             } else if let long = component as? Arguments.LongOption {
+
+                if long.name == "help" {
+                    context.print(usageString(context: context))
+                    exit(EXIT_SUCCESS)
+                }
 
                 try parse(component: long, context: context)
 
             } else if let short = component as? Arguments.ShortOption {
+
+                if short.character == "h" {
+                    context.print(usageString(context: context))
+                    exit(EXIT_SUCCESS)
+                }
 
                 try parse(component: short, context: context)
 
@@ -129,7 +143,7 @@ extension Command {
         }
 
         guard variadicParameter != nil else {
-            throw CommandError.unexpectedOption(component.value)
+            throw CommandError.unexpectedArgument(component.value)
         }
 
         context.parameters.variadic.append(component.value)
@@ -152,20 +166,19 @@ extension Command {
                 } else if let flag = flags.filter(shortName: character).first {
                     context.flags.insert(flag)
                 } else {
-                    throw CommandError.unexpectedOption(String(character))
+                    throw CommandError.unexpectedArgument(String(character))
                 }
-
 
             } else {
 
                 guard let flag = flags.filter(shortName: character).first else {
-                    throw CommandError.unexpectedOption(String(character))
+                    throw CommandError.unexpectedArgument(String(character))
                 }
 
                 context.flags.insert(flag)
-                
+
             }
-            
+
         }
     }
 
@@ -183,7 +196,7 @@ extension Command {
         } else if let flag = flags.filter(shortName: component.character).first {
             context.flags.insert(flag)
         } else {
-            throw CommandError.unexpectedOption(String(component.character))
+            throw CommandError.unexpectedArgument(String(component.character))
         }
     }
 
@@ -199,21 +212,98 @@ extension Command {
         } else if let flag = flags.filter(longName: component.name).first {
             context.flags.insert(flag)
         } else {
-            throw CommandError.unexpectedOption(component.name)
+            throw CommandError.unexpectedArgument(component.name)
         }
     }
-
 }
 
+extension Command {
+    internal func usageString(context: Context) -> String {
 
-public enum CommandError: Error {
+        var string = ""
+
+        let indentation = "  "
+
+        string += "NAME".bold + "\n"
+
+        string += "\(indentation)\(context.currentCommand.name) - \(summary.dimmed)\n\n"
+
+        if !parameters.isEmpty || !flags.isEmpty || !options.isEmpty {
+
+            string += "USAGE".bold + "\n"
+
+            string += "\(indentation)\(context.commands.map { $0.name }.joined(separator: " ")) " + "[options]".magenta
+
+            for parameter in parameters {
+                string += " " + "[\(parameter.name)]".blue
+            }
+
+            if let variadic = variadicParameter {
+                string += " " + "[\(variadic.name)...]".blue
+            }
+
+            for parameter in parameters {
+                string += "\n" + indentation + parameter.name.blue + " - " + parameter.summary.dimmed
+            }
+
+            if let variadic = variadicParameter {
+                string += "\n" + indentation + variadic.name.blue + " - " + variadic.summary.dimmed
+            }
+
+            string += "\n\n"
+        }
+
+        if !subcommands.isEmpty {
+
+            string += "SUBCOMMANDS".bold + "\n"
+
+            for (subcommandName, subcommand) in subcommands {
+                string += "\(indentation)\(subcommandName.underlined) - \(subcommand.summary.dimmed)\n"
+            }
+
+            string += "\n"
+        }
+
+        if flags.isEmpty == false {
+
+            string += "OPTIONS".bold + "\n"
+
+            for flag in flags {
+
+                string += "\(indentation)"
+
+                string += flag.description
+
+                string += "\n\(indentation)\(indentation)\(flag.summary.dimmed)\n\n"
+
+            }
+
+            string += "\(indentation)" + "-h, --help" + "\n\(indentation)\(indentation)" + "Show usage description".dimmed + "\n\n"
+
+            for option in options {
+
+                string += "\(indentation)"
+
+                string += option.description
+
+                string += "\n\(indentation)\(indentation)\(option.summary.dimmed)\n\n"
+
+            }
+
+        }
+
+        return string
+    }
+}
+
+internal enum CommandError: Error {
     case missingOperand(Option)
     case missingOption(Option)
-    case unexpectedOption(String)
+    case unexpectedArgument(String)
     case missingParameter(Parameter)
     case other(reason: String, invalidUsage: Bool)
 
-    public init(reason: String, invalidUsage: Bool = false) {
+    internal init(reason: String, invalidUsage: Bool = false) {
         self = .other(reason: reason, invalidUsage: invalidUsage)
     }
 }
@@ -229,8 +319,8 @@ extension CommandError : CustomStringConvertible {
         case .missingOption(let option):
             return "Expected option \(option)"
 
-        case .unexpectedOption(let option):
-            return "Unexpected option \"\(option)\""
+        case .unexpectedArgument(let option):
+            return "Unexpected argument \"\(option)\""
 
         case .missingParameter(let parameter):
             return "Missing parameter \(parameter)"

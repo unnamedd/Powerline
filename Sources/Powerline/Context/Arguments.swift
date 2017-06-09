@@ -5,7 +5,6 @@ internal protocol ArgumentsComponent {
     var string: String { get }
 }
 
-
 public struct Arguments {
 
     internal struct ShortOption: ArgumentsComponent {
@@ -92,11 +91,11 @@ public struct Arguments {
 
                 // If all else, it's a value
             } else {
+
                 components.append(
                     Parameter(index: i, value: argument)
                 )
             }
-
         }
 
         self.components = components

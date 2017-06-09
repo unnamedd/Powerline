@@ -45,11 +45,11 @@ extension Context {
         public func variadicValues<T: StandardInputInitializable>() throws -> [T] {
             return try variadic.indices.map { try self.variadicValue(at: $0) }
         }
-        
+
         public var variadicCount: Int {
             return variadic.count
         }
-        
+
         public var hasVariadicParameters: Bool {
             return variadicCount > 0
         }
@@ -61,7 +61,6 @@ extension Context {
     public func string(for option: Option) -> String? {
         return options[option]
     }
-
 
     public func value<T: StandardInputInitializable>(for option: Option) throws -> T? {
         guard let string = options[option] else {
@@ -79,7 +78,7 @@ extension Context {
         guard let value: T = try value(for: option) else {
             throw CommandError.missingOption(option)
         }
-        
+
         return value
     }
 }
