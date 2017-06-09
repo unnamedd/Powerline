@@ -9,8 +9,7 @@ class PowerlineTests: XCTestCase {
             ("testRequiresNamedArgument", testRequiresNamedArgument),
             ("testVariadicPositionalArgumentsWithConversion", testVariadicPositionalArgumentsWithConversion),
             ("testSubCommand", testSubCommand),
-            ("testCmd", testCmd),
-            ("testCmdAsync", testCmdAsync),
+            ("testCmd", testCmd)
         ]
     }
 
