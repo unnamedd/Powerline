@@ -87,37 +87,4 @@ class PowerlineTests: XCTestCase {
 
         try command.run(arguments: ["example"])
     }
-
-    func testCmdAsync() throws {
-
-        let e = expectation(description: "Async command")
-
-        let command = SimpleCommand { context in
-
-            try context.run("curl -v http://ip.jsontest.com") { error, cmdResult in
-                if let error = error {
-                    XCTFail(error.localizedDescription)
-                    return
-                }
-
-                guard let cmdResult = cmdResult else {
-                    XCTFail("Result missing")
-                    return
-                }
-
-                guard let stdout = cmdResult.standardOutput else {
-                    XCTFail("No stdout")
-                    return
-                }
-
-                context.print(stdout)
-
-                e.fulfill()
-            }
-        }
-
-        try command.run(arguments: ["example"])
-
-        waitForExpectations(timeout: 10, handler: nil)
-    }
 }
