@@ -2,10 +2,19 @@ import class Foundation.Pipe
 import class Foundation.Process
 import class Foundation.FileManager
 
+/// Error associated with running processes
 public enum ProcessError: Error {
+
+    // Executable file not found
     case fileNotFound(path: String)
+
+    // Path did not resolve to an executable
     case launchPathNotExecutable(path: String)
+
+    // Launch path is invalid
     case invalidLaunchPath
+
+    // Non-zero exit
     case unsuccessfulExit(
         exitCode: Int,
         reason: String?

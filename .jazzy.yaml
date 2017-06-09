@@ -1,0 +1,8 @@
+output: docs
+clean: true
+exclude: [Packages]
+author: Formbound
+github_url: https://github.com/formbound/Powerline
+readme: README.md
+xcodebuild_arguments: [-project, Powerline.xcodeproj, -target, Powerline, LIBRARY_SEARCH_PATHS=.build/debug]
+theme: fullwidth

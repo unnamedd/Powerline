@@ -1,8 +1,16 @@
+/// An enum that specifies the name of an argument which supports both a long and a short name
 public enum ArgumentName {
+
+    /// Short argument name, character
     case short(Character)
+
+    /// Long argument name, string
     case long(String)
+
+    /// Both long and short argument name, string, character
     case both(String, Character)
 
+    /// The long version of an argument name, if defined
     public var longName: String? {
 
         switch self {
@@ -18,6 +26,7 @@ public enum ArgumentName {
         }
     }
 
+    /// The short name of an argument, if defined
     public var shortName: Character? {
         switch self {
         case .both(_, let short):

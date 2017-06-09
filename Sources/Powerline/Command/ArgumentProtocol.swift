@@ -1,6 +1,7 @@
+// :nodoc:
 public protocol ArgumentProtocol: Equatable, Hashable, CustomStringConvertible {
     associatedtype Name: Hashable, Equatable, CustomStringConvertible
-
+    
     var name: Name { get }
     var summary: String { get }
 }

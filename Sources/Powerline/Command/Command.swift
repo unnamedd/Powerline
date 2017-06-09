@@ -70,6 +70,10 @@ extension Command {
 
             context.error(error.description.red)
 
+            if case .other(_, let invalidUsage) = error, invalidUsage == true {
+                context.print(usageString(context: context))
+            }
+
         } catch {
             throw error
         }
@@ -300,13 +304,30 @@ extension Command {
     }
 }
 
+/// Error associated with commands
 public enum CommandError: Error {
+
+    /// Associated value is missing from a supplied option
     case missingOperand(Option)
+
+    /// Expected option was not found among the arguments
     case missingOption(Option)
+
+    /// Unexpected argument found
     case unexpectedArgument(String)
+
+    /// Expected parameter not found
     case missingParameter(Parameter)
+
+    /// Other errors
     case other(message: String, invalidUsage: Bool)
 
+    /// Creates a custom CommandError
+    ///
+    /// - Parameters:
+    ///   - message: The reason for the error
+    ///   - invalidUsage: Specifies whether the error occurred due to invalid usage.
+    ///                   If set to `true`, the usage of the command will be printed to stdout
     public init(message: String, invalidUsage: Bool = false) {
         self = .other(message: message, invalidUsage: invalidUsage)
     }

@@ -1,6 +1,6 @@
 
 <p align="center">
-<img src="Images/header.png" height="250" />
+<img src="https://raw.githubusercontent.com/formbound/Powerline/master/Images/header.png" height="250" />
 </p>
 
 # Powerline
@@ -57,7 +57,7 @@ try HelloWorld().run()
 
 ## License
 
-Pin is released under the MIT license. See LICENSE for details.
+Powerline is released under the MIT license. See LICENSE for details.
 
 ## About Formbound
 

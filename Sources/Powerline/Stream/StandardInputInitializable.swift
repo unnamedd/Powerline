@@ -6,7 +6,10 @@
 
 import struct Foundation.URL
 
+/// Error associated with initializing types from standard input
 public enum StandardInputInitializableError: Error {
+
+    /// Conversion from standard input to specified type failed
     case failedConversion(of: String, to: StandardInputInitializable.Type)
 }
 

@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ASCIIStyle Enum Reference</title>
+    <link rel="stylesheet" type="text/css" href="../../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../../js/jquery.min.js" defer></script>
+    <script src="../../js/jazzy.js" defer></script>
+    
+    <script src="../../js/lunr.min.js" defer></script>
+    <script src="../../js/typeahead.jquery.js" defer></script>
+    <script src="../../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Enum/ASCIIStyle" class="dashAnchor"></a>
+
+    <a title="ASCIIStyle Enum Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../../index.html">
+           Docs
+        </a>
+         (54% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/formbound/Powerline">
+            <img class="header-icon" src="../../img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../../index.html"> Reference</a>
+      <img class="carat" src="../../img/carat.png" />
+      ASCIIStyle Enum Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Classes/Context.html">Context</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Classes/Context/Parameters.html">– Parameters</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../../Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Enums/ArgumentName.html">ArgumentName</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Enums/CommandError.html">CommandError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Enums/ProcessError.html">ProcessError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Enums/StandardInputInitializableError.html">StandardInputInitializableError</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Extensions/Bool.html">Bool</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Extensions/Double.html">Double</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Extensions/Int.html">Int</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Extensions/String.html">String</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Extensions/String/ASCIIStyle.html">– ASCIIStyle</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Extensions/URL.html">URL</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Protocols/ArgumentProtocol.html">ArgumentProtocol</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Protocols/Command.html">Command</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Protocols/FileHandleStream.html">FileHandleStream</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Protocols/ReadableStream.html">ReadableStream</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Protocols/StandardInputInitializable.html">StandardInputInitializable</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Protocols/WritableStream.html">WritableStream</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../../Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Structs/Arguments.html">Arguments</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Structs/Flag.html">Flag</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Structs/InputStream.html">InputStream</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Structs/Option.html">Option</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Structs/OutputStream.html">OutputStream</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Structs/Parameter.html">Parameter</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Structs/ProcessHandler.html">ProcessHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Structs/ProcessResult.html">ProcessResult</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../../Structs/Stream.html">Stream</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            <h1>ASCIIStyle</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">ASCIIStyle</span><span class="p">:</span> <span class="kt">String</span></code></pre>
+
+                </div>
+              </div>
+            <p>String ascii style</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle4boldFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/bold" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle4boldFMS0_S0_">bold</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Bold</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">bold</span>            <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[1m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle3dimFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/dim" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle3dimFMS0_S0_">dim</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Dimmed</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">dim</span>             <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[2m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle6italicFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/italic" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle6italicFMS0_S0_">italic</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Italic</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">italic</span>          <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[3m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle9underlineFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/underline" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle9underlineFMS0_S0_">underline</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Underlined</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">underline</span>       <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[4m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle5blinkFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/blink" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle5blinkFMS0_S0_">blink</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Blinking</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">blink</span>           <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[5m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle7reverseFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/reverse" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle7reverseFMS0_S0_">reverse</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Reversed</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">reverse</span>         <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[7m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle6hiddenFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/hidden" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle6hiddenFMS0_S0_">hidden</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Hidden</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">hidden</span>          <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[8m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle13strikethroughFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/strikethrough" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle13strikethroughFMS0_S0_">strikethrough</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Strikethrough</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">strikethrough</span>   <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[9m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle5resetFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/reset" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle5resetFMS0_S0_">reset</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>No style</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">reset</span>           <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[0m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle5blackFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/black" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle5blackFMS0_S0_">black</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Black</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">black</span>           <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[30m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle3redFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/red" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle3redFMS0_S0_">red</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Red</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">red</span>             <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[31m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle5greenFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/green" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle5greenFMS0_S0_">green</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Green</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">green</span>           <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[32m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle6yellowFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/yellow" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle6yellowFMS0_S0_">yellow</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Yellow</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">yellow</span>          <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[33m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle4blueFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/blue" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle4blueFMS0_S0_">blue</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Blue</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">blue</span>            <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[34m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle7magentaFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/magenta" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle7magentaFMS0_S0_">magenta</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Magenta</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">magenta</span>         <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[35m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle4cyanFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/cyan" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle4cyanFMS0_S0_">cyan</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Cyan</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">cyan</span>            <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[36m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle9lightGrayFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/lightGray" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle9lightGrayFMS0_S0_">lightGray</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Light gray</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">lightGray</span>       <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[37m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle8darkGrayFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/darkGray" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle8darkGrayFMS0_S0_">darkGray</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Dark gray</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">darkGray</span>        <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[90m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle8lightRedFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/lightRed" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle8lightRedFMS0_S0_">lightRed</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Light red</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">lightRed</span>        <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[91m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle10lightGreenFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/lightGreen" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle10lightGreenFMS0_S0_">lightGreen</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Light green</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">lightGreen</span>      <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[92m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle11lightYellowFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/lightYellow" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle11lightYellowFMS0_S0_">lightYellow</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Light yellow</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">lightYellow</span>     <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[93m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle9lightBlueFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/lightBlue" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle9lightBlueFMS0_S0_">lightBlue</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Light blue</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">lightBlue</span>       <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[94m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle12lightMagentaFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/lightMagenta" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle12lightMagentaFMS0_S0_">lightMagenta</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Light magenta</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">lightMagenta</span>    <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[95m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle9lightCyanFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/lightCyan" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle9lightCyanFMS0_S0_">lightCyan</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Light cyan</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">lightCyan</span>       <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[96m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle5whiteFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/white" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle5whiteFMS0_S0_">white</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>White</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">white</span>           <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[97m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle7onBlackFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/onBlack" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle7onBlackFMS0_S0_">onBlack</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Black background</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">onBlack</span>         <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[40m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle5onRedFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/onRed" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle5onRedFMS0_S0_">onRed</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Red background</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">onRed</span>           <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[41m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle7onGreenFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/onGreen" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle7onGreenFMS0_S0_">onGreen</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Green background</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">onGreen</span>         <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[42m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle8onYellowFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/onYellow" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle8onYellowFMS0_S0_">onYellow</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Yellow background</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">onYellow</span>        <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[43m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle6onBlueFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/onBlue" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle6onBlueFMS0_S0_">onBlue</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Blue background</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">onBlue</span>          <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[44m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle9onMagentaFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/onMagenta" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle9onMagentaFMS0_S0_">onMagenta</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Magenta background</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">onMagenta</span>       <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[45m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle6onCyanFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/onCyan" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle6onCyanFMS0_S0_">onCyan</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Cyan background</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">onCyan</span>          <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[46m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle11onLightGrayFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/onLightGray" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle11onLightGrayFMS0_S0_">onLightGray</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Light gray background</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">onLightGray</span>     <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[47m"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle10onDarkGrayFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/onDarkGray" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle10onDarkGrayFMS0_S0_">onDarkGray</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Dark gray background</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">onDarkGray</span>      <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[100"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle10onLightRedFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/onLightRed" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle10onLightRedFMS0_S0_">onLightRed</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Light red background</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">onLightRed</span>      <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[101"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle12onLightGreenFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/onLightGreen" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle12onLightGreenFMS0_S0_">onLightGreen</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Light green background</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">onLightGreen</span>    <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[102"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle13onLightYellowFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/onLightYellow" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle13onLightYellowFMS0_S0_">onLightYellow</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Light yellow background</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">onLightYellow</span>   <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[103"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle11onLightBlueFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/onLightBlue" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle11onLightBlueFMS0_S0_">onLightBlue</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Light blue background</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">onLightBlue</span>     <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[104"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle14onLightMagentaFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/onLightMagenta" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle14onLightMagentaFMS0_S0_">onLightMagenta</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Light magenta background</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">onLightMagenta</span>  <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[105"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle11onLightCyanFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/onLightCyan" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle11onLightCyanFMS0_S0_">onLightCyan</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Light cyan background</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">onLightCyan</span>     <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[106"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FOE9PowerlineSS10ASCIIStyle7onWhiteFMS0_S0_"></a>
+                    <a name="//apple_ref/swift/Element/onWhite" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FOE9PowerlineSS10ASCIIStyle7onWhiteFMS0_S0_">onWhite</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>White background</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">case</span> <span class="n">onWhite</span>         <span class="o">=</span> <span class="s">"</span><span class="se">\u{001B}</span><span class="s">[107"</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external">Formbound</a>. All rights reserved. (Last updated: 2017-06-09)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.2</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>
