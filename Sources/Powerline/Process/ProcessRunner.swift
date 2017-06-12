@@ -93,7 +93,7 @@ internal struct ProcessRunner {
         process.launchPath = launchPath
 
         process.environment = context.environment
-        process.currentDirectoryPath = context.currentDirectory
+        process.currentDirectoryPath = context.currentDirectoryPath
 
         process.standardOutput = standardOutputPipe
         process.standardError = standardErrorPipe

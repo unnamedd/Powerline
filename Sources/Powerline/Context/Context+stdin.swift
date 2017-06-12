@@ -1,7 +1,8 @@
 extension Context {
-    /// Reads the input from stdin
+
+    /// Reads from stdin
     ///
-    /// - Returns: A string, or nil if the input is empty
+    /// - Returns: A string, or nil if the read string is empty
     public func read() -> String? {
         guard let input = standardInput.read()?.trimmingCharacters(in: .whitespacesAndNewlines) else {
             return nil
@@ -9,6 +10,12 @@ extension Context {
         return input.isEmpty ? nil : input
     }
 
+    /// Reads from stdin, converting to inferred type conforming to `StandardInputInitializable`
+    ///
+    /// - Note: If the conversion from `String` to the inferred type fails, this method will
+    /// prompt the user to provide a correct input
+    ///
+    /// - Returns: Read value form stdin, converted to the inferred type
     public func read<T: StandardInputInitializable>() -> T {
 
         while true {
@@ -27,6 +34,14 @@ extension Context {
         }
     }
 
+    /// Writes out a message to stdout, then reads from stdin, converting to inferred type
+    /// conforming to `StandardInputInitializable`
+    ///
+    /// - Note: If the conversion from `String` to the inferred type fails, this method will
+    /// prompt the user to provide a correct input
+    ///
+    /// - Parameter message: Message to write to stdout
+    /// - Returns: Read value form stdin, converted to the inferred type
     public func read<T: StandardInputInitializable>(message: String) -> T {
         print("\(message): ".bold.magenta, terminator: "")
 
@@ -62,6 +77,7 @@ extension Context {
     ///   - message: A message to provide
     /// - Returns: The selected value or default value, if provided
     public func select(_ options: [String], default defaultValue: String? = nil, message: String) -> String {
+
         print(message.bold.magenta)
         for (i, option) in options.enumerated() {
             if let defaultValue = defaultValue, i == options.index(of: defaultValue) {

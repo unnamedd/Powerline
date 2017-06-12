@@ -3,7 +3,7 @@ provides-top-level:
 provides-nominal:
 provides-member:
 - ["C9Powerline7Context", ""]
-- ["C9Powerline7Context", "currentDirectory"]
+- ["C9Powerline7Context", "currentDirectoryPath"]
 - ["C9Powerline7Context", "urlForCurrentDirectory"]
 - ["C9Powerline7Context", "relativePath"]
 provides-dynamic-lookup:
@@ -25,7 +25,6 @@ depends-member:
 - !private ["Ps9AnyObject", "FileManager"]
 - !private ["Ps9AnyObject", "URL"]
 - !private ["Ps9AnyObject", "changeCurrentDirectoryPath"]
-- !private ["Ps9AnyObject", "currentDirectory"]
 - !private ["Ps9AnyObject", "currentDirectoryPath"]
 - !private ["Ps9AnyObject", "default"]
 - !private ["Ps9AnyObject", "exit"]
@@ -45,7 +44,7 @@ depends-member:
 - !private ["C9Powerline7Context", "FileManager"]
 - ["C9Powerline7Context", "String"]
 - ["C9Powerline7Context", "URL"]
-- ["C9Powerline7Context", "currentDirectory"]
+- ["C9Powerline7Context", "currentDirectoryPath"]
 - !private ["C9Powerline7Context", "exit"]
 - ["C9Powerline7Context", "relativePath"]
 - !private ["C9Powerline7Context", "standardError"]
@@ -208,4 +207,4 @@ depends-external:
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/Swift.swiftmodule"
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/IOKit.swiftmodule"
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/SwiftOnoneSupport.swiftmodule"
-interface-hash: "6855f80393a2d6a2e9794e3048fe61b3"
+interface-hash: "c6cfc718f475c2767a0050f97fb3ceb1"

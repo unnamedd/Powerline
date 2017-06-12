@@ -42,7 +42,6 @@ depends-top-level:
 depends-member:
 - !private ["Ps9AnyObject", "arguments"]
 - !private ["Ps9AnyObject", "characters"]
-- !private ["Ps9AnyObject", "currentDirectory"]
 - !private ["Ps9AnyObject", "currentDirectoryPath"]
 - !private ["Ps9AnyObject", "default"]
 - !private ["Ps9AnyObject", "encoding"]
@@ -98,7 +97,7 @@ depends-member:
 - !private ["Ps10Comparable", "characters"]
 - !private ["Ps10Comparable", "init"]
 - !private ["Ps10Comparable", "trimmingCharacters"]
-- !private ["C9Powerline7Context", "currentDirectory"]
+- !private ["C9Powerline7Context", "currentDirectoryPath"]
 - !private ["C9Powerline7Context", "encoding"]
 - !private ["C9Powerline7Context", "environment"]
 - !private ["Ps28CustomDebugStringConvertible", "arguments"]

@@ -27,13 +27,18 @@ extension StandardInputInitializableError: CustomStringConvertible {
 
 }
 
+/// A protocol that provides functionality to convert strings from stdin to
+/// other types
 public protocol StandardInputInitializable {
+
     init?(input: String)
 
+    /// An array of valid strings that would result in a successful conversion
     static var inputExamples: [String] { get }
 }
 
 extension String: StandardInputInitializable {
+
     public init?(input: String) {
         self = input
     }
@@ -69,6 +74,7 @@ extension Bool: StandardInputInitializable {
 }
 
 extension Double: StandardInputInitializable {
+    
     public init?(input: String) {
 
         var string = input

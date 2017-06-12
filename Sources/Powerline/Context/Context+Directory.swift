@@ -9,7 +9,8 @@ import class Foundation.FileManager
 
 extension Context {
 
-    public var currentDirectory: String {
+    /// Returns the current directory path of the context
+    public var currentDirectoryPath: String {
         get {
             return FileManager.default.currentDirectoryPath
         }
@@ -21,13 +22,13 @@ extension Context {
         }
     }
 
-    /// The current directory url of the process
+    /// Returns the current directory URL of the context
     public var urlForCurrentDirectory: URL {
         get {
-            return URL(fileURLWithPath: currentDirectory, isDirectory: true)
+            return URL(fileURLWithPath: currentDirectoryPath, isDirectory: true)
         }
         set {
-            currentDirectory = newValue.path
+            currentDirectoryPath = newValue.path
         }
     }
 

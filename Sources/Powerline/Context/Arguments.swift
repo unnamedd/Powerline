@@ -5,6 +5,8 @@ internal protocol ArgumentsComponent {
     var string: String { get }
 }
 
+/// Arguments is a collection of strings, representing the arguments, including the executable
+//  of a Powerline process
 public struct Arguments {
 
     internal struct ShortOption: ArgumentsComponent {
@@ -43,6 +45,7 @@ public struct Arguments {
         }
     }
 
+    /// Executable argument
     public let executable: String
 
     fileprivate let rawArguments: [String]
@@ -104,7 +107,7 @@ public struct Arguments {
 
 extension Arguments {
 
-    func component(after component: ArgumentsComponent) -> ArgumentsComponent? {
+    internal func component(after component: ArgumentsComponent) -> ArgumentsComponent? {
         guard components.count > component.index + 1 else {
             return nil
         }
@@ -112,7 +115,7 @@ extension Arguments {
         return components[component.index + 1]
     }
 
-    func component(before component: ArgumentsComponent) -> ArgumentsComponent? {
+    internal func component(before component: ArgumentsComponent) -> ArgumentsComponent? {
         guard component.index > 0 else {
             return nil
         }
@@ -123,6 +126,7 @@ extension Arguments {
 
 extension Arguments {
 
+    /// Name of the executable
     public var executableName: String {
         guard executable.contains("/") else {
             return executable
