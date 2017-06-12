@@ -9,5 +9,3 @@ install:
   - eval "$(curl -sL https://raw.githubusercontent.com/Zewo/Scripts/master/install.sh)"
 script:
   - bash <(curl -s https://raw.githubusercontent.com/Zewo/Scripts/master/build.sh) Powerline
-after_success:
-  - bash <(curl -s https://raw.githubusercontent.com/Zewo/Zewo/master/Scripts/Travis/report-coverage.sh)
