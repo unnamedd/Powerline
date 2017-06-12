@@ -1,6 +1,6 @@
 dependencies:
   override:
-    - eval "$(curl -sL https://raw.githubusercontent.com/Zewo/Scripts/master/install.sh)"
+    - eval "$(curl -sL http://sh.zewo.io/install.sh)"
 test:
   override:
-    - eval "$(curl -sL https://raw.githubusercontent.com/Zewo/Scripts/master/build.sh)"
+    - eval "$(curl -sL http://sh.zewo.io/build.sh)"

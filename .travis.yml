@@ -6,6 +6,6 @@ sudo: false
 dist: trusty
 osx_image: xcode8.3
 install:
-  - eval "$(curl -sL https://raw.githubusercontent.com/Zewo/Scripts/master/install.sh)"
+  - eval "$(curl -sL http://sh.zewo.io/install.sh)"
 script:
-  - bash <(curl -s https://raw.githubusercontent.com/Zewo/Scripts/master/build.sh) Powerline
+  - eval "$(curl -sL http://sh.zewo.io/build.sh)"
