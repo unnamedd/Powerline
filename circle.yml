@@ -1,16 +1,6 @@
 dependencies:
-  pre:
-    - sudo apt-get install clang-3.6 libicu-dev
-    - sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-3.6 100
-    - sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-3.6 100
   override:
-    - eval "$(curl -sL https://raw.githubusercontent.com/formbound/swift-tools/master/scripts/swiftenv-install.sh)"
-
+    - eval "$(curl -sL https://raw.githubusercontent.com/Zewo/Scripts/master/install.sh)"
 test:
   override:
-    - export SWIFTENV_ROOT="$HOME/.swiftenv"
-    - export PATH="$SWIFTENV_ROOT/bin:$SWIFTENV_ROOT/shims:$PATH"
-
-    - /home/ubuntu/.swiftenv/shims/swift build
-    - /home/ubuntu/.swiftenv/shims/swift build --configuration release
-    - /home/ubuntu/.swiftenv/shims/swift test
+    - eval "$(curl -sL https://raw.githubusercontent.com/Zewo/Scripts/master/build.sh)"
