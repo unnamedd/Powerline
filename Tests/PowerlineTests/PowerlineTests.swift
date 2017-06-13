@@ -9,60 +9,61 @@ class PowerlineTests: XCTestCase {
             ("testRequiresNamedArgument", testRequiresNamedArgument),
             ("testVariadicPositionalArgumentsWithConversion", testVariadicPositionalArgumentsWithConversion),
             ("testSubCommand", testSubCommand),
-            ("testCmd", testCmd),
-            ("testCmdAsync", testCmdAsync),
+            ("testCmd", testCmd)
         ]
     }
 
     func testRequiresFlag() throws {
 
         let flag = Flag(
-            name: "flag",
-            character: "f",
+            longName: "flag",
+            shortName: "f",
             summary: "Required flag"
         )
 
         try SimpleCommand(
-            flags: [flag]) { process in
-                XCTAssert(process.flags.contains(flag))
+            flags: [flag]) { context in
+                XCTAssert(context.flags.contains(flag))
         }.run(arguments: ["example", "-f"])
     }
 
     func testRequiresNamedArgument() throws {
 
-        let arg = NamedArgument(name: "required")
+        let arg = Option(longName: "required", summary: "None")
 
         try SimpleCommand(
-            namedArguments: [arg]) { process in
-                XCTAssertEqual(try process.value(forNamedArgument: arg), "1234")
+            options: [arg]) { context in
+                XCTAssertEqual(try context.value(for: arg), "1234")
             }.run(arguments: ["example", "--required", "1234"])
     }
 
     func testVariadicPositionalArgumentsWithConversion() throws {
 
-        let positional = PositionalArgument(name: "pos", variadic: true)
+        let positional = Parameter(name: "pos", summary: "None")
 
         try SimpleCommand(
-            positionalArgument: positional) { process in
-                XCTAssertEqual(try process.positionalArguments.value(at: 0), 1234)
-                XCTAssertEqual(try process.positionalArguments.value(at: 1), 5678)
+            variadicParameter: positional) { context in
+
+                XCTAssertEqual(try context.parameters.variadicValue(at: 0), 1234)
+                XCTAssertEqual(try context.parameters.variadicValue(at: 1), 5678)
+
             }.run(arguments: ["example", "1234", "5678"])
     }
 
     func testSubCommand() throws {
 
-        let subcommandFlag = Flag(name: "test", character: "t")
+        let subcommandFlag = Flag(longName: "test", shortName: "t", summary: "None")
 
         let subcommand = SimpleCommand(
             summary: "Subcommand",
-            flags: [subcommandFlag]) { process in
-                XCTAssert(process.flags.contains(subcommandFlag))
+            flags: [subcommandFlag]) { context in
+                XCTAssert(context.flags.contains(subcommandFlag))
         }
 
-        let mainFlag = Flag(name: "main", character: "m")
+        let mainFlag = Flag(longName: "main", shortName: "m", summary: "None")
 
-        let command = SimpleCommand(flags: [mainFlag], subcommands: ["sub": subcommand]) { process in
-            XCTAssert(process.flags.contains(mainFlag))
+        let command = SimpleCommand(flags: [mainFlag], subcommands: ["sub": subcommand]) { context in
+            XCTAssert(context.flags.contains(mainFlag))
         }
 
         try command.run(arguments: ["example", "-m"])
@@ -71,51 +72,18 @@ class PowerlineTests: XCTestCase {
     }
 
     func testCmd() throws {
-        let command = SimpleCommand { process in
+        let command = SimpleCommand { context in
 
-            guard let stdout = try process.run("ls -a1").standardOutput else {
+            guard let stdout = try context.run("ls -a1").standardOutput else {
                 XCTFail("No stdout")
                 return
             }
 
-            process.print(stdout)
+            context.print(stdout)
         }
 
         print(CommandLine.arguments)
 
         try command.run(arguments: ["example"])
-    }
-
-    func testCmdAsync() throws {
-
-        let e = expectation(description: "Async command")
-
-        let command = SimpleCommand { process in
-
-            try process.run("curl -v http://ip.jsontest.com") { error, cmdResult in
-                if let error = error {
-                    XCTFail(error.localizedDescription)
-                    return
-                }
-
-                guard let cmdResult = cmdResult else {
-                    XCTFail("Result missing")
-                    return
-                }
-
-                guard let stdout = cmdResult.standardOutput else {
-                    XCTFail("No stdout")
-                    return
-                }
-
-                process.print(stdout)
-
-                e.fulfill()
-            }
-        }
-
-        try command.run(arguments: ["example"])
-
-        waitForExpectations(timeout: 10, handler: nil)
     }
 }

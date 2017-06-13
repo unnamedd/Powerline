@@ -1,0 +1,194 @@
+### Swift dependencies file v0 ###
+provides-top-level:
+- "ArgumentProtocol"
+- "=="
+provides-nominal:
+- "P9Powerline16ArgumentProtocol"
+provides-member:
+- ["P9Powerline16ArgumentProtocol", ""]
+- ["Ps8Sequence", ""]
+- ["P9Powerline16ArgumentProtocol", "=="]
+- ["P9Powerline16ArgumentProtocol", "hashValue"]
+- ["P9Powerline16ArgumentProtocol", "description"]
+- ["Ps8Sequence", "filter"]
+- ["Ps8Sequence", "filter"]
+provides-dynamic-lookup:
+depends-top-level:
+- "=="
+- "ArgumentName"
+- "ArgumentProtocol"
+- "Bool"
+- "Character"
+- "CustomStringConvertible"
+- "Equatable"
+- "Hashable"
+- "Int"
+- "Sequence"
+- "String"
+- !private "StringLiteralType"
+depends-member:
+- !private ["Ps9AnyObject", "init"]
+- !private ["O9Powerline12ArgumentName", "longName"]
+- !private ["O9Powerline12ArgumentName", "shortName"]
+- ["P9Powerline16ArgumentProtocol", "=="]
+- ["P9Powerline16ArgumentProtocol", "Bool"]
+- ["P9Powerline16ArgumentProtocol", "CustomStringConvertible"]
+- ["P9Powerline16ArgumentProtocol", "Equatable"]
+- ["P9Powerline16ArgumentProtocol", "Hashable"]
+- ["P9Powerline16ArgumentProtocol", "Int"]
+- ["P9Powerline16ArgumentProtocol", "Name"]
+- ["P9Powerline16ArgumentProtocol", "Self"]
+- ["P9Powerline16ArgumentProtocol", "String"]
+- ["P9Powerline16ArgumentProtocol", "description"]
+- ["P9Powerline16ArgumentProtocol", "hashValue"]
+- ["P9Powerline16ArgumentProtocol", "name"]
+- ["P9Powerline16ArgumentProtocol", "summary"]
+- !private ["Ps7CVarArg", "init"]
+- !private ["Ps10Comparable", "init"]
+- !private ["Ps28CustomDebugStringConvertible", "init"]
+- !private ["Ps29CustomPlaygroundQuickLookable", "init"]
+- !private ["Ps17CustomReflectable", "init"]
+- ["Ps23CustomStringConvertible", "Bool"]
+- ["Ps23CustomStringConvertible", "CustomStringConvertible"]
+- ["Ps23CustomStringConvertible", "Equatable"]
+- ["Ps23CustomStringConvertible", "Hashable"]
+- ["Ps23CustomStringConvertible", "Int"]
+- ["Ps23CustomStringConvertible", "Name"]
+- ["Ps23CustomStringConvertible", "Self"]
+- ["Ps23CustomStringConvertible", "String"]
+- !private ["Ps23CustomStringConvertible", "description"]
+- !private ["Ps23CustomStringConvertible", "hashValue"]
+- !private ["Ps23CustomStringConvertible", "init"]
+- !private ["Ps23CustomStringConvertible", "longName"]
+- ["Ps23CustomStringConvertible", "name"]
+- !private ["Ps23CustomStringConvertible", "shortName"]
+- ["Ps23CustomStringConvertible", "summary"]
+- ["Ps23CustomStringConvertible", ""]
+- ["Ps9Equatable", "Bool"]
+- ["Ps9Equatable", "CustomStringConvertible"]
+- ["Ps9Equatable", "Equatable"]
+- ["Ps9Equatable", "Hashable"]
+- ["Ps9Equatable", "Int"]
+- ["Ps9Equatable", "Name"]
+- ["Ps9Equatable", "Self"]
+- ["Ps9Equatable", "String"]
+- !private ["Ps9Equatable", "description"]
+- !private ["Ps9Equatable", "hashValue"]
+- !private ["Ps9Equatable", "init"]
+- !private ["Ps9Equatable", "longName"]
+- ["Ps9Equatable", "name"]
+- !private ["Ps9Equatable", "shortName"]
+- ["Ps9Equatable", "summary"]
+- ["Ps9Equatable", ""]
+- !private ["Ps43ExpressibleByExtendedGraphemeClusterLiteral", "init"]
+- !private ["Ps26ExpressibleByStringLiteral", "init"]
+- !private ["Ps33ExpressibleByUnicodeScalarLiteral", "init"]
+- ["Ps8Hashable", "Bool"]
+- ["Ps8Hashable", "CustomStringConvertible"]
+- ["Ps8Hashable", "Equatable"]
+- ["Ps8Hashable", "Hashable"]
+- ["Ps8Hashable", "Int"]
+- ["Ps8Hashable", "Name"]
+- ["Ps8Hashable", "Self"]
+- ["Ps8Hashable", "String"]
+- !private ["Ps8Hashable", "description"]
+- !private ["Ps8Hashable", "hashValue"]
+- !private ["Ps8Hashable", "init"]
+- !private ["Ps8Hashable", "longName"]
+- ["Ps8Hashable", "name"]
+- !private ["Ps8Hashable", "shortName"]
+- ["Ps8Hashable", "summary"]
+- ["Ps8Hashable", ""]
+- !private ["Ps25LosslessStringConvertible", "init"]
+- !private ["Ps10MirrorPath", "init"]
+- !private ["PSo8NSCoding", "init"]
+- !private ["PSo9NSCopying", "init"]
+- !private ["PSo16NSMutableCopying", "init"]
+- !private ["PSo16NSObjectProtocol", "init"]
+- !private ["PSo14NSSecureCoding", "init"]
+- !private ["CSo8NSString", "init"]
+- ["Ps8Sequence", "ArgumentName"]
+- ["Ps8Sequence", "ArgumentProtocol"]
+- ["Ps8Sequence", "Character"]
+- ["Ps8Sequence", "Iterator"]
+- ["Ps8Sequence", "String"]
+- ["Ps8Sequence", "filter"]
+- !private ["P9Powerline26StandardInputInitializable", "init"]
+- !private ["SS", "deinit"]
+- !private ["SS", "init"]
+- !private ["Ps16TextOutputStream", "init"]
+- !private ["Ps20TextOutputStreamable", "init"]
+- !private ["Ps51_ExpressibleByBuiltinExtendedGraphemeClusterLiteral", "init"]
+- !private ["Ps34_ExpressibleByBuiltinStringLiteral", "init"]
+- !private ["Ps39_ExpressibleByBuiltinUTF16StringLiteral", "init"]
+- !private ["Ps41_ExpressibleByBuiltinUnicodeScalarLiteral", "init"]
+- !private ["Ps33_ExpressibleByStringInterpolation", "init"]
+- !private ["Ps35_HasCustomAnyHashableRepresentation", "init"]
+- ["Ps9_Hashable", "Bool"]
+- ["Ps9_Hashable", "CustomStringConvertible"]
+- ["Ps9_Hashable", "Equatable"]
+- ["Ps9_Hashable", "Hashable"]
+- ["Ps9_Hashable", "Int"]
+- ["Ps9_Hashable", "Name"]
+- ["Ps9_Hashable", "Self"]
+- ["Ps9_Hashable", "String"]
+- !private ["Ps9_Hashable", "description"]
+- !private ["Ps9_Hashable", "hashValue"]
+- !private ["Ps9_Hashable", "init"]
+- !private ["Ps9_Hashable", "longName"]
+- ["Ps9_Hashable", "name"]
+- !private ["Ps9_Hashable", "shortName"]
+- ["Ps9_Hashable", "summary"]
+- !private ["Ps21_ObjectiveCBridgeable", "init"]
+depends-nominal:
+- !private "Ps9AnyObject"
+- !private "O9Powerline12ArgumentName"
+- "P9Powerline16ArgumentProtocol"
+- !private "Ps7CVarArg"
+- !private "Ps10Comparable"
+- !private "Ps28CustomDebugStringConvertible"
+- !private "Ps29CustomPlaygroundQuickLookable"
+- !private "Ps17CustomReflectable"
+- "Ps23CustomStringConvertible"
+- "Ps9Equatable"
+- !private "Ps43ExpressibleByExtendedGraphemeClusterLiteral"
+- !private "Ps26ExpressibleByStringLiteral"
+- !private "Ps33ExpressibleByUnicodeScalarLiteral"
+- "Ps8Hashable"
+- !private "Ps25LosslessStringConvertible"
+- !private "Ps10MirrorPath"
+- !private "PSo8NSCoding"
+- !private "PSo9NSCopying"
+- !private "PSo16NSMutableCopying"
+- !private "PSo16NSObjectProtocol"
+- !private "PSo14NSSecureCoding"
+- !private "CSo8NSString"
+- "Ps8Sequence"
+- !private "P9Powerline26StandardInputInitializable"
+- !private "SS"
+- !private "Ps16TextOutputStream"
+- !private "Ps20TextOutputStreamable"
+- !private "Ps51_ExpressibleByBuiltinExtendedGraphemeClusterLiteral"
+- !private "Ps34_ExpressibleByBuiltinStringLiteral"
+- !private "Ps39_ExpressibleByBuiltinUTF16StringLiteral"
+- !private "Ps41_ExpressibleByBuiltinUnicodeScalarLiteral"
+- !private "Ps33_ExpressibleByStringInterpolation"
+- !private "Ps35_HasCustomAnyHashableRepresentation"
+- "Ps9_Hashable"
+- !private "Ps21_ObjectiveCBridgeable"
+depends-dynamic-lookup:
+depends-external:
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/ObjectiveC.apinotesc"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/Dispatch.apinotesc"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/Foundation.apinotesc"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/CoreGraphics.apinotesc"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/CoreText.apinotesc"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/ObjectiveC.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/Dispatch.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/Darwin.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/Foundation.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/CoreGraphics.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/Swift.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/IOKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/SwiftOnoneSupport.swiftmodule"
+interface-hash: "4dd2ba61eda9d3cfe2d8551cde69f408"

@@ -2,31 +2,34 @@ import Powerline
 
 struct SimpleCommand: Command {
     let summary: String
-    let positionalArgument: PositionalArgument?
+    let parameters: [Parameter]
+    let variadicParameter: Parameter?
     let flags: Set<Flag>
-    let namedArguments: Set<NamedArgument>
+    let options: Set<Option>
     let subcommands: [String : Command]
 
-    let handler: (CommandProcess) throws -> Void
+    let handler: (Context) throws -> Void
 
-    func run(process: CommandProcess) throws {
-        try handler(process)
+    func process(context: Context) throws {
+        try handler(context)
     }
 
     init(
         summary: String = "No summary",
-        positionalArgument: PositionalArgument? = nil,
+        parameters: [Parameter] = [],
+        variadicParameter: Parameter? = nil,
         flags: Set<Flag> = [],
-        namedArguments: Set<NamedArgument> = [],
+        options: Set<Option> = [],
         subcommands: [String: Command] = [:],
-        handler: @escaping (CommandProcess) throws -> Void
+        handler: @escaping (Context) throws -> Void
         ) {
 
         self.summary = summary
-        self.positionalArgument = positionalArgument
         self.flags = flags
-        self.namedArguments = namedArguments
+        self.parameters = parameters
+        self.variadicParameter = variadicParameter
         self.subcommands = subcommands
         self.handler = handler
+        self.options = options
     }
 }
