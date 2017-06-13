@@ -28,9 +28,6 @@ Due to lack of argument parsing standards, Powerline adopts a similar style to t
 - **Parameter**
   An argument that is a value in itself
 
-
-
-
 ## Basic usage
 
 ```swift
@@ -48,12 +45,9 @@ struct HelloWorld : Command {
 try HelloWorld().run()
 ```
 
+## Documentation
 
-
-
-## Credits
-
-- David Ask ([@davidask](https://github.com/davidask))
+Read the code documentation at [powerline.formbound.org](http://powerline.formbound.org)
 
 ## License
 
