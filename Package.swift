@@ -13,6 +13,7 @@ let package = Package(
         )
     ],
     targets: [
-        .target(name: "Powerline")
+        .target(name: "Powerline"),
+        .testTarget(name: "PowerlineTests", dependencies: ["Powerline"])
     ]
 )
