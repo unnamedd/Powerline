@@ -24,7 +24,6 @@ extension StandardInputInitializableError: CustomStringConvertible {
             return string
         }
     }
-
 }
 
 /// A protocol that provides functionality to convert strings from stdin to

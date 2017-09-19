@@ -1,56 +1,33 @@
 import Foundation
 
-internal protocol ArgumentsComponent {
-    var index: Int { get }
-    var string: String { get }
-}
-
 /// Arguments is a collection of strings, representing the arguments, including the executable
 //  of a Powerline process
-public struct Arguments {
+public struct TokenizedArguments {
 
-    internal struct ShortOption: ArgumentsComponent {
-        let index: Int
-        let character: Character
+    public struct Token {
 
-        var string: String {
-            return String(character)
+        public enum `Type` {
+            case shortOption(Character)
+            case longOption(String)
+            case parameter(String)
+            case optionSet([Character])
         }
-    }
 
-    internal struct LongOption: ArgumentsComponent {
         let index: Int
-        let name: String
+        let type: `Type`
 
-        var string: String {
-            return name
-        }
-    }
-
-    internal struct Parameter: ArgumentsComponent {
-        let index: Int
-        let value: String
-
-        var string: String {
-            return value
-        }
-    }
-
-    internal struct OptionSet: ArgumentsComponent {
-        let index: Int
-        let characters: [Character]
-
-        var string: String {
-            return String(characters)
+        internal init(index: Int, type: Type) {
+            self.index = index
+            self.type = type
         }
     }
 
     /// Executable argument
     public let executable: String
 
-    fileprivate let rawArguments: [String]
+    public let rawArguments: [String]
 
-    internal let components: [ArgumentsComponent]
+    internal let components: [Token]
 
     internal init?(arguments: [String]) {
 
@@ -62,7 +39,7 @@ public struct Arguments {
 
         executable = arguments[0]
 
-        var components: [ArgumentsComponent] = []
+        var tokens: [Token] = []
 
         for (i, argument) in arguments.enumerated() {
 
@@ -71,8 +48,8 @@ public struct Arguments {
 
                 let index = argument.index(argument.startIndex, offsetBy: 2)
 
-                components.append(
-                    LongOption(index: i, name: argument.substring(from: index))
+                tokens.append(
+                    Token(index: i, type: .longOption(String(argument[index...])))
                 )
 
                 // If the argument has a prefix of one dash it's a short option or a optionset
@@ -82,49 +59,49 @@ public struct Arguments {
 
                 // If a short option has exactly two characters (one including the dash) it's a short option
                 if argument.characters.count == 2 {
-                    components.append(
-                        ShortOption(index: i, character: argument.characters[index])
+                    tokens.append(
+                        Token(index: i, type: .shortOption(argument.characters[index]))
                     )
                     // If the number of characters (excluding the dash) exceeds one, it's an optionset
                 } else {
-                    components.append(
-                        OptionSet(index: i, characters: Array(argument.substring(from: index).characters))
+                    tokens.append(
+                        Token(index: i, type: .optionSet(Array(String(argument[index...]).characters)))
                     )
                 }
 
                 // If all else, it's a value
             } else {
 
-                components.append(
-                    Parameter(index: i, value: argument)
+                tokens.append(
+                    Token(index: i, type: .parameter(argument))
                 )
             }
         }
 
-        self.components = components
+        self.components = tokens
     }
 }
 
-extension Arguments {
+extension TokenizedArguments {
 
-    internal func component(after component: ArgumentsComponent) -> ArgumentsComponent? {
-        guard components.count > component.index + 1 else {
+    internal func token(after index: Int) -> Token? {
+        guard components.count > index + 1 else {
             return nil
         }
 
-        return components[component.index + 1]
+        return components[index + 1]
     }
 
-    internal func component(before component: ArgumentsComponent) -> ArgumentsComponent? {
-        guard component.index > 0 else {
+    internal func token(before index: Int) -> Token? {
+        guard index > 0 else {
             return nil
         }
 
-        return components[component.index - 1]
+        return components[index - 1]
     }
 }
 
-extension Arguments {
+extension TokenizedArguments {
 
     /// Name of the executable
     public var executableName: String {
@@ -137,21 +114,21 @@ extension Arguments {
     }
 }
 
-extension Arguments: Collection {
+extension TokenizedArguments: Collection {
 
     public var startIndex: Int {
-        return rawArguments.startIndex
+        return components.startIndex
     }
 
     public var endIndex: Int {
-        return rawArguments.endIndex
+        return components.endIndex
     }
 
     public func index(after i: Int) -> Int {
-        return rawArguments.index(after: i)
+        return components.index(after: i)
     }
 
-    public subscript (position: Int) -> String {
-        return rawArguments[position]
+    public subscript (position: Int) -> Token {
+        return components[position]
     }
 }

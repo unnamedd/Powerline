@@ -9,35 +9,35 @@
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/ArgumentProtocol.swift",
-      "line": 2,
+      "line": 3,
       "symbol": "ArgumentProtocol",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/ArgumentProtocol.swift",
-      "line": 5,
+      "line": 6,
       "symbol": "ArgumentProtocol.name",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/ArgumentProtocol.swift",
-      "line": 6,
+      "line": 7,
       "symbol": "ArgumentProtocol.summary",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/ArgumentProtocol.swift",
-      "line": 15,
+      "line": 16,
       "symbol": "ArgumentProtocol.hashValue",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/ArgumentProtocol.swift",
-      "line": 19,
+      "line": 20,
       "symbol": "ArgumentProtocol.description",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
@@ -58,128 +58,149 @@
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/Command.swift",
-      "line": 7,
+      "line": null,
       "symbol": "Command",
-      "symbol_kind": "source.lang.swift.decl.protocol",
+      "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/Command.swift",
-      "line": 9,
-      "symbol": "Command.summary",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/Command.swift",
-      "line": 11,
-      "symbol": "Command.flags",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "line": 7,
+      "symbol": "Arguments",
+      "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/Command.swift",
       "line": 13,
-      "symbol": "Command.options",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/Command.swift",
-      "line": 15,
-      "symbol": "Command.parameters",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/Command.swift",
-      "line": 17,
-      "symbol": "Command.variadicParameter",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/Command.swift",
-      "line": 19,
-      "symbol": "Command.subcommands",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/Command.swift",
-      "line": 21,
-      "symbol": "Command.process(context:)",
+      "symbol": "Arguments.init(flags:options:parameters:variadicParameter:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/Command.swift",
       "line": 26,
-      "symbol": "Command.flags",
+      "symbol": "Command",
+      "symbol_kind": "source.lang.swift.decl.protocol",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/Command.swift",
+      "line": 28,
+      "symbol": "Command.summary",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/Command.swift",
       "line": 30,
-      "symbol": "Command.options",
+      "symbol": "Command.arguments",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/Command.swift",
-      "line": 34,
+      "line": 32,
       "symbol": "Command.subcommands",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/Command.swift",
-      "line": 38,
-      "symbol": "Command.parameters",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/Command.swift",
-      "line": 42,
-      "symbol": "Command.variadicParameter",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/Command.swift",
-      "line": 46,
+      "line": 34,
       "symbol": "Command.process(context:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/Command.swift",
-      "line": 53,
+      "line": 38,
+      "symbol": "Command.subcommands",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/Command.swift",
+      "line": 45,
       "symbol": "Command.run(arguments:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/Command.swift",
+      "line": 250,
+      "symbol": "Command.contextualUsageString(for:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Context/Arguments.swift",
       "line": null,
-      "symbol": "Arguments",
+      "symbol": "TokenizedArguments",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Context/Arguments.swift",
       "line": null,
-      "symbol": "Arguments",
+      "symbol": "TokenizedArguments",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Context/Arguments.swift",
-      "line": 10,
-      "symbol": "Arguments",
+      "line": 5,
+      "symbol": "TokenizedArguments",
       "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Context/Arguments.swift",
+      "line": 7,
+      "symbol": "TokenizedArguments.Token",
+      "symbol_kind": "source.lang.swift.decl.struct",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Context/Arguments.swift",
+      "line": 9,
+      "symbol": "TokenizedArguments.Token.Type",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Context/Arguments.swift",
+      "line": 10,
+      "symbol": "TokenizedArguments.Token.Type.shortOption",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Context/Arguments.swift",
+      "line": 11,
+      "symbol": "TokenizedArguments.Token.Type.longOption",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Context/Arguments.swift",
+      "line": 12,
+      "symbol": "TokenizedArguments.Token.Type.parameter",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Context/Arguments.swift",
+      "line": 13,
+      "symbol": "TokenizedArguments.Token.Type.optionSet",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Context/Arguments.swift",
+      "line": 28,
+      "symbol": "TokenizedArguments.rawArguments",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
@@ -331,42 +352,42 @@
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Stream/StandardInputInitializable.swift",
-      "line": 34,
+      "line": 33,
       "symbol": "StandardInputInitializable.init(input:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Stream/StandardInputInitializable.swift",
-      "line": 42,
+      "line": 41,
       "symbol": "String.init(input:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Stream/StandardInputInitializable.swift",
-      "line": 50,
+      "line": 49,
       "symbol": "Int.init(input:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Stream/StandardInputInitializable.swift",
-      "line": 62,
+      "line": 61,
       "symbol": "Bool.init(input:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Stream/StandardInputInitializable.swift",
-      "line": 78,
+      "line": 77,
       "symbol": "Double.init(input:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Stream/StandardInputInitializable.swift",
-      "line": 100,
+      "line": 99,
       "symbol": "URL.init(input:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"

@@ -7,16 +7,6 @@
 
 Powerline is a library for writing fast and reliable command-line applications in Swift, for Linux and macOS.
 
-----
-
-**IMPORTANT NOTICE**
-
-Powerline `1.0.0` will release with the public release of Swift 4 and Xcode 9. To get started ahead of time, build with Swift tools version `4.0` and specify Formbound dependencies as `.branch("swift-4")`.
-
-To otherwise speed up the process, [get involved](mailto:contact@formbound.com).
-
----
-
 ## Features
 
 - [x] Subcommands
@@ -38,7 +28,31 @@ Due to lack of argument parsing standards, Powerline adopts a similar style to t
 - **Parameter**
   An argument that is a value in itself
 
-## Basic usage
+
+
+## Creating an executable
+
+* Create a new folder and run `swift package init —type executable`
+* Add `Powerline` as a dependency to your package
+
+```swift
+// swift-tools-version:4.0
+import PackageDescription
+
+let package = Package(
+    name: "Example",
+    dependencies: [
+        .package(url: "https://github.com/formbound/Powerline", from: "1.0.0"),
+    ],
+    targets: [
+        .target(
+            name: "Example",
+            dependencies: ["Powerline"]),
+    ]
+)
+```
+
+
 
 ```swift
 import Powerline
@@ -52,8 +66,12 @@ struct HelloWorld : Command {
     }
 }
 
-try HelloWorld().run()
+let main = HelloWorld()
+
+try main.run()
 ```
+
+
 
 ## Documentation
 
@@ -65,4 +83,4 @@ Powerline is released under the MIT license. See LICENSE for details.
 
 ## About Formbound
 
-[Formbound AB](https://github.com/formbound) is a software development firm devoted to open-source development.
+Formbound AB is a software development firm devoted to open-source development.

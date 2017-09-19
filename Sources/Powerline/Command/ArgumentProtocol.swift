@@ -1,3 +1,4 @@
+
 // :nodoc:
 public protocol ArgumentProtocol: Hashable, CustomStringConvertible {
     associatedtype Name: Hashable, CustomStringConvertible

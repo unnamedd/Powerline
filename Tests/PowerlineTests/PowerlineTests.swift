@@ -13,6 +13,12 @@ class PowerlineTests: XCTestCase {
         ]
     }
 
+    func testExampleCommand() throws {
+        let command = ExampleCommand()
+
+        try command.run(arguments: ["example", "--verbose", "Hello World!", "-n", "1"])
+    }
+
     func testRequiresFlag() throws {
 
         let flag = Flag(
@@ -21,8 +27,7 @@ class PowerlineTests: XCTestCase {
             summary: "Required flag"
         )
 
-        try SimpleCommand(
-            flags: [flag]) { context in
+        try SimpleCommand(arguments: Arguments(flags: [flag])) { context in
                 XCTAssert(context.flags.contains(flag))
         }.run(arguments: ["example", "-f"])
     }
@@ -31,8 +36,7 @@ class PowerlineTests: XCTestCase {
 
         let arg = Option(longName: "required", summary: "None")
 
-        try SimpleCommand(
-            options: [arg]) { context in
+        try SimpleCommand(arguments: Arguments(options: [arg])) { context in
                 XCTAssertEqual(try context.value(for: arg), "1234")
             }.run(arguments: ["example", "--required", "1234"])
     }
@@ -41,8 +45,7 @@ class PowerlineTests: XCTestCase {
 
         let positional = Parameter(name: "pos", summary: "None")
 
-        try SimpleCommand(
-            variadicParameter: positional) { context in
+        try SimpleCommand(arguments: Arguments(variadicParameter: positional)) { context in
 
                 XCTAssertEqual(try context.parameters.variadicValue(at: 0), 1234)
                 XCTAssertEqual(try context.parameters.variadicValue(at: 1), 5678)
@@ -56,19 +59,18 @@ class PowerlineTests: XCTestCase {
 
         let subcommand = SimpleCommand(
             summary: "Subcommand",
-            flags: [subcommandFlag]) { context in
+            arguments: Arguments(flags: [subcommandFlag])) { context in
                 XCTAssert(context.flags.contains(subcommandFlag))
         }
 
         let mainFlag = Flag(longName: "main", shortName: "m", summary: "None")
 
-        let command = SimpleCommand(flags: [mainFlag], subcommands: ["sub": subcommand]) { context in
+        let command = SimpleCommand(summary: "Main command", arguments: Arguments(flags: [mainFlag]), subcommands: ["sub": subcommand]) { context in
             XCTAssert(context.flags.contains(mainFlag))
         }
 
         try command.run(arguments: ["example", "-m"])
         try command.run(arguments: ["example", "sub", "--test"])
-
     }
 
     func testCmd() throws {

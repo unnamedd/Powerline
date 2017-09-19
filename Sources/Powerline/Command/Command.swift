@@ -4,17 +4,30 @@
     import Darwin.C
 #endif
 
+public struct Arguments {
+    internal var flags: Set<Flag>
+    internal var options: Set<Option>
+    internal var parameters: [Parameter]
+    internal var variadicParameter: Parameter?
+
+    public init(
+        flags: Set<Flag> = [],
+        options: Set<Option> = [],
+        parameters: [Parameter] = [],
+        variadicParameter: Parameter? = nil) {
+
+        self.flags = flags
+        self.options = options
+        self.parameters = parameters
+        self.variadicParameter = variadicParameter
+    }
+}
+
 public protocol Command {
 
     var summary: String { get }
 
-    var flags: Set<Flag> { get }
-
-    var options: Set<Option> { get }
-
-    var parameters: [Parameter] { get }
-
-    var variadicParameter: Parameter? { get }
+    var arguments: Arguments { get }
 
     var subcommands: [String: Command] { get }
 
@@ -22,29 +35,8 @@ public protocol Command {
 }
 
 extension Command {
-
-    public var flags: Set<Flag> {
-        return []
-    }
-
-    public var options: Set<Option> {
-        return []
-    }
-
     public var subcommands: [String: Command] {
         return [:]
-    }
-
-    public var parameters: [Parameter] {
-        return []
-    }
-
-    public var variadicParameter: Parameter? {
-        return nil
-    }
-
-    public func process(context: Context) throws {
-        context.print(usageString(context: context))
     }
 }
 
@@ -52,7 +44,7 @@ extension Command {
 
     public func run(arguments: [String] = CommandLine.arguments) throws {
 
-        guard let arguments = Arguments(arguments: arguments) else {
+        guard let arguments = TokenizedArguments(arguments: arguments) else {
             print("Not enough arguments")
             exit(EXIT_FAILURE)
         }
@@ -71,7 +63,7 @@ extension Command {
             context.error(error.description.red)
 
             if case .other(_, let invalidUsage) = error, invalidUsage == true {
-                context.print(usageString(context: context))
+                context.print(contextualUsageString(for: context))
             }
 
         } catch {
@@ -83,95 +75,115 @@ extension Command {
 
         // Loop through all arguments in the context
         for component in context.arguments.components {
-
-            if let parameter = component as? Arguments.Parameter, component.index > context.currentCommand.argumentIndex {
-
-                if component.index == context.currentCommand.argumentIndex + 1, let subcommand = subcommands[parameter.value] {
-                    context.commands.append((name: parameter.value, argumentIndex: parameter.index))
-                    try subcommand.run(context: context)
-                    return
-
-                } else {
-                    try parse(component: parameter, context: context)
-                }
-
-            } else if let long = component as? Arguments.LongOption {
-
-                if long.name == "help" {
-                    context.print(usageString(context: context))
-                    exit(EXIT_SUCCESS)
-                }
-
-                try parse(component: long, context: context)
-
-            } else if let short = component as? Arguments.ShortOption {
-
-                if short.character == "h" {
-                    context.print(usageString(context: context))
-                    exit(EXIT_SUCCESS)
-                }
-
-                try parse(component: short, context: context)
-
-            } else if let optionSet = component as? Arguments.OptionSet {
-
-                try parse(component: optionSet, context: context)
+            guard try parse(token: component, context: context) else {
+                return
             }
-
         }
 
         try process(context: context)
+    }
 
+    // Returns false if a subcommand was encountered, which then will continue the execution
+    private func parse(token: TokenizedArguments.Token, context: Context) throws -> Bool {
+        switch token.type {
+        case .parameter(let parameterName):
+
+            // We won't parse tokens with an index less than the current index of the context's current command
+            guard token.index > context.currentCommand.argumentIndex else {
+                break
+            }
+
+            if token.index == context.currentCommand.argumentIndex + 1, let subcommand = subcommands[parameterName] {
+                context.commands.append((name: parameterName, argumentIndex: token.index))
+                try subcommand.run(context: context)
+                return false
+
+            } else {
+                try parse(parameter: parameterName, at: token.index, context: context)
+            }
+
+        case .longOption(let longOptionName):
+
+            if longOptionName == "help" {
+                context.print(contextualUsageString(for: context))
+                exit(EXIT_SUCCESS)
+            }
+
+            try parse(longOption: longOptionName, at: token.index, context: context)
+
+        case .shortOption(let shortOptionCharacter):
+
+            if shortOptionCharacter == "h" {
+                context.print(contextualUsageString(for: context))
+                exit(EXIT_SUCCESS)
+            }
+
+            try parse(shortOption: shortOptionCharacter, at: token.index, context: context)
+
+        case .optionSet(let optionSet):
+            try parse(optionSet: optionSet, at: token.index, context: context)
+        }
+
+        return true
     }
 
     @inline(__always)
-    private func parse(component: Arguments.Parameter, context: Context) throws {
+    private func parse(parameter value: String, at index: Int, context: Context) throws {
 
-        if let longArgument = context.arguments.component(before: component) as? Arguments.LongOption {
-            guard options.filter(longName: longArgument.name).isEmpty else {
-                return
-            }
-        } else if let shortArgument = context.arguments.component(before: component) as? Arguments.ShortOption {
-            guard options.filter(shortName: shortArgument.character).isEmpty else {
-                return
-            }
-        } else if let optionSet = context.arguments.component(before: component) as? Arguments.OptionSet {
-            guard options.filter(shortName: optionSet.characters[optionSet.characters.endIndex - 1]).isEmpty else {
-                return
+        if let previousToken = context.arguments.token(before: index) {
+            switch previousToken.type {
+            case .longOption(let longOptionName):
+                guard arguments.options.filter(longName: longOptionName).isEmpty else {
+                    return
+                }
+            case .shortOption(let shortOptionCharacter):
+                guard arguments.options.filter(shortName: shortOptionCharacter).isEmpty else {
+                    return
+                }
+
+            case .optionSet(let optionSetCharacters):
+                guard arguments.options.filter(shortName: optionSetCharacters[optionSetCharacters.endIndex - 1]).isEmpty else {
+                    return
+                }
+            default:
+                break
             }
         }
 
-        for parameter in parameters {
+        for parameter in arguments.parameters {
             guard context.parameters.hasValue(for: parameter) == false else {
                 continue
             }
 
-            context.parameters.set(value: component.value, for: parameter)
+            context.parameters.set(value: value, for: parameter)
             return
         }
 
-        guard variadicParameter != nil else {
-            throw CommandError.unexpectedArgument(component.value)
+        guard arguments.variadicParameter != nil else {
+            throw CommandError.unexpectedArgument(value)
         }
 
-        context.parameters.variadic.append(component.value)
+        context.parameters.variadic.append(value)
     }
 
     @inline(__always)
-    private func parse(component: Arguments.OptionSet, context: Context) throws {
-        for (i, character) in component.characters.enumerated() {
+    private func parse(optionSet characters: [Character], at index: Int, context: Context) throws {
+        for (i, character) in characters.enumerated() {
 
-            if i == component.characters.count - 1 {
+            if i == characters.count - 1 {
 
-                if let option = options.filter(shortName: character).first {
+                if let option = arguments.options.filter(shortName: character).first {
 
-                    guard let argument = context.arguments.component(after: component) as? Arguments.Parameter else {
+                    guard
+                        let nextToken = context.arguments.token(after: index),
+                        case .parameter(let optionValue) = nextToken.type else {
+
                         throw CommandError.missingOperand(option)
                     }
 
-                    context.options[option] = argument.value
+                    context.options[option] = optionValue
 
-                } else if let flag = flags.filter(shortName: character).first {
+                } else if let flag = arguments.flags.filter(shortName: character).first {
                     context.flags.insert(flag)
                 } else {
                     throw CommandError.unexpectedArgument(String(character))
@@ -179,7 +191,7 @@ extension Command {
 
             } else {
 
-                guard let flag = flags.filter(shortName: character).first else {
+                guard let flag = arguments.flags.filter(shortName: character).first else {
                     throw CommandError.unexpectedArgument(String(character))
                 }
 
@@ -191,42 +203,51 @@ extension Command {
     }
 
     @inline(__always)
-    private func parse(component: Arguments.ShortOption, context: Context) throws {
+    private func parse(shortOption character: Character, at index: Int, context: Context) throws {
 
-        if let option = options.filter(shortName: component.character).first {
+        if let option = arguments.options.filter(shortName: character).first {
 
-            guard let argument = context.arguments.component(after: component) as? Arguments.Parameter else {
-                throw CommandError.missingOperand(option)
+            guard
+                let nextToken = context.arguments.token(after: index),
+                case .parameter(let optionValue) = nextToken.type else {
+
+                    throw CommandError.missingOperand(option)
             }
 
-            context.options[option] = argument.value
+            context.options[option] = optionValue
 
-        } else if let flag = flags.filter(shortName: component.character).first {
+        } else if let flag = arguments.flags.filter(shortName: character).first {
             context.flags.insert(flag)
         } else {
-            throw CommandError.unexpectedArgument(String(component.character))
+            throw CommandError.unexpectedArgument(String(character))
         }
     }
 
     @inline(__always)
-    private func parse(component: Arguments.LongOption, context: Context) throws {
-        if let option = options.filter(longName: component.name).first {
-            guard let argument = context.arguments.component(after: component) as? Arguments.Parameter else {
-                throw CommandError.missingOperand(option)
+    private func parse(longOption name: String, at index: Int, context: Context) throws {
+        if let option = arguments.options.filter(longName: name).first {
+
+            guard
+                let nextToken = context.arguments.token(after: index),
+                case .parameter(let optionValue) = nextToken.type else {
+
+                    throw CommandError.missingOperand(option)
             }
 
-            context.options[option] = argument.value
+            context.options[option] = optionValue
 
-        } else if let flag = flags.filter(longName: component.name).first {
+        } else if let flag = arguments.flags.filter(longName: name).first {
             context.flags.insert(flag)
         } else {
-            throw CommandError.unexpectedArgument(component.name)
+            throw CommandError.unexpectedArgument(name)
         }
     }
 }
 
 extension Command {
-    internal func usageString(context: Context) -> String {
+
+    // Prints the contextual usage string for the command
+    public func contextualUsageString(for context: Context) -> String {
 
         var string = ""
 
@@ -236,25 +257,25 @@ extension Command {
 
         string += "\(indentation)\(context.currentCommand.name) - \(summary.dimmed)\n\n"
 
-        if !parameters.isEmpty || !flags.isEmpty || !options.isEmpty {
+        if !arguments.parameters.isEmpty || !arguments.flags.isEmpty || !arguments.options.isEmpty {
 
             string += "USAGE".bold + "\n"
 
             string += "\(indentation)\(context.commands.map { $0.name }.joined(separator: " ")) " + "[options]".magenta
 
-            for parameter in parameters {
+            for parameter in arguments.parameters {
                 string += " " + "[\(parameter.name)]".blue
             }
 
-            if let variadic = variadicParameter {
+            if let variadic = arguments.variadicParameter {
                 string += " " + "[\(variadic.name)...]".blue
             }
 
-            for parameter in parameters {
+            for parameter in arguments.parameters {
                 string += "\n" + indentation + parameter.name.blue + " - " + parameter.summary.dimmed
             }
 
-            if let variadic = variadicParameter {
+            if let variadic = arguments.variadicParameter {
                 string += "\n" + indentation + variadic.name.blue + " - " + variadic.summary.dimmed
             }
 
@@ -272,11 +293,11 @@ extension Command {
             string += "\n"
         }
 
-        if flags.isEmpty == false {
+        if arguments.flags.isEmpty == false {
 
             string += "OPTIONS".bold + "\n"
 
-            for flag in flags {
+            for flag in arguments.flags {
 
                 string += "\(indentation)"
 
@@ -288,7 +309,7 @@ extension Command {
 
             string += "\(indentation)" + "-h, --help" + "\n\(indentation)\(indentation)" + "Show usage description".dimmed + "\n\n"
 
-            for option in options {
+            for option in arguments.options {
 
                 string += "\(indentation)"
 

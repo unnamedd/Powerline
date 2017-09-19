@@ -25,7 +25,7 @@ public class Context {
     }
 
     /// Arguments passed to the process
-    public let arguments: Arguments
+    public let arguments: TokenizedArguments
 
     /// Environment, copied from `ProcessInfo`
     public let environment: [String: String]
@@ -42,7 +42,7 @@ public class Context {
     /// Standard error stream
     public let standardError: OutputStream
 
-    internal init(arguments: Arguments) {
+    internal init(arguments: TokenizedArguments) {
         self.arguments = arguments
 
         commands = [(name: arguments.executableName, argumentIndex: 0)]
@@ -73,8 +73,8 @@ public class Context {
         self.environment = environment
         self.encoding = encoding
 
-        self.standardInput = InputStream(fileHandle: FileHandle.standardInput, encoding: encoding)
-        self.standardOutput = OutputStream(fileHandle: FileHandle.standardOutput, encoding: encoding)
-        self.standardError = OutputStream(fileHandle: FileHandle.standardError, encoding: encoding)
+        standardInput = InputStream(fileHandle: FileHandle.standardInput, encoding: encoding)
+        standardOutput = OutputStream(fileHandle: FileHandle.standardOutput, encoding: encoding)
+        standardError = OutputStream(fileHandle: FileHandle.standardError, encoding: encoding)
     }
 }
