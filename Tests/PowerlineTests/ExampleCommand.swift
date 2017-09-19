@@ -51,7 +51,7 @@ struct ExampleCommand : Command {
             message = context.read(message: "What do you want to print out?")
         }
 
-        let count: Int = try context.value(for: .count) ?? 0
+        let count: Int = try context.value(for: .count) ?? 1
 
         if count > 10 {
             // Prompt a user
