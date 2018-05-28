@@ -1,6 +1,7 @@
 import class Foundation.Pipe
 import class Foundation.Process
 import class Foundation.FileManager
+import Futures
 
 /// Error associated with running processes
 public enum ProcessError: Error {
@@ -30,7 +31,7 @@ extension ProcessError: CustomStringConvertible {
             return "Launch path \"\(path)\" is not an executable"
         case .invalidLaunchPath:
             return "Missing launch path"
-        case .unsuccessfulExit(let exitCode, let reason):
+        case let .unsuccessfulExit(exitCode, reason):
             guard let reason = reason else {
                 return "Process finished with non-zero exit value \(exitCode)"
             }
@@ -45,21 +46,17 @@ internal struct ProcessRunner {
     fileprivate let standardOutput: Stream
     fileprivate let standardError: Stream
 
-    internal init(context: Context, combineOutput: Bool = false, executable: String, arguments: String...) throws {
-        try self.init(context: context, combineOutput: combineOutput, executable: executable, arguments: arguments)
-    }
-
-    internal init(context: Context, combineOutput: Bool = false, executable: String, arguments: [String]) throws {
+    internal init(context: Context, executable: String, arguments: [String]) throws {
 
         func pathForExecutable(executable: String) throws -> String {
-            guard !executable.characters.contains("/") else {
+            guard !executable.contains("/") else {
                 return executable
             }
 
             let process = try ProcessRunner(
                 context: context,
                 executable: "/usr/bin/which",
-                arguments: executable
+                arguments: [executable]
             )
 
             guard let stdout = try process.run().standardOutput else {
@@ -70,13 +67,7 @@ internal struct ProcessRunner {
         }
 
         let standardOutputPipe = Pipe()
-        let standardErrorPipe: Pipe
-
-        if combineOutput {
-            standardErrorPipe = standardOutputPipe
-        } else {
-            standardErrorPipe = Pipe()
-        }
+        let standardErrorPipe = Pipe()
 
         standardOutput = Stream(fileHandle: standardOutputPipe.fileHandleForReading, encoding: context.encoding)
 
@@ -131,8 +122,17 @@ internal struct ProcessRunner {
         )
     }
 
+    public func run() -> Future<ProcessResult> {
+        return promise {
+            return try self.run()
+        }
+    }
+
     @discardableResult
-    internal func run(completion: @escaping (_ error: ProcessError?, _ result: ProcessResult?) -> Void) throws -> ProcessHandler {
+    internal func run(completion: @escaping (
+        _ error: ProcessError?,
+        _ result: ProcessResult?) -> Void) throws -> ProcessHandler {
+
         guard let launchPath = process.launchPath else {
             throw ProcessError.invalidLaunchPath
         }

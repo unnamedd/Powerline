@@ -1,7 +1,7 @@
-extension Context {
+public extension Context {
 
     /// Contains both variadic and non-variadic parameters passed to the context
-    public struct Parameters {
+    struct Parameters {
 
         internal var parameters: [Parameter: String] = [:]
         internal var variadic: [String] = []
@@ -87,13 +87,13 @@ extension Context {
     }
 }
 
-extension Context {
+public extension Context {
 
     /// Returns an optional string value for specified `Option`
     ///
     /// - Parameter option: `Option`
     /// - Returns: `String`, or `nil` if the option is not present in the context
-    public func string(for option: Option) -> String? {
+    func string(for option: Option) -> String? {
         return options[option]
     }
 
@@ -103,7 +103,7 @@ extension Context {
     /// - Returns: The value converted to the inferred type, or nil, if the value was not found
     /// - Throws: `StandardInputInitializableError.failedConversion` if a value was found, but conversion to
     /// inferred type failed
-    public func value<T: StandardInputInitializable>(for option: Option) throws -> T? {
+    func value<T: StandardInputInitializable>(for option: Option) throws -> T? {
         guard let string = options[option] else {
             return nil
         }
@@ -121,7 +121,7 @@ extension Context {
     /// - Returns: The value converted to the inferred type
     /// - Throws: `StandardInputInitializableError.failedConversion` if a value was found, but conversion to, or
     /// `CommandError.missingParameter` if the value was not found
-    public func value<T: StandardInputInitializable>(for option: Option) throws -> T {
+    func value<T: StandardInputInitializable>(for option: Option) throws -> T {
         guard let value: T = try value(for: option) else {
             throw CommandError.missingOption(option)
         }

@@ -168,9 +168,9 @@ extension Command {
 
     @inline(__always)
     private func parse(optionSet characters: [Character], at index: Int, context: Context) throws {
-        for (i, character) in characters.enumerated() {
+        for (index, character) in characters.enumerated() {
 
-            if i == characters.count - 1 {
+            if index == characters.count - 1 {
 
                 if let option = arguments.options.filter(shortName: character).first {
 
@@ -354,7 +354,7 @@ public enum CommandError: Error {
     }
 }
 
-extension CommandError : CustomStringConvertible {
+extension CommandError: CustomStringConvertible {
 
     public var description: String {
         switch self {

@@ -9,36 +9,29 @@
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/ArgumentProtocol.swift",
-      "line": 3,
+      "line": 2,
       "symbol": "ArgumentProtocol",
       "symbol_kind": "source.lang.swift.decl.protocol",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/ArgumentProtocol.swift",
-      "line": 6,
+      "line": 3,
+      "symbol": "ArgumentProtocol.Name",
+      "symbol_kind": "source.lang.swift.decl.associatedtype",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/ArgumentProtocol.swift",
+      "line": 5,
       "symbol": "ArgumentProtocol.name",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/ArgumentProtocol.swift",
-      "line": 7,
+      "line": 6,
       "symbol": "ArgumentProtocol.summary",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/ArgumentProtocol.swift",
-      "line": 16,
-      "symbol": "ArgumentProtocol.hashValue",
-      "symbol_kind": "source.lang.swift.decl.var.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Command/ArgumentProtocol.swift",
-      "line": 20,
-      "symbol": "ArgumentProtocol.description",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
@@ -157,43 +150,43 @@
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Context/Arguments.swift",
       "line": 7,
-      "symbol": "TokenizedArguments.Token",
-      "symbol_kind": "source.lang.swift.decl.struct",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Context/Arguments.swift",
-      "line": 9,
-      "symbol": "TokenizedArguments.Token.Type",
+      "symbol": "TokenizedArguments.TokenType",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Context/Arguments.swift",
+      "line": 8,
+      "symbol": "TokenizedArguments.TokenType.shortOption",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Context/Arguments.swift",
+      "line": 9,
+      "symbol": "TokenizedArguments.TokenType.longOption",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Context/Arguments.swift",
       "line": 10,
-      "symbol": "TokenizedArguments.Token.Type.shortOption",
+      "symbol": "TokenizedArguments.TokenType.parameter",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Context/Arguments.swift",
       "line": 11,
-      "symbol": "TokenizedArguments.Token.Type.longOption",
+      "symbol": "TokenizedArguments.TokenType.optionSet",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Context/Arguments.swift",
-      "line": 12,
-      "symbol": "TokenizedArguments.Token.Type.parameter",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Context/Arguments.swift",
-      "line": 13,
-      "symbol": "TokenizedArguments.Token.Type.optionSet",
-      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "line": 14,
+      "symbol": "TokenizedArguments.Token",
+      "symbol_kind": "source.lang.swift.decl.struct",
       "warning": "undocumented"
     },
     {
@@ -207,6 +200,13 @@
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Context/Context+Directory.swift",
       "line": 35,
       "symbol": "Context.relativePath(for:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Context/Context+Process.swift",
+      "line": 7,
+      "symbol": "Context.run(executable:arguments:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
@@ -261,28 +261,28 @@
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Process/ProcessRunner.swift",
-      "line": 9,
+      "line": 10,
       "symbol": "ProcessError.fileNotFound",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Process/ProcessRunner.swift",
-      "line": 12,
+      "line": 13,
       "symbol": "ProcessError.launchPathNotExecutable",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Process/ProcessRunner.swift",
-      "line": 15,
+      "line": 16,
       "symbol": "ProcessError.invalidLaunchPath",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/davidask/Formbound/OpenSource/Powerline/Sources/Powerline/Process/ProcessRunner.swift",
-      "line": 18,
+      "line": 19,
       "symbol": "ProcessError.unsuccessfulExit",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"

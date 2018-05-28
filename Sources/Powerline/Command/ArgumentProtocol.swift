@@ -1,23 +1,22 @@
-
 // :nodoc:
 public protocol ArgumentProtocol: Hashable, CustomStringConvertible {
     associatedtype Name: Hashable, CustomStringConvertible
-    
+
     var name: Name { get }
     var summary: String { get }
 }
 
-extension ArgumentProtocol {
+public extension ArgumentProtocol {
 
-    public static func == (lhs: Self, rhs: Self) -> Bool {
+    static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.name == rhs.name
     }
 
-    public var hashValue: Int {
+    var hashValue: Int {
         return name.hashValue
     }
 
-    public var description: String {
+    var description: String {
         return "\(name.description)"
     }
 }

@@ -31,7 +31,7 @@ extension Parameter {
     )
 }
 
-struct ExampleCommand : Command {
+struct ExampleCommand: Command {
 
     let summary: String = "A sample command that prints a message"
 
@@ -68,10 +68,10 @@ struct ExampleCommand : Command {
             }
         }
 
-        for i in 0 ..< count {
+        for index in 0 ..< count {
             // Print verbos output
             if context.flags.contains(.verbose) {
-                context.print("Printing message number \(i + 1)...".darkGray)
+                context.print("Printing message number \(index + 1)...".darkGray)
             }
             context.print(message.green)
         }

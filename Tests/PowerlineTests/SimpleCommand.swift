@@ -3,7 +3,7 @@ import Powerline
 struct SimpleCommand: Command {
     let summary: String
     let arguments: Arguments
-    let subcommands: [String : Command]
+    let subcommands: [String: Command]
 
     let handler: (Context) throws -> Void
 

@@ -4,19 +4,19 @@ import Foundation
 //  of a Powerline process
 public struct TokenizedArguments {
 
+    public enum TokenType {
+        case shortOption(Character)
+        case longOption(String)
+        case parameter(String)
+        case optionSet([Character])
+    }
+
     public struct Token {
 
-        public enum `Type` {
-            case shortOption(Character)
-            case longOption(String)
-            case parameter(String)
-            case optionSet([Character])
-        }
-
         let index: Int
-        let type: `Type`
+        let type: TokenType
 
-        internal init(index: Int, type: Type) {
+        internal init(index: Int, type: TokenType) {
             self.index = index
             self.type = type
         }
@@ -41,39 +41,38 @@ public struct TokenizedArguments {
 
         var tokens: [Token] = []
 
-        for (i, argument) in arguments.enumerated() {
+        for (index, argument) in arguments.enumerated() {
 
             // If the argument has a prefix of two dashes it's a long option
-            if argument.hasPrefix("--"), argument.characters.count > 2 {
+            if argument.hasPrefix("--"), argument.count > 2 {
 
-                let index = argument.index(argument.startIndex, offsetBy: 2)
+                let stringIndex = argument.index(argument.startIndex, offsetBy: 2)
 
                 tokens.append(
-                    Token(index: i, type: .longOption(String(argument[index...])))
+                    Token(index: index, type: .longOption(String(argument[stringIndex...])))
                 )
 
                 // If the argument has a prefix of one dash it's a short option or a optionset
-            } else if argument.hasPrefix("-"), argument.characters.count > 1 {
+            } else if argument.hasPrefix("-"), argument.count > 1 {
 
-                let index = argument.index(argument.startIndex, offsetBy: 1)
+                let stringIndex = argument.index(argument.startIndex, offsetBy: 1)
 
                 // If a short option has exactly two characters (one including the dash) it's a short option
-                if argument.characters.count == 2 {
+                if argument.count == 2 {
                     tokens.append(
-                        Token(index: i, type: .shortOption(argument.characters[index]))
+                        Token(index: index, type: .shortOption(argument[stringIndex]))
                     )
                     // If the number of characters (excluding the dash) exceeds one, it's an optionset
                 } else {
                     tokens.append(
-                        Token(index: i, type: .optionSet(Array(String(argument[index...]).characters)))
+                        Token(index: index, type: .optionSet(Array(String(argument[stringIndex...]))))
                     )
                 }
 
                 // If all else, it's a value
             } else {
-
                 tokens.append(
-                    Token(index: i, type: .parameter(argument))
+                    Token(index: index, type: .parameter(argument))
                 )
             }
         }
@@ -101,10 +100,10 @@ extension TokenizedArguments {
     }
 }
 
-extension TokenizedArguments {
+public extension TokenizedArguments {
 
     /// Name of the executable
-    public var executableName: String {
+    var executableName: String {
         guard executable.contains("/") else {
             return executable
         }
@@ -124,8 +123,8 @@ extension TokenizedArguments: Collection {
         return components.endIndex
     }
 
-    public func index(after i: Int) -> Int {
-        return components.index(after: i)
+    public func index(after index: Int) -> Int {
+        return components.index(after: index)
     }
 
     public subscript (position: Int) -> Token {

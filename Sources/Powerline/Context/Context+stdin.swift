@@ -1,9 +1,9 @@
-extension Context {
+public extension Context {
 
     /// Reads from stdin
     ///
     /// - Returns: A string, or nil if the read string is empty
-    public func read() -> String? {
+    func read() -> String? {
         guard let input = standardInput.read()?.trimmingCharacters(in: .whitespacesAndNewlines) else {
             return nil
         }
@@ -16,7 +16,7 @@ extension Context {
     /// prompt the user to provide a correct input
     ///
     /// - Returns: Read value form stdin, converted to the inferred type
-    public func read<T: StandardInputInitializable>() -> T {
+    func read<T: StandardInputInitializable>() -> T {
 
         while true {
             guard let input = read() else {
@@ -42,7 +42,7 @@ extension Context {
     ///
     /// - Parameter message: Message to write to stdout
     /// - Returns: Read value form stdin, converted to the inferred type
-    public func read<T: StandardInputInitializable>(message: String) -> T {
+    func read<T: StandardInputInitializable>(message: String) -> T {
         print("\(message): ".bold.magenta, terminator: "")
 
         return read()
@@ -52,7 +52,7 @@ extension Context {
     ///
     /// - Parameter message: A message to provide
     /// - Returns: `true` if the input was `y`, `false` if the input was `n`.
-    public func confirm(_ message: String) -> Bool {
+    func confirm(_ message: String) -> Bool {
         print(message.bold.magenta, "[y/N]", terminator: " ")
 
         while true {
@@ -76,14 +76,14 @@ extension Context {
     ///   - defaultValue: Optional default value. Does not have to be contained in the original options
     ///   - message: A message to provide
     /// - Returns: The selected value or default value, if provided
-    public func select(_ options: [String], default defaultValue: String? = nil, message: String) -> String {
+    func select(_ options: [String], default defaultValue: String? = nil, message: String) -> String {
 
         print(message.bold.magenta)
-        for (i, option) in options.enumerated() {
-            if let defaultValue = defaultValue, i == options.index(of: defaultValue) {
-                print("\(i + 1))".blue.bold, option, "(Default)".dimmed)
+        for (index, option) in options.enumerated() {
+            if let defaultValue = defaultValue, index == options.index(of: defaultValue) {
+                print("\(index + 1))".blue.bold, option, "(Default)".dimmed)
             } else {
-                print("\(i + 1))".blue, option)
+                print("\(index + 1))".blue, option)
             }
         }
 

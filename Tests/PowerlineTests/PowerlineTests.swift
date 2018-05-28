@@ -1,5 +1,5 @@
-import XCTest
 @testable import Powerline
+import XCTest
 
 class PowerlineTests: XCTestCase {
 
@@ -38,7 +38,7 @@ class PowerlineTests: XCTestCase {
 
         try SimpleCommand(arguments: Arguments(options: [arg])) { context in
                 XCTAssertEqual(try context.value(for: arg), "1234")
-            }.run(arguments: ["example", "--required", "1234"])
+        }.run(arguments: ["example", "--required", "1234"])
     }
 
     func testVariadicPositionalArgumentsWithConversion() throws {
@@ -47,10 +47,10 @@ class PowerlineTests: XCTestCase {
 
         try SimpleCommand(arguments: Arguments(variadicParameter: positional)) { context in
 
-                XCTAssertEqual(try context.parameters.variadicValue(at: 0), 1234)
-                XCTAssertEqual(try context.parameters.variadicValue(at: 1), 5678)
+                XCTAssertEqual(try context.parameters.variadicValue(at: 0), 1_234)
+                XCTAssertEqual(try context.parameters.variadicValue(at: 1), 5_678)
 
-            }.run(arguments: ["example", "1234", "5678"])
+        }.run(arguments: ["example", "1234", "5678"])
     }
 
     func testSubCommand() throws {
@@ -65,7 +65,10 @@ class PowerlineTests: XCTestCase {
 
         let mainFlag = Flag(longName: "main", shortName: "m", summary: "None")
 
-        let command = SimpleCommand(summary: "Main command", arguments: Arguments(flags: [mainFlag]), subcommands: ["sub": subcommand]) { context in
+        let command = SimpleCommand(
+        summary: "Main command",
+        arguments: Arguments(flags: [mainFlag]),
+        subcommands: ["sub": subcommand]) { context in
             XCTAssert(context.flags.contains(mainFlag))
         }
 
@@ -74,18 +77,16 @@ class PowerlineTests: XCTestCase {
     }
 
     func testCmd() throws {
+        let expectation = self.expectation(description: #function)
+
         let command = SimpleCommand { context in
-
-            guard let stdout = try context.run("ls -a1").standardOutput else {
-                XCTFail("No stdout")
-                return
+            context.run(executable: "ls", arguments: ["-a1"]).whenResolved { result in
+                XCTAssert(result.isError == false)
+                expectation.fulfill()
             }
-
-            context.print(stdout)
         }
 
-        print(CommandLine.arguments)
-
         try command.run(arguments: ["example"])
+        waitForExpectations(timeout: 3, handler: nil)
     }
 }

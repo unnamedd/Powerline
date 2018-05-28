@@ -7,10 +7,10 @@
 @_exported import struct Foundation.URL
 import class Foundation.FileManager
 
-extension Context {
+public extension Context {
 
     /// Returns the current directory path of the context
-    public var currentDirectoryPath: String {
+    var currentDirectoryPath: String {
         get {
             return FileManager.default.currentDirectoryPath
         }
@@ -23,7 +23,7 @@ extension Context {
     }
 
     /// Returns the current directory URL of the context
-    public var urlForCurrentDirectory: URL {
+    var urlForCurrentDirectory: URL {
         get {
             return URL(fileURLWithPath: currentDirectoryPath, isDirectory: true)
         }
@@ -32,7 +32,7 @@ extension Context {
         }
     }
 
-    public func relativePath(for path: String) throws -> String {
+    func relativePath(for path: String) throws -> String {
         guard let url = URL(string: path, relativeTo: urlForCurrentDirectory) else {
             throw CommandError(message: "Failed to resolve path for \(path)")
         }

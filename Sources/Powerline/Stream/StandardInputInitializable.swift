@@ -60,9 +60,9 @@ extension Int: StandardInputInitializable {
 extension Bool: StandardInputInitializable {
     public init?(input: String) {
         switch input.lowercased() {
-            case "yes", "true", "1":
+        case "yes", "true", "1":
             self = true
-            case "no", "false", "0":
+        case "no", "false", "0":
             self = false
         default:
             return nil
@@ -73,7 +73,7 @@ extension Bool: StandardInputInitializable {
 }
 
 extension Double: StandardInputInitializable {
-    
+
     public init?(input: String) {
 
         var string = input
