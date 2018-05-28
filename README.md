@@ -1,21 +1,23 @@
-
-<p align="center">
-<img src="https://raw.githubusercontent.com/formbound/Powerline/master/Images/header.png" height="250" />
-</p>
-
 # Powerline
+[![CircleCI](https://circleci.com/gh/formbound/Powerline.svg?style=svg)](https://circleci.com/gh/formbound/Powerline)
 
 Powerline is a library for writing fast and reliable command-line applications in Swift, for Linux and macOS.
 
-## Features
+### Supported platforms
+Powerline runs on macOS and Ubuntu.
 
-- [x] Subcommands
-- [x] Type-safe argument parsing
-- [x] Shell commands
-- [x] Prompting
-- [x] String coloring
+* Ubuntu 14.04+
+* macOS 10.12+
 
-## Glossary
+### Features
+
+* Subcommands
+* Type-safe argument parsing
+* Shell commands
+* Prompting
+* String coloring
+
+### Glossary
 
 Due to lack of argument parsing standards, Powerline adopts a similar style to that of git. Here's how Powerline distinguishes types of arguments:
 
@@ -30,13 +32,12 @@ Due to lack of argument parsing standards, Powerline adopts a similar style to t
 
 
 
-## Creating an executable
+## Creating a command-line application
 
 * Create a new folder and run `swift package init —type executable`
 * Add `Powerline` as a dependency to your package
 
 ```swift
-// swift-tools-version:4.0
 import PackageDescription
 
 let package = Package(
@@ -143,10 +144,3 @@ try command.run()
 
 Read the code documentation at [powerline.formbound.org](http://powerline.formbound.org)
 
-## License
-
-Powerline is released under the MIT license. See LICENSE for details.
-
-## About Formbound
-
-Formbound AB is a software development firm devoted to open-source development.

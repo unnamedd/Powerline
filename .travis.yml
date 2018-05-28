@@ -1,9 +1,0 @@
-os:
-  - linux
-language: generic
-sudo: false
-dist: trusty
-install:
-  - eval "$(curl -sL http://sh.zewo.io/install.sh)"
-script:
-  - eval "$(curl -sL http://sh.zewo.io/build.sh)"
