@@ -171,46 +171,49 @@
         <section class="section">
           <div class="section-content">
             
-            <p align="center">
-<img src="https://raw.githubusercontent.com/formbound/Powerline/master/Images/header.png" height="250" />
-</p>
-<h1 id='powerline' class='heading'>Powerline</h1>
+            <h1 id='powerline' class='heading'>Powerline</h1>
+
+<p><a href="https://circleci.com/gh/formbound/Powerline"><img src="https://circleci.com/gh/formbound/Powerline.svg?style=svg" alt="CircleCI"></a></p>
 
 <p>Powerline is a library for writing fast and reliable command-line applications in Swift, for Linux and macOS.</p>
-<h2 id='features' class='heading'>Features</h2>
+<h3 id='supported-platforms' class='heading'>Supported platforms</h3>
+
+<p>Powerline runs on macOS and Ubuntu.</p>
 
 <ul>
-<li>[x] Subcommands</li>
-<li>[x] Type-safe argument parsing</li>
-<li>[x] Shell commands</li>
-<li>[x] Prompting</li>
-<li>[x] String coloring</li>
+<li>Ubuntu 14.04+</li>
+<li>macOS 10.12+</li>
 </ul>
-<h2 id='glossary' class='heading'>Glossary</h2>
+<h3 id='features' class='heading'>Features</h3>
+
+<ul>
+<li>Subcommands</li>
+<li>Type-safe argument parsing</li>
+<li>Shell commands</li>
+<li>Prompting</li>
+<li>String coloring</li>
+</ul>
+<h3 id='glossary' class='heading'>Glossary</h3>
 
 <p>Due to lack of argument parsing standards, Powerline adopts a similar style to that of git. Here&rsquo;s how Powerline distinguishes types of arguments:</p>
 
 <ul>
-<li><strong>Option</strong>
-A key-value argument. <code>--message &quot;Message&quot;</code> or <code>-m &quot;Message&quot;</code></li>
-<li><strong>Flag</strong>
-An on-off switch defining a condition.  <code>--verbose</code> or <code>-v</code>
+<li><code>Option</code>, A key-value argument. <code>--message &quot;Message&quot;</code> or <code>-m &quot;Message&quot;</code></li>
+<li><code>Flag</code>, An on-off switch defining a condition.  <code>--verbose</code> or <code>-v</code>
 
 <ul>
 <li>Multiple flags can be combined. <code>-a -b -c</code>, equals <code>-abc</code></li>
 <li>A series of flags can contain a trailing option <code>-abcm &quot;Message&quot;</code></li>
 </ul></li>
-<li><strong>Parameter</strong>
-An argument that is a value in itself</li>
+<li><code>Parameter</code>, An argument that is a value in itself</li>
 </ul>
-<h2 id='creating-an-executable' class='heading'>Creating an executable</h2>
+<h2 id='creating-a-command-line-application' class='heading'>Creating a command-line application</h2>
 
 <ul>
 <li>Create a new folder and run <code>swift package init —type executable</code></li>
 <li>Add <code>Powerline</code> as a dependency to your package</li>
 </ul>
-<pre class="highlight swift"><code><span class="c1">// swift-tools-version:4.0</span>
-<span class="kd">import</span> <span class="kt">PackageDescription</span>
+<pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">PackageDescription</span>
 
 <span class="k">let</span> <span class="nv">package</span> <span class="o">=</span> <span class="kt">Package</span><span class="p">(</span>
     <span class="nv">name</span><span class="p">:</span> <span class="s">"example"</span><span class="p">,</span>
@@ -312,12 +315,6 @@ An argument that is a value in itself</li>
 <h2 id='documentation' class='heading'>Documentation</h2>
 
 <p>Read the code documentation at <a href="http://powerline.formbound.org">powerline.formbound.org</a></p>
-<h2 id='license' class='heading'>License</h2>
-
-<p>Powerline is released under the MIT license. See LICENSE for details.</p>
-<h2 id='about-formbound' class='heading'>About Formbound</h2>
-
-<p>Formbound AB is a software development firm devoted to open-source development.</p>
 
           </div>
         </section>

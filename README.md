@@ -21,14 +21,11 @@ Powerline runs on macOS and Ubuntu.
 
 Due to lack of argument parsing standards, Powerline adopts a similar style to that of git. Here's how Powerline distinguishes types of arguments:
 
-- **Option**
-  A key-value argument. `--message "Message"` or `-m "Message"`
-- **Flag**
-  An on-off switch defining a condition.  `--verbose` or `-v`
+- `Option`, A key-value argument. `--message "Message"` or `-m "Message"`
+- `Flag`, An on-off switch defining a condition.  `--verbose` or `-v`
   - Multiple flags can be combined. `-a -b -c`, equals `-abc`
   - A series of flags can contain a trailing option `-abcm "Message"`
-- **Parameter**
-  An argument that is a value in itself
+- `Parameter`, An argument that is a value in itself
 
 
 
